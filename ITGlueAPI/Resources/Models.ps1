@@ -1,3 +1,29 @@
+function New-ITGlueModels {
+    Param (
+        [Nullable[Int]]$manufacturer_id,
+
+        [Parameter(Mandatory=$true)]
+        [hashtable]$data
+    )
+
+    $resource_uri = "/models/"
+
+    if($manufacturer_id) {
+        $resource_uri = "/manufacturers/${manufacturer_id}/relationships/models"
+    }
+
+    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method "POST" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+
+    $data = @{}
+    $data = $rest_output 
+    return $data
+}
+
+
+
 function Get-ITGlueModels {
     [CmdletBinding(DefaultParameterSetName="index")]
     Param (
@@ -48,6 +74,34 @@ function Get-ITGlueModels {
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "GET" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
                                      -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+
+    $data = @{}
+    $data = $rest_output 
+    return $data
+}
+
+
+
+
+
+function Set-ITGlueModels {
+    Param (
+        [Nullable[Int]]$manufacturer_id,
+
+        [Parameter(Mandatory=$true)]
+        [hashtable]$data
+    )
+
+    $resource_uri = "/models/"
+
+    if($manufacturer_id) {
+        $resource_uri = "/manufacturers/${manufacturer_id}/relationships/models"
+    }
+
+    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method "PATCH" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}

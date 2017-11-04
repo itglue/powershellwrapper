@@ -1,10 +1,10 @@
-function New-ITGlueManufacturers {
+function New-ITGlueFlexibleAssets {
     Param (
         [Parameter(Mandatory=$true)]
         [hashtable]$data
     )
 
-    $resource_uri = "/manufacturers/"
+    $resource_uri = "/flexible_assets/"
 
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "POST" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
@@ -18,15 +18,22 @@ function New-ITGlueManufacturers {
 
 
 
-function Get-ITGlueManufacturers {
+
+function Get-ITGlueFlexibleAssets {
     [CmdletBinding(DefaultParameterSetName="index")]
     Param (
         [Parameter(ParameterSetName="index")]
         [String]$filter_name = "",
 
         [Parameter(ParameterSetName="index")]
-        [ValidateSet( "name",  "id", `
-                     "-name", "-id")]
+        [Nullable[Int]]$filter_organization_id = $null,
+
+        [Parameter(ParameterSetName="index")]
+        [Nullable[Int]]$filter_flexible_asset_type_id = $null,
+
+        [Parameter(ParameterSetName="index")]
+        [ValidateSet( "name",`
+                     "-name")]
         [String]$sort = "",
 
         [Parameter(ParameterSetName="index")]
@@ -39,11 +46,13 @@ function Get-ITGlueManufacturers {
         [Nullable[Int]]$id = $null
     )
 
-    $resource_uri = "/manufacturers/${id}"
+    $resource_uri = "/flexible_assets/${id}"
 
     if($PSCmdlet.ParameterSetName -eq "index") {
         $body = @{
                 "filter[name]" = $filter_name
+                "filter[organization_id]" = $filter_organization_id
+                "filter[flexible_asset_type_id]" = $filter_flexible_asset_type_id
                 "sort" = $sort
         }
         if($page_number) {
@@ -68,7 +77,8 @@ function Get-ITGlueManufacturers {
 
 
 
-function Set-ITGlueManufacturers {
+
+function Set-ITGlueFlexibleAssets {
     Param (
         [Parameter(Mandatory=$true)]
         [Int]$id,
@@ -77,7 +87,7 @@ function Set-ITGlueManufacturers {
         [Hashtable]$data
     )
 
-    $resource_uri = "/manufacturers/${id}"
+    $resource_uri = "/flexible_assets/${id}"
 
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "PATCH" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `

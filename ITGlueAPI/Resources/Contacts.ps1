@@ -1,3 +1,30 @@
+function New-ITGlueContacts {
+    Param (
+        [Nullable[Int]]$organization_id = $null,
+
+        [Parameter(Mandatory=$true)]
+        [hashtable]$data
+    )
+
+    $resource_uri = "/contacts"
+
+    if($organization_id) {
+        $resource_uri = "/organizations/${organization_id}/relationships/contacts"
+    }
+
+    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method "POST" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+
+    $data = @{}
+    $data = $rest_output 
+    return $data
+}
+
+
+
+
 function Get-ITGlueContacts {
     [CmdletBinding(DefaultParameterSetName="index")]
     Param (
@@ -61,6 +88,36 @@ function Get-ITGlueContacts {
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "GET" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
                                      -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+
+    $data = @{}
+    $data = $rest_output 
+    return $data
+}
+
+
+
+
+
+function Set-ITGlueContacts {
+    Param (
+        [Nullable[Int]]$id = $null,
+
+        [Nullable[Int]]$organization_id = $null,
+
+        [Parameter(Mandatory=$true)]
+        [Hashtable]$data
+    )
+
+    $resource_uri = "/contacts/${id}"
+
+    if($flexible_asset_type_id) {
+        $resource_uri = "/organizations/${organization_id}/relationships/contacts/${id}"
+    }
+
+    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method "PATCH" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}

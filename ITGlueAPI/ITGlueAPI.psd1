@@ -21,10 +21,7 @@ ModuleVersion = '0.1.0'
 Author = 'Caleb Albers'
 
 # Company or vendor of this module
-CompanyName = 'Keystone Technologies, LLC'
-
-# Copyright statement for this module
-Copyright = '(c) 2017 Caleb Albers. All rights reserved.'
+CompanyName = 'IT Glue'
 
 # Description of the functionality provided by this module
 Description = 'This module provides a PowerShell wrapper for the IT Glue API.'
@@ -74,6 +71,9 @@ NestedModules = 'Internal/BaseURI.ps1',
                 'Resources/ContactTypes.ps1',
                 'Resources/Countries.ps1',
                 'Resources/FavoriteOrganizations.ps1',
+                'Resources/FlexibleAssetFields.ps1',
+                'Resources/FlexibleAssets.ps1',
+                'Resources/FlesibleAssetTypes.ps1',
                 'Resources/Locations.ps1',
                 'Resources/Manufacturers.ps1',
                 'Resources/Models.ps1',
@@ -98,61 +98,74 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'Export-ITGlueModuleSettings',
                     'Import-ITGlueModuleSettings',
 
-                    #'New-ITGlueConfigurationInterfaces',
+                    'New-ITGlueConfigurationInterfaces',
                     'Get-ITGlueConfigurationInterfaces',
-                    #'Set-ITGlueConfigurationInterfaces',
+                    'Set-ITGlueConfigurationInterfaces',
 
-                    #'New-ITGlueConfigurationStatuses',
+                    'New-ITGlueConfigurationStatuses',
                     'Get-ITGlueConfigurationStatuses',
-                    #'Set-ITGlueConfigurationStatuses',
+                    'Set-ITGlueConfigurationStatuses',
 
-                    #'New-ITGlueConfigurationTypes',
+                    'New-ITGlueConfigurationTypes',
                     'Get-ITGlueConfigurationTypes',
-                    #'Set-ITGlueConfigurationTypes',
+                    'Set-ITGlueConfigurationTypes',
 
-                    #'New-ITGlueConfigurations',
+                    'New-ITGlueConfigurations',
                     'Get-ITGlueConfigurations',
-                    #'Set-ITGlueConfigurations',
+                    'Set-ITGlueConfigurations',
                     
-                    #'New-ITGlueContactTypes',
+                    'New-ITGlueContactTypes',
                     'Get-ITGlueContactTypes',
-                    #'Set-ITGlueContactTypes',
+                    'Set-ITGlueContactTypes',
 
-                    #'New-ITGlueContacts',
+                    'New-ITGlueContacts',
                     'Get-ITGlueContacts',
-                    #'Set-ITGlueContacts',
+                    'Set-ITGlueContacts',
 
                     'Get-ITGlueCountries',
 
-                    #'New-ITGlueFavoriteOrganizations',
+                    'New-ITGlueFavoriteOrganizations',
                     'Get-ITGlueFavoriteOrganizations',
-                    #'Remove-ITGlueFavoriteOrganizations',
+                    'Remove-ITGlueFavoriteOrganizations',
 
-                    #'New-ITGlueLocations',
+                    'New-ITGlueFlexibleAssetFields',
+                    'Get-ITGlueFlexibleAssetFields',
+                    'Set-ITGlueFlexibleAssetFields',
+                    'Remove-ITGlueFlexibleAssetFields',
+
+                    'New-ITGlueFlexibleAssetTypes',
+                    'Get-ITGlueFlexibleAssetTypes',
+                    'Set-ITGlueFlexibleAssetTypes',
+
+                    'New-ITGlueFlexibleAssets',
+                    'Get-ITGlueFlexibleAssets',
+                    'Set-ITGlueFlexibleAssets',
+
+                    'New-ITGlueLocations',
                     'Get-ITGlueLocations',
-                    #'Set-ITGlueLocations',
+                    'Set-ITGlueLocations',
 
-                    #'New-ITGlueManufacturers',
+                    'New-ITGlueManufacturers',
                     'Get-ITGlueManufacturers',
-                    #'Set-ITGlueManufacturers',
+                    'Set-ITGlueManufacturers',
 
-                    #'New-ITGlueModels',
+                    'New-ITGlueModels',
                     'Get-ITGlueModels',
-                    #'Set-ITGlueModels',
+                    'Set-ITGlueModels',
 
                     'Get-ITGlueOperatingSystems',
 
-                    #'New-ITGlueOrganizationStatuses',
+                    'New-ITGlueOrganizationStatuses',
                     'Get-ITGlueOrganizationStatuses',
-                    #'Set-ITGlueOrganizationStatuses',
+                    'Set-ITGlueOrganizationStatuses',
 
-                    #'New-ITGlueOrganizationTypes',
+                    'New-ITGlueOrganizationTypes',
                     'Get-ITGlueOrganizationTypes',
-                    #'Set-ITGlueOrganizationTypes',
+                    'Set-ITGlueOrganizationTypes',
 
-                    #'New-ITGlueOrganizations',
+                    'New-ITGlueOrganizations',
                     'Get-ITGlueOrganizations',
-                    #'Set-ITGlueOrganizations',
+                    'Set-ITGlueOrganizations',
 
                     'Get-ITGluePlatforms',
 
@@ -160,8 +173,8 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
 
                     'Get-ITGlueUserMetrics',
 
-                    'Get-ITGlueUsers'#,
-                    #'Set-ITGlueUsers'
+                    'Get-ITGlueUsers',
+                    'Set-ITGlueUsers'
 
 
 #FunctionsToExport = '*'
