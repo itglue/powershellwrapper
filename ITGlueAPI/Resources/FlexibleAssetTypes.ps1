@@ -1,16 +1,10 @@
-function New-ITGlueModels {
+function New-ITGlueFlexibleAssetTypes {
     Param (
-        [Nullable[Int]]$manufacturer_id = $null,
-
         [Parameter(Mandatory=$true)]
         $data
     )
 
-    $resource_uri = "/models/"
-
-    if($manufacturer_id) {
-        $resource_uri = "/manufacturers/${manufacturer_id}/relationships/models"
-    }
+    $resource_uri = "/flexible_asset_types/"
 
     $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
 
@@ -26,16 +20,23 @@ function New-ITGlueModels {
 
 
 
-function Get-ITGlueModels {
+
+function Get-ITGlueFlexibleAssetTypes {
     [CmdletBinding(DefaultParameterSetName="index")]
     Param (
         [Parameter(ParameterSetName="index")]
-        [Parameter(ParameterSetName="show")]
-        [Nullable[Int]]$manufacturer_id = $null,
+        [String]$filter_name = "",
 
         [Parameter(ParameterSetName="index")]
-        [ValidateSet( "id",  "name",  "manufacturer_id", `
-                     "-id", "-name", "-manufacturer_id")]
+        [String]$filter_icon = "",
+
+        [Parameter(ParameterSetName="index")]
+        [ValidateSet("1", "0")]
+        [Nullable[Int]]$filter_enabled = $null,
+
+        [Parameter(ParameterSetName="index")]
+        [ValidateSet( "name", "id",`
+                     "-name", "-id")]
         [String]$sort = "",
 
         [Parameter(ParameterSetName="index")]
@@ -44,25 +45,24 @@ function Get-ITGlueModels {
         [Parameter(ParameterSetName="index")]
         [Nullable[int]]$page_size = $null,
 
+        [Parameter(ParameterSetName="index")]
+        [String]$include = "",
+
         [Parameter(ParameterSetName="show")]
-            [Nullable[Int]]$id = $null
+        [Nullable[Int]]$id = $null
     )
 
-    $resource_uri = "/models/${id}"
-    if($manufacturer_id) {
-        $resource_uri = "/manufacturers/${manufacturer_id}/relationships" + $resource_uri
-    }
+    $resource_uri = "/flexible_asset_types/${id}"
+
+    $body = @{}
 
     if($PSCmdlet.ParameterSetName -eq "index") {
         $body = @{
                 "filter[name]" = $filter_name
+                "filter[icon]" = $filter_icon
+                "filter[enabled]" = $filter_enabled
                 "sort" = $sort
-        }
-        if($filter_region_id) {
-            $body += @{"filter[region_id]" = $filter_region_id}
-        }
-        if($filter_country_id) {
-            $body += @{"filter[country_id]" = $filter_country_id}
+                "include" = $include
         }
         if($page_number) {
             $body += @{"page[number]" = $page_number}
@@ -71,7 +71,6 @@ function Get-ITGlueModels {
             $body += @{"page[size]" = $page_size}
         }
     }
-
 
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "GET" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
@@ -87,21 +86,18 @@ function Get-ITGlueModels {
 
 
 
-function Set-ITGlueModels {
-    Param (
-        [Nullable[Int]]$id = $null,
 
-        [Nullable[Int]]$manufacturer_id = $null,
+
+function Set-ITGlueFlexibleAssetTypes {
+    Param (
+        [Parameter(Mandatory=$true)]
+        [Int]$id,
 
         [Parameter(Mandatory=$true)]
         $data
     )
 
-    $resource_uri = "/models/${id}"
-
-    if($manufacturer_id) {
-        $resource_uri = "/manufacturers/${manufacturer_id}/relationships/models/${id}"
-    }
+    $resource_uri = "/flexible_asset_types/${id}"
 
     $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
 
