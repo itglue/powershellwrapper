@@ -3,7 +3,7 @@ function New-ITGlueContacts {
         [Nullable[Int]]$organization_id = $null,
 
         [Parameter(Mandatory=$true)]
-        [hashtable]$data
+        $data
     )
 
     $resource_uri = "/contacts"
@@ -12,9 +12,11 @@ function New-ITGlueContacts {
         $resource_uri = "/organizations/${organization_id}/relationships/contacts"
     }
 
+    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
+
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "POST" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
+                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
@@ -106,7 +108,7 @@ function Set-ITGlueContacts {
         [Nullable[Int]]$organization_id = $null,
 
         [Parameter(Mandatory=$true)]
-        [Hashtable]$data
+        $data
     )
 
     $resource_uri = "/contacts/${id}"
@@ -115,9 +117,11 @@ function Set-ITGlueContacts {
         $resource_uri = "/organizations/${organization_id}/relationships/contacts/${id}"
     }
 
+    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
+
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "PATCH" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
+                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}

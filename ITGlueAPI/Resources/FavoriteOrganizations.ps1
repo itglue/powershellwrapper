@@ -4,14 +4,16 @@ function New-ITGlueFavoriteOrganizations {
         [Int]$user_id,
 
         [Parameter(Mandatory=$true)]
-        [hashtable]$data
+        $data
     )
 
     $resource_uri = "/users/${user_id}/relationships/favorite_organizations"
 
+    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
+
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "POST" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
+                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
@@ -83,16 +85,18 @@ function Remove-ITGlueFavoriteOrganizations {
         [Int]$user_id,
 
         [Parameter(Mandatory=$true)]
-        [Hashtable]$data
+        $data
     )
 
     $resource_uri = "/users/${user_id}/relationships/favorite_organizations"
+
+    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
 
     if ($pscmdlet.ShouldProcess($user_id)) {
 
         $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
         $rest_output = Invoke-RestMethod -method "DELETE" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                        -body $data -ErrorAction Stop -ErrorVariable $web_error
+                                        -body $body -ErrorAction Stop -ErrorVariable $web_error
         $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
         $data = @{}

@@ -7,6 +7,7 @@ New-Item -ItemType Directory -Force -Path $outputPath | %{$_.Attributes = "hidde
 @{
     ITGlue_Base_URI = '$ITGlue_Base_URI'
     ITGlue_API_Key = '$secureString'
+    ITGlue_JSON_Conversion_Depth = '$ITGlue_JSON_Conversion_Depth'
 }
 "@ | Out-File -FilePath ($outputPath+"\config.psd1") -Force
 
@@ -30,6 +31,9 @@ function Import-ITGlueModuleSettings {
         Set-Variable -Name "ITGlue_API_Key"  -Value $tmp_config.ITGlue_API_key `
                     -Option ReadOnly -Scope global -Force
 
+        Set-Variable -Name "ITGlue_JSON_Conversion_Depth" -Value $tmp_config.ITGlue_JSON_Conversion_Depth `
+                    -Scope global -Force 
+
         # Clean things up
         Remove-Variable "tmp_config"
 
@@ -37,6 +41,12 @@ function Import-ITGlueModuleSettings {
     }
     else {
         Write-Host "No configuration file was found." -ForegroundColor Red
-        Write-Host "Please run Add-ITGlueBaseURI and Add-ITGlueAPIKey to get started."
+        
+        Set-Variable -Name "ITGlue_Base_URI" -Value "https://api.itglue.com"  -Option ReadOnly -Scope global -Force
+        
+        Write-Host "Using https://api.itglue.com as Base URI. Run Add-ITGlueBaseURI to modify."
+        Write-Host "Please run Add-ITGlueAPIKey to get started." -ForegroundColor Red
+        
+        Set-Variable -Name "ITGlue_JSON_Conversion_Depth" -Value 100  -Scope global -Force
     }
 }

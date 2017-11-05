@@ -1,14 +1,16 @@
 function New-ITGlueFlexibleAssetTypes {
     Param (
         [Parameter(Mandatory=$true)]
-        [hashtable]$data
+        $data
     )
 
     $resource_uri = "/flexible_asset_types/"
 
+    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
+
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "POST" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
+                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
@@ -30,7 +32,7 @@ function Get-ITGlueFlexibleAssetTypes {
 
         [Parameter(ParameterSetName="index")]
         [ValidateSet("1", "0")]
-        [Int]$filter_enabled,
+        [Nullable[Int]]$filter_enabled = $null,
 
         [Parameter(ParameterSetName="index")]
         [ValidateSet( "name", "id",`
@@ -52,6 +54,8 @@ function Get-ITGlueFlexibleAssetTypes {
 
     $resource_uri = "/flexible_asset_types/${id}"
 
+    $body = @{}
+
     if($PSCmdlet.ParameterSetName -eq "index") {
         $body = @{
                 "filter[name]" = $filter_name
@@ -67,7 +71,6 @@ function Get-ITGlueFlexibleAssetTypes {
             $body += @{"page[size]" = $page_size}
         }
     }
-
 
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "GET" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
@@ -91,14 +94,16 @@ function Set-ITGlueFlexibleAssetTypes {
         [Int]$id,
 
         [Parameter(Mandatory=$true)]
-        [Hashtable]$data
+        $data
     )
 
     $resource_uri = "/flexible_asset_types/${id}"
 
+    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
+
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "PATCH" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
+                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}

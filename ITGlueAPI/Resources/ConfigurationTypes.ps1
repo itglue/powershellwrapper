@@ -1,14 +1,16 @@
 function New-ITGlueConfigurationTypes {
     Param (
         [Parameter(Mandatory=$true)]
-        [hashtable]$data
+        $data
     )
 
-    $resource_uri = "/configuration_types"
+    $resource_uri = "/configuration_types/"
+
+    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "POST" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
+                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
@@ -73,17 +75,19 @@ function Get-ITGlueConfigurationTypes {
 function Set-ITGlueConfigurationTypes {
     Param (
         [Parameter(Mandatory=$true)]
-        [Int]]$id,
+        [Int]$id,
 
         [Parameter(Mandatory=$true)]
-        [Hashtable]$data
+        $data
     )
 
     $resource_uri = "/configuration_types/${id}" 
 
+    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
+
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "PATCH" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
+                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}

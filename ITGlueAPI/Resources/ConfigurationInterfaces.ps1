@@ -3,18 +3,20 @@ function New-ITGlueConfigurationInterfaces {
         [Nullable[Int]]$conf_id = $null,
 
         [Parameter(Mandatory=$true)]
-        [hashtable]$data
+        $data
     )
 
-    $resource_uri = "/contacts_interfaces"
+    $resource_uri = "/configuration_interfaces/"
 
     if($conf_id) {
-        $resource_uri = "/configurations/${conf_id}/relationships/contacts_interfaces"
+        $resource_uri = "/configurations/${conf_id}/relationships/configuration_interfaces"
     }
+
+    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "POST" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
+                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
@@ -78,18 +80,20 @@ function Set-ITGlueConfigurationInterfaces {
         [Nullable[Int]]$conf_id = $null,
 
         [Parameter(Mandatory=$true)]
-        [hashtable]$data
+        $data
     )
 
     $resource_uri = "/configuration_interfaces/${id}"
 
     if($conf_id) {
-        $resource_uri = "/configurations/${conf_id}/relationships/contacts_interfaces/${id}"
+        $resource_uri = "/configurations/${conf_id}/relationships/configuration_interfaces/${id}"
     }
+
+    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method "PATCH" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $data -ErrorAction Stop -ErrorVariable $web_error
+                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
