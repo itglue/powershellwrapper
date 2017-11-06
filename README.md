@@ -31,10 +31,10 @@ Get-ITGlueUsers
 
 ## Installation
 
-One can manually download the Master branch and run the following PowerShell command:
+One can manually download the Master branch and place the "ITGlueAPI" folder into the (default) `C:\Program Files\WindowsPowerShell\Modules` folder.
 
 ```posh
-Import-Module .\ITGlueAPI.psd1
+Import-Module ITGlueAPI
 ```
 
 
@@ -46,7 +46,7 @@ The first time you run this module, you will need to configure the base URI and 
 
 2. Run `Add-ITGlueAPIKey`. It will prompt you to enter your API key (please refer to IT Glue's documentation [here](https://api.itglue.com/developer/) for generating an API key).
 
-3. [optional] If you would like the IT Glue module to remember your base uri and API key, you can run `Export-ITGlueModuleSettings`. This will create a config file at `Settings/config.psd1` that securely holds this information. Next time you run `Import-Module`, this configuration will automatically be loaded. 
+3. [optional] If you would like the IT Glue module to remember your base uri and API key, you can run `Export-ITGlueModuleSettings`. This will create a config file at `%UserProfile%\ITGlueAPI` that securely holds this information. Next time you run `Import-Module`, this configuration will automatically be loaded. 
 
 :warning: Exporting module settings encrypts your API key in a format that can **only be unencrypted with your Windows account**. It makes use of PowerShell's `System.Security.SecureString` type, which uses reversible encrypted tied to your principle. This means that you cannot copy your configuration file to another computer or user account and expect it to work.
 
