@@ -12,11 +12,11 @@ This module serves to abstract away the details of interacting with IT Glue's AP
 
 ### Function Naming
 
-IT Glue features a REST API that makes use of common HTTP(s) GET, POST, PUT, and DELETE actions. In order to maintain PowerShell best practices, only approved verbs are used. As such, the following mapping should be utilized:
+IT Glue features a REST API that makes use of common HTTP(s) GET, POST, PATCH, and DELETE actions. In order to maintain PowerShell best practices, only approved verbs are used. As such, the following mapping should be utilized:
 
 - GET     -> Get-
 - POST    -> New-
-- PUT     -> Set-
+- PATCH   -> Set-
 - DELETE  -> Remove-
 
 Additionally, PowerShell's `verb-noun` nomenclature is respected. Each noun is prefixed with `ITGlue` in an attempt to prevent any naming problems.
