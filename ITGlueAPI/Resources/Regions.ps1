@@ -1,60 +1,59 @@
 function Get-ITGlueRegions {
-    [CmdletBinding(DefaultParameterSetName="index")]
+    [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
-        [Parameter(ParameterSetName="index")]
-        [Parameter(ParameterSetName="show")]
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'show')]
         [Nullable[Int]]$country_id = $null,
 
-        [Parameter(ParameterSetName="index")]
-        [String]$filter_name = "",
+        [Parameter(ParameterSetName = 'index')]
+        [String]$filter_name = '',
 
-        [Parameter(ParameterSetName="index")]
-        [String]$filter_iso = "",
+        [Parameter(ParameterSetName = 'index')]
+        [String]$filter_iso = '',
 
-        [Parameter(ParameterSetName="index")]
-        [Nullable[Int]]$filter_country_id = "",
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int]]$filter_country_id = '',
 
-        [Parameter(ParameterSetName="index")]
-        [ValidateSet( "name",  "id", `
-                     "-name", "-id")]
-        [String]$sort = "",
+        [Parameter(ParameterSetName = 'index')]
+        [ValidateSet( 'name', 'id', `
+                '-name', '-id')]
+        [String]$sort = '',
 
-        [Parameter(ParameterSetName="index")]
-        [Nullable[Int]]$page_number = $null,
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$page_number = $null,
 
-        [Parameter(ParameterSetName="index")]
+        [Parameter(ParameterSetName = 'index')]
         [Nullable[int]]$page_size = $null,
 
-        [Parameter(ParameterSetName="show")]
-        [Nullable[Int]]$id = $null
+        [Parameter(ParameterSetName = 'show')]
+        [Nullable[Int64]]$id = $null
     )
 
-    $resource_uri = "/regions/${id}"
-    if($country_id) {
-        $resource_uri = "/countries/${country_id}/relationships" + $resource_uri
+    $resource_uri = ('/regions/{0}' -f $id)
+    if ($country_id) {
+        $resource_uri = ('/countries/{0}/relationships' -f $country_id) + $resource_uri
     }
 
-    if($PSCmdlet.ParameterSetName -eq "index") {
+    if ($PSCmdlet.ParameterSetName -eq 'index') {
         $body = @{
-                "filter[name]" = $filter_name
-                "filter[iso]" = $filter_iso
-                "sort" = $sort
+            'filter[name]' = $filter_name
+            'filter[iso]'  = $filter_iso
+            'sort'         = $sort
         }
-        if($filter_country_id) {
-            $body += @{"filter[country_id]" = $filter_country_id}
+        if ($filter_country_id) {
+            $body += @{'filter[country_id]' = $filter_country_id}
         }
-        if($page_number) {
-            $body += @{"page[number]" = $page_number}
+        if ($page_number) {
+            $body += @{'page[number]' = $page_number}
         }
-        if($page_size) {
-            $body += @{"page[size]" = $page_size}
+        if ($page_size) {
+            $body += @{'page[size]' = $page_size}
         }
     }
 
-
-    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method "GET" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}

@@ -1,16 +1,16 @@
 function New-ITGlueOrganizations {
     Param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $data
     )
 
-    $resource_uri = "/organizations/"
+    $resource_uri = '/organizations/'
 
-    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
 
-    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method "POST" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
@@ -18,77 +18,74 @@ function New-ITGlueOrganizations {
     return $data
 }
 
-
-
-
 function Get-ITGlueOrganizations {
-    [CmdletBinding(DefaultParameterSetName="index")]
+    [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
-        [Parameter(ParameterSetName="index")]
-        [String]$filter_name = "",
+        [Parameter(ParameterSetName = 'index')]
+        [String]$filter_name = '',
 
-        [Parameter(ParameterSetName="index")]
-        [Nullable[Int]]$filter_organization_type_id = $null,
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_organization_type_id = $null,
 
-        [Parameter(ParameterSetName="index")]
-        [Nullable[Int]]$filter_organization_status_id = $null,
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_organization_status_id = $null,
 
-        [Parameter(ParameterSetName="index")]
-        [String]$filter_exclude_name = "",
+        [Parameter(ParameterSetName = 'index')]
+        [String]$filter_exclude_name = '',
 
-        [Parameter(ParameterSetName="index")]
-        [Nullable[Int]]$filter_exclude_organization_type_id = $null,
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_exclude_organization_type_id = $null,
 
-        [Parameter(ParameterSetName="index")]
-        [Nullable[Int]]$filter_exclude_organization_status_id = $null,
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_exclude_organization_status_id = $null,
 
-        [Parameter(ParameterSetName="index")]
-        [ValidateSet( "name",  "id",  "updated-at",  "organization_status_name",  "organization_type_name", `
-                     "-name", "-id", "-updated-at", "-organization_status_name", "-organization_type_name")]
-        [String]$sort = "",
+        [Parameter(ParameterSetName = 'index')]
+        [ValidateSet( 'name', 'id', 'updated-at', 'organization_status_name', 'organization_type_name', `
+                '-name', '-id', '-updated-at', '-organization_status_name', '-organization_type_name')]
+        [String]$sort = '',
 
-        [Parameter(ParameterSetName="index")]
-        [Nullable[Int]]$page_number = $null,
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$page_number = $null,
 
-        [Parameter(ParameterSetName="index")]
+        [Parameter(ParameterSetName = 'index')]
         [Nullable[int]]$page_size = $null,
 
-        [Parameter(ParameterSetName="show")]
-        [Nullable[Int]]$id = $null
+        [Parameter(ParameterSetName = 'show')]
+        [Nullable[Int64]]$id = $null
     )
 
-    $resource_uri = "/organizations/${id}"
+    $resource_uri = ('/organizations/{0}' -f $id)
 
-    if($PSCmdlet.ParameterSetName -eq "index") {
+    if ($PSCmdlet.ParameterSetName -eq 'index') {
         $body = @{
-                "filter[name]" = $filter_name
-                "filter[exclude][name]" = $filter_exclude_name
-                "sort" = $sort
+            'filter[name]'          = $filter_name
+            'filter[exclude][name]' = $filter_exclude_name
+            'sort'                  = $sort
         }
-        if($filter_organization_type_id) {
-            $body += @{"filter[organization_type_id]" = $filter_organization_type_id}
+        if ($filter_organization_type_id) {
+            $body += @{'filter[organization_type_id]' = $filter_organization_type_id}
         }
-        if($filter_organization_type_id) {
-            $body += @{"filter[organization_status_id]" = $filter_organization_status_id}
+        if ($filter_organization_type_id) {
+            $body += @{'filter[organization_status_id]' = $filter_organization_status_id}
         }
-        if($filter_exclude_organization_type_id) {
-            $body += @{"filter[exclude][organization_type_id]" = $filter_exclude_organization_type_id}
+        if ($filter_exclude_organization_type_id) {
+            $body += @{'filter[exclude][organization_type_id]' = $filter_exclude_organization_type_id}
         }
-        if($filter_exclude_organization_type_id) {
-            $body += @{"filter[exclude][organization_status_id]" = $filter_exclude_organization_status_id}
+        if ($filter_exclude_organization_type_id) {
+            $body += @{'filter[exclude][organization_status_id]' = $filter_exclude_organization_status_id}
         }
-        if($page_number) {
-            $body += @{"page[number]" = $page_number}
+        if ($page_number) {
+            $body += @{'page[number]' = $page_number}
         }
-        if($page_size) {
-            $body += @{"page[size]" = $page_size}
+        if ($page_size) {
+            $body += @{'page[size]' = $page_size}
         }
     }
 
 
-    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method "GET" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
@@ -96,25 +93,21 @@ function Get-ITGlueOrganizations {
     return $data
 }
 
-
-
-
-
 function Set-ITGlueOrganizations {
     Param (
-        [Nullable[Int]]$id = $null,
+        [Nullable[Int64]]$id = $null,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $data
     )
 
-    $resource_uri = "/organizations/${id}"
+    $resource_uri = ('/organizations/{0}' -f $id)
 
-    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
 
-    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method "PATCH" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}

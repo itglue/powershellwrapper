@@ -1,16 +1,16 @@
 function New-ITGlueManufacturers {
     Param (
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $data
     )
 
-    $resource_uri = "/manufacturers/"
+    $resource_uri = '/manufacturers/'
 
-    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
 
-    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method "POST" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
@@ -18,48 +18,46 @@ function New-ITGlueManufacturers {
     return $data
 }
 
-
-
 function Get-ITGlueManufacturers {
-    [CmdletBinding(DefaultParameterSetName="index")]
+    [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
-        [Parameter(ParameterSetName="index")]
-        [String]$filter_name = "",
+        [Parameter(ParameterSetName = 'index')]
+        [String]$filter_name = '',
 
-        [Parameter(ParameterSetName="index")]
-        [ValidateSet( "name",  "id", `
-                     "-name", "-id")]
-        [String]$sort = "",
+        [Parameter(ParameterSetName = 'index')]
+        [ValidateSet( 'name', 'id', `
+                '-name', '-id')]
+        [String]$sort = '',
 
-        [Parameter(ParameterSetName="index")]
-        [Nullable[Int]]$page_number = $null,
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$page_number = $null,
 
-        [Parameter(ParameterSetName="index")]
+        [Parameter(ParameterSetName = 'index')]
         [Nullable[int]]$page_size = $null,
 
-        [Parameter(ParameterSetName="show")]
-        [Nullable[Int]]$id = $null
+        [Parameter(ParameterSetName = 'show')]
+        [Nullable[Int64]]$id = $null
     )
 
-    $resource_uri = "/manufacturers/${id}"
+    $resource_uri = ('/manufacturers/{0}' -f $id)
 
-    if($PSCmdlet.ParameterSetName -eq "index") {
+    if ($PSCmdlet.ParameterSetName -eq 'index') {
         $body = @{
-                "filter[name]" = $filter_name
-                "sort" = $sort
+            'filter[name]' = $filter_name
+            'sort'         = $sort
         }
-        if($page_number) {
-            $body += @{"page[number]" = $page_number}
+        if ($page_number) {
+            $body += @{'page[number]' = $page_number}
         }
-        if($page_size) {
-            $body += @{"page[size]" = $page_size}
+        if ($page_size) {
+            $body += @{'page[size]' = $page_size}
         }
     }
 
 
-    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method "GET" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
@@ -67,25 +65,22 @@ function Get-ITGlueManufacturers {
     return $data
 }
 
-
-
-
 function Set-ITGlueManufacturers {
     Param (
-        [Parameter(Mandatory=$true)]
-        [Int]$id,
+        [Parameter(Mandatory = $true)]
+        [Int64]$id,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $data
     )
 
-    $resource_uri = "/manufacturers/${id}"
+    $resource_uri = ('/manufacturers/{0}' -f $id)
 
-    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
 
-    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method "PATCH" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
