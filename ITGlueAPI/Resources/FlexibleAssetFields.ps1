@@ -1,101 +1,96 @@
 function New-ITGlueFlexibleAssetFields {
     Param (
-        [Nullable[Int]]$flexible_asset_type_id = $null,
+        [Nullable[Int64]]$flexible_asset_type_id = $null,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $data
     )
 
-    $resource_uri = "/flexible_asset_fields/"
+    $resource_uri = '/flexible_asset_fields/'
 
-    if($flexible_asset_type_id) {
-        $resource_uri = "/flexible_asset_types/${flexible_asset_type_id}/relationships/flexible_asset_fields"
+    if ($flexible_asset_type_id) {
+        $resource_uri = ('/flexible_asset_types/{0}/relationships/flexible_asset_fields' -f $flexible_asset_type_id)
     }
 
-    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
 
-    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method "POST" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
     $data = $rest_output 
     return $data
 }
-
-
-
 
 function Get-ITGlueFlexibleAssetFields {
-    [CmdletBinding(DefaultParameterSetName="index")]
+    [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
-        [Parameter(ParameterSetName="index")]
-        [Parameter(ParameterSetName="show")]
-        [Nullable[Int]]$flexible_asset_type_id = $null,
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'show')]
+        [Nullable[Int64]]$flexible_asset_type_id = $null,
 
-        [Parameter(ParameterSetName="index")]
-        [Nullable[Int]]$page_number = $null,
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$page_number = $null,
 
-        [Parameter(ParameterSetName="index")]
+        [Parameter(ParameterSetName = 'index')]
         [Nullable[int]]$page_size = $null,
 
-        [Parameter(ParameterSetName="show")]
-        [Nullable[Int]]$id = $null
+        [Parameter(ParameterSetName = 'show')]
+        [Nullable[Int64]]$id = $null
     )
     
-    $resource_uri = "/flexible_asset_fields/${id}"
+    $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
 
-    if($flexible_asset_type_id) {
-        $resource_uri = "/flexible_asset_types/${flexible_asset_type_id}/relationships/flexible_asset_fields/${id}"
+    if ($flexible_asset_type_id) {
+        $resource_uri = ('/flexible_asset_types/{0}/relationships/flexible_asset_fields/{1}' -f $flexible_asset_type_id, $id)
     }
 
-    if($PSCmdlet.ParameterSetName -eq "index") {
+    if ($PSCmdlet.ParameterSetName -eq 'index') {
         $body = @{}
-        if($page_number) {$body += @{"page[number]" = $page_number}}
-        if($page_size) {$body += @{"page[size]" = $page_size}}
+        if ($page_number) {$body += @{'page[number]' = $page_number}
+        }
+        if ($page_size) {$body += @{'page[size]' = $page_size}
+        }
     }
-    elseif ($flexible_asset_type_id -eq $null){
+    elseif ($flexible_asset_type_id -eq $null) {
         #Parameter set "Show" is selected and no flexible asset type id is specified; switch from nested relationships route
-        $resource_uri = "/flexible_asset_fields/${id}"
+        $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
     }
 
 
-    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method "GET" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
     $data = $rest_output 
     return $data
 }
-
-
-
-
 
 function Set-ITGlueFlexibleAssetFields {
     Param (
-        [Nullable[Int]]$flexible_asset_type_id = $null,
+        [Nullable[Int64]]$flexible_asset_type_id = $null,
 
-        [Nullable[Int]]$id = $null,
+        [Nullable[Int64]]$id = $null,
 
-        [Parameter(Mandatory=$true)]
+        [Parameter(Mandatory = $true)]
         $data
     )
 
-    $resource_uri = "/flexible_asset_fields/${id}"
+    $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
 
-    if($flexible_asset_type_id) {
-        $resource_uri = "/flexible_asset_types/${flexible_asset_type_id}/relationships/flexible_asset_fields/${id}"
+    if ($flexible_asset_type_id) {
+        $resource_uri = ('/flexible_asset_types/{0}/relationships/flexible_asset_fields/{1}' -f $flexible_asset_type_id, $id)
     }
 
-    $body = ConvertTo-Json $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
 
-    $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method "PATCH" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                     -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
     $data = @{}
@@ -103,31 +98,26 @@ function Set-ITGlueFlexibleAssetFields {
     return $data
 }
 
-
-
-
-
-
 function Remove-ITGlueFlexibleAssetFields {
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact='High')]
+    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
     Param (
-        [Parameter(Mandatory=$true)]
-        [Int]$id,
+        [Parameter(Mandatory = $true)]
+        [Int64]$id,
 
-        [Nullable[Int]]$flexible_asset_type_id = $null
+        [Nullable[Int64]]$flexible_asset_type_id = $null
     )
 
-    $resource_uri = "/flexible_asset_fields/${id}"
+    $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
 
-    if($flexible_asset_type_id) {
-        $resource_uri = "/flexible_asset_types/${flexible_asset_type_id}/relationships/flexible_asset_fields/${id}"
+    if ($flexible_asset_type_id) {
+        $resource_uri = ('/flexible_asset_types/{0}/relationships/flexible_asset_fields/{1}' -f $flexible_asset_type_id, $id)
     }
 
     if ($pscmdlet.ShouldProcess($id)) {
 
-        $ITGlue_Headers.Add("x-api-key", (New-Object System.Management.Automation.PSCredential 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method "DELETE" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                                         -ErrorAction Stop -ErrorVariable $web_error
+        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $rest_output = Invoke-RestMethod -method 'DELETE' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+            -ErrorAction Stop -ErrorVariable $web_error
         $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
         $data = @{}
