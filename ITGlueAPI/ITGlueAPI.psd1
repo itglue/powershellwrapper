@@ -12,7 +12,7 @@
 RootModule = '.\ITGlueAPI.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.0'
+ModuleVersion = '1.8.0'
 
 # ID used to uniquely identify this module
 #GUID = ''
@@ -81,6 +81,7 @@ NestedModules = 'Internal/BaseURI.ps1',
                 'Resources/Organizations.ps1',
                 'Resources/OrganizationStatuses.ps1',
                 'Resources/OrganizationTypes.ps1',
+                'Resources/Passwords.ps1',
                 'Resources/Platforms.ps1',
                 'Resources/Regions.ps1',
                 'Resources/UserMetrics.ps1',
@@ -166,6 +167,10 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'New-ITGlueOrganizations',
                     'Get-ITGlueOrganizations',
                     'Set-ITGlueOrganizations',
+
+                    'New-ITGluePasswords',
+                    'Get-ITGluePasswords',
+                    'Set-ITGluePasswords',
 
                     'Get-ITGluePlatforms',
 
