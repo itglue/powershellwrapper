@@ -32,6 +32,9 @@ function Get-ITGlueModels {
         [Nullable[Int64]]$manufacturer_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_id = $null,
+
+        [Parameter(ParameterSetName = 'index')]
         [ValidateSet( 'id', 'name', 'manufacturer_id', `
                 '-id', '-name', '-manufacturer_id')]
         [String]$sort = '',
@@ -53,14 +56,8 @@ function Get-ITGlueModels {
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         $body = @{
-            'filter[name]' = $filter_name
-            'sort'         = $sort
-        }
-        if ($filter_region_id) {
-            $body += @{'filter[region_id]' = $filter_region_id}
-        }
-        if ($filter_country_id) {
-            $body += @{'filter[country_id]' = $filter_country_id}
+            'filter[id]' = $filter_id
+            'sort'       = $sort
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}
@@ -88,7 +85,9 @@ function Set-ITGlueModels {
         [Nullable[Int64]]$manufacturer_id = $null,
 
         [Parameter(Mandatory = $true)]
-        $data
+        $data,
+
+        [Nullable[Int64]]$filter_id = $null
     )
 
     $resource_uri = ('/models/{0}' -f $id)
@@ -98,6 +97,10 @@ function Set-ITGlueModels {
     }
 
     $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+
+    if($filter_id) {
+        $body += @{'filter[id]' = $filter_id}
+    }
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `

@@ -53,12 +53,6 @@ function Get-ITGlueUsers {
     return $data
 }
 
-
-
-
-
-
-
 function Set-ITGlueUsers {
     Param (
         [Parameter(Mandatory = $true)]

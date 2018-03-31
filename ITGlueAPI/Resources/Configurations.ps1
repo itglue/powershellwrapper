@@ -32,6 +32,13 @@ function Get-ITGlueConfigurations {
         [Nullable[Int64]]$id,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'show')]
+        [String]$include = '',
+
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_id = '',
+
+        [Parameter(ParameterSetName = 'index')]
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -47,6 +54,8 @@ function Get-ITGlueConfigurations {
         [String]$filter_serial_number = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [ValidateSet('name', 'id', 'created_at', 'updated-at', `
+                '-name', '-id', '-created_at', '-updated-at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -54,9 +63,6 @@ function Get-ITGlueConfigurations {
 
         [Parameter(ParameterSetName = 'index')]
         [Nullable[int]]$page_size = $null,
-
-        [Parameter(ParameterSetName = 'index')]
-        [String]$include = '',
 
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$organization_id = $null
@@ -67,14 +73,17 @@ function Get-ITGlueConfigurations {
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         $body = @{
             'filter[name]'          = $filter_name
-            'filter[serial-number]' = $filter_serial_number
+            'filter[serial_number]' = $filter_serial_number
             'sort'                  = $sort
+            'include'               = $include
         }
-        if ($filter_organization_id) {$body += @{'filter[organization-id]' = $filter_organization_id}
+        if ($filter_id) {$body += @{'filter[id]' = $filter_id}
         }
-        if ($filter_configuration_type_id) {$body += @{'filter[configuration-type-id]' = $filter_configuration_type_id}
+        if ($filter_organization_id) {$body += @{'filter[organization_id]' = $filter_organization_id}
         }
-        if ($filter_configuration_status_id) {$body += @{'filter[configuration-status-id]' = $filter_configuration_status_id}
+        if ($filter_configuration_type_id) {$body += @{'filter[configuration_type_id]' = $filter_configuration_type_id}
+        }
+        if ($filter_configuration_status_id) {$body += @{'filter[configuration_status_id]' = $filter_configuration_status_id}
         }
         if ($page_number) {$body += @{'page[number]' = $page_number}
         }
@@ -101,6 +110,8 @@ function Set-ITGlueConfigurations {
         [Nullable[Int64]]$id = $null,
 
         [Nullable[Int64]]$organization_id = $null,
+
+        
 
         [Parameter(Mandatory = $true)]
         $data

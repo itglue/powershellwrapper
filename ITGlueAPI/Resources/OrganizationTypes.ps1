@@ -25,8 +25,8 @@ function Get-ITGlueOrganizationTypes {
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'name', 'id', `
-                '-name', '-id')]
+        [ValidateSet( 'name', 'id', 'created_at', 'updated_at', `
+                '-name', '-id', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -66,6 +66,7 @@ function Get-ITGlueOrganizationTypes {
 }
 function Set-ITGlueOrganizationTypes {
     Param (
+        [Parameter(Mandatory = $true)]
         [Int64]$id,
 
         [Parameter(Mandatory = $true)]

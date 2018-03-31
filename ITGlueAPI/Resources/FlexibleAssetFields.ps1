@@ -32,6 +32,14 @@ function Get-ITGlueFlexibleAssetFields {
         [Nullable[Int64]]$flexible_asset_type_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_id = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [ValidateSet( 'created_at', 'updated_at', `
+                '-created_at', '-updated_at')]
+        [String]$sort = '',
+
+        [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$page_number = $null,
 
         [Parameter(ParameterSetName = 'index')]
@@ -48,10 +56,17 @@ function Get-ITGlueFlexibleAssetFields {
     }
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{}
-        if ($page_number) {$body += @{'page[number]' = $page_number}
+        $body = @{
+            'sort'            = $sort
         }
-        if ($page_size) {$body += @{'page[size]' = $page_size}
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
+        }
+        if ($page_number) {
+            $body += @{'page[number]' = $page_number}
+        }
+        if ($page_size) {
+            $body += @{'page[size]' = $page_size}
         }
     }
     elseif ($flexible_asset_type_id -eq $null) {
@@ -78,6 +93,8 @@ function Set-ITGlueFlexibleAssetFields {
 
         [Parameter(Mandatory = $true)]
         $data
+
+        [Nullable[Int64]]$filter_id = $null,
     )
 
     $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
@@ -87,6 +104,10 @@ function Set-ITGlueFlexibleAssetFields {
     }
 
     $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+
+    if ($filter_id) {
+        $body += @{'filter[id]' = $filter_id}
+    }
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `

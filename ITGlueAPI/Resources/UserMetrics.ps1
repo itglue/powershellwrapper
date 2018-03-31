@@ -14,8 +14,8 @@ function Get-ITGlueUserMetrics {
         [String]$filter_date = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'created', 'viewed', 'edited', 'deleted', 'date', `
-                '-created', '-viewed', '-edited', '-deleted', '-date')]
+        [ValidateSet( 'id', 'created', 'viewed', 'edited', 'deleted', 'date', `
+                '-id', '-created', '-viewed', '-edited', '-deleted', '-date')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]

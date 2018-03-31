@@ -1,7 +1,7 @@
 function New-ITGlueLocations {
     Param (
         [Parameter(Mandatory = $true)]
-        [Int]$org_id,
+        [Int64]$org_id,
 
         [Parameter(Mandatory = $true)]
         $data
@@ -25,16 +25,16 @@ function Get-ITGlueLocations {
     Param (
         [Parameter(ParameterSetName = 'index')]
         [Parameter(ParameterSetName = 'show')]
-        [Nullable[Int]]$org_id = $null,
+        [Nullable[Int64]]$org_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [Nullable[Int]]$filter_region_id = '',
+        [Nullable[Int64]]$filter_region_id = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [Nullable[Int]]$filter_country_id = '',
+        [Nullable[Int64]]$filter_country_id = '',
 
         [Parameter(ParameterSetName = 'index')]
         [ValidateSet( 'name', 'id', `
@@ -45,7 +45,7 @@ function Get-ITGlueLocations {
         [Nullable[Int64]]$page_number = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [Nullable[int]]$page_size = $null,
+        [Nullable[int64]]$page_size = $null,
 
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$id = $null
@@ -90,10 +90,20 @@ function Set-ITGlueLocations {
     Param (
         [Nullable[Int64]]$id = $null,
 
-        [Nullable[Int]]$org_id = $null,
+        [Nullable[Int64]]$org_id = $null,
 
         [Parameter(Mandatory = $true)]
-        $data
+        $data,
+
+        [Nullable[Int64]]$filter_id = $null,
+
+        [String]$filter_name = '',
+
+        [String]$filter_city = '',
+
+        [Nullable[Int64]]$filter_region_id = $null,
+
+        [Nullable[Int64]]$filter_country_id = $null
     )
 
     $resource_uri = ('/locations/{0}' -f $id)
@@ -103,6 +113,22 @@ function Set-ITGlueLocations {
     }
 
     $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+
+    if($filter_id) {
+        $body += @{'filter[id]' = $filter_id}
+    }
+    if($filter_name) {
+        $body += @{'filter[name]' = $filter_name}
+    }
+    if($filter_city) {
+        $body += @{'filter[city]' = $filter_city}
+    }
+    if($filter_region_id) {
+        $body += @{'filter[region_id]' = $filter_region_id}
+    }
+    if($filter_country_id) {
+        $body += @{'filter[country_id]' = $filter_country_id}
+    }
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `

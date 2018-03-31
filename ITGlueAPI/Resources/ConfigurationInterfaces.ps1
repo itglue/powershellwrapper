@@ -32,6 +32,14 @@ function Get-ITGlueConfigurationInterfaces {
         [Nullable[Int64]]$conf_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_id = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [ValidateSet('created_at', 'updated-at', `
+                '-created_at', '-updated-at')]
+        [String]$sort = '',
+
+        [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$page_number = $null,
 
         [Parameter(ParameterSetName = 'index')]
@@ -48,6 +56,12 @@ function Get-ITGlueConfigurationInterfaces {
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         $body = @{}
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
+        }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}
         }
@@ -73,6 +87,8 @@ function Set-ITGlueConfigurationInterfaces {
 
         [Nullable[Int64]]$conf_id = $null,
 
+        [Nullable[Int64]]$filter_id = $null,
+
         [Parameter(Mandatory = $true)]
         $data
     )
@@ -83,7 +99,13 @@ function Set-ITGlueConfigurationInterfaces {
         $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces/{1}' -f $conf_id, $id)
     }
 
-    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
+
+    if ($filter_id -and $id -and $organization_id) {
+        $body += @{'filter[id]' = $filter_id}
+    }
+
+    $body += ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `

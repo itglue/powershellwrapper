@@ -47,8 +47,8 @@ function Get-ITGlueContacts {
         [String]$filter_important = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'name', 'id', `
-                '-name', '-id')]
+        [ValidateSet( 'first_name', 'last_name', 'id', 'created_at', 'updated_at', `
+                '-first_name', '-last_name', '-id', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -68,12 +68,20 @@ function Get-ITGlueContacts {
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         $body = @{
-            'filter[name]' = $filter_name
+            'filter[first_name]' = $filter_first_name
+            'filter[last_name]' = $filter_last_name
+            'filter[title]'     = $filter_title
             'filter[iso]'  = $filter_iso
             'sort'         = $sort
         }
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
+        }
         if ($filter_country_id) {
             $body += @{'filter[country_id]' = $filter_country_id}
+        }
+        if ($filter_important) {
+            $body += @{'filter[important]' = $filter_important}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}
@@ -101,7 +109,20 @@ function Set-ITGlueContacts {
         [Nullable[Int64]]$organization_id = $null,
 
         [Parameter(Mandatory = $true)]
-        $data
+        $data,
+
+        [Nullable[Int64]]$filter_id = $null,
+
+        [String]$filter_first_name = '',
+
+        [String]$filter_last_name = '',
+
+        [String]$filter_title = '',
+
+        [Nullable[Int64]]$filter_contact_type_id = $null,
+
+        [String]$filter_important = ''
+
     )
 
     $resource_uri = ('/contacts/{0}' -f $id)

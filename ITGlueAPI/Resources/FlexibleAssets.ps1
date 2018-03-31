@@ -22,17 +22,17 @@ function Get-ITGlueFlexibleAssets {
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
         [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_flexible_asset_type_id = $null,
+
+        [Parameter(ParameterSetName = 'index')]
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$filter_organization_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [Nullable[Int64]]$filter_flexible_asset_type_id = $null,
-
-        [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'name', `
-                '-name')]
+        [ValidateSet( 'name', 'created_at', 'updated_at', `
+                '-name', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -40,6 +40,10 @@ function Get-ITGlueFlexibleAssets {
 
         [Parameter(ParameterSetName = 'index')]
         [Nullable[int]]$page_size = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'show')]
+        [String]$include = $null,
 
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$id = $null
@@ -62,6 +66,9 @@ function Get-ITGlueFlexibleAssets {
         }
     }
 
+    if ($include) {
+        $body += @{'include' = $include}
+    }
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
@@ -72,9 +79,9 @@ function Get-ITGlueFlexibleAssets {
     $data = $rest_output 
     return $data
 }
+
 function Set-ITGlueFlexibleAssets {
     Param (
-        [Parameter(Mandatory = $true)]
         [Int64]$id,
 
         [Parameter(Mandatory = $true)]
