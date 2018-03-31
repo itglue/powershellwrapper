@@ -101,7 +101,8 @@ function Get-ITGlueConfigurations {
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
 
-    $data = $rest_output.data   
+    $data = @{}
+    $data = $rest_output 
     return $data
 }
 
