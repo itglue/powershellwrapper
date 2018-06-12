@@ -22,9 +22,11 @@ function Get-ITGlueOperatingSystems {
     $resource_uri = ('/operating_systems/{0}' -f $id)
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'filter[name]' = $filter_name
-            'sort'         = $sort
+        if ($filter_name) {
+            $body += @{'filter[name]' = $filter_name}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}

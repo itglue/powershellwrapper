@@ -29,11 +29,17 @@ function Get-ITGlueUsers {
     $resource_uri = ('/users/{0}' -f $id)
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'filter[name]'      = $filter_name
-            'filter[email]'     = $filter_email
-            'filter[role_name]' = $filter_role_name
-            'sort'              = $sort
+        if ($filter_name) {
+            $body += @{'filter[name]' = $filter_name}
+        }
+        if ($filter_email) {
+            $body += @{'filter[email]' = $filter_email}
+        }
+        if ($filter_role_name) {
+            $body += @{'filter[role_name]' = $filter_role_name}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}

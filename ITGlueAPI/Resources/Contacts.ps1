@@ -44,7 +44,8 @@ function Get-ITGlueContacts {
         [Nullable[Int64]]$filter_contact_type_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [String]$filter_important = '',
+        [ValidateSet( '1', '0')]
+        [Nullable[Int64]]$filter_important = $null,
 
         [Parameter(ParameterSetName = 'index')]
         [ValidateSet( 'first_name', 'last_name', 'id', 'created_at', 'updated_at', `
@@ -67,12 +68,17 @@ function Get-ITGlueContacts {
     }
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'filter[first_name]' = $filter_first_name
-            'filter[last_name]' = $filter_last_name
-            'filter[title]'     = $filter_title
-            'filter[iso]'  = $filter_iso
-            'sort'         = $sort
+        if ($filter_first_name) {
+            $body += @{'filter[first_name]' = $filter_first_name}
+        }
+        if ($filter_last_name) {
+            $body += @{'filter[last_name]' = $filter_last_name}
+        }
+        if ($filter_title) {
+            $body += @{'filter[title]' = $filter_title}
+        }
+        if ($filter_iso) {
+            $body += @{'filter[iso]' = $filter_iso}
         }
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
@@ -82,6 +88,9 @@ function Get-ITGlueContacts {
         }
         if ($filter_important) {
             $body += @{'filter[important]' = $filter_important}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}
@@ -103,25 +112,37 @@ function Get-ITGlueContacts {
 }
 
 function Set-ITGlueContacts {
+    [CmdletBinding(DefaultParameterSetName = 'update')]
     Param (
+        [Parameter(ParameterSetName = 'update')]
         [Nullable[Int64]]$id = $null,
 
+        [Parameter(ParameterSetName = 'update')]
         [Nullable[Int64]]$organization_id = $null,
 
-        [Parameter(Mandatory = $true)]
-        $data,
-
+        [Parameter(ParameterSetName = 'bulk_update')]
         [Nullable[Int64]]$filter_id = $null,
 
+        [Parameter(ParameterSetName = 'bulk_update')]
         [String]$filter_first_name = '',
 
+        [Parameter(ParameterSetName = 'bulk_update')]
         [String]$filter_last_name = '',
 
+        [Parameter(ParameterSetName = 'bulk_update')]
         [String]$filter_title = '',
 
+        [Parameter(ParameterSetName = 'bulk_update')]
         [Nullable[Int64]]$filter_contact_type_id = $null,
 
-        [String]$filter_important = ''
+        [Parameter(ParameterSetName = 'bulk_update')]
+        [ValidateSet( '1', '0')]
+        [Nullable[Int64]]$filter_important = $null,
+
+        [Parameter(ParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'bulk_update')]
+        [Parameter(Mandatory = $true)]
+        $data
 
     )
 
@@ -131,10 +152,114 @@ function Set-ITGlueContacts {
         $resource_uri = ('/organizations/{0}/relationships/contacts/{1}' -f $organization_id, $id)
     }
 
-    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
+
+    if ($PSCmdlet.ParameterSetName -eq 'bulk_update') {
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
+        }
+        if ($filter_first_name) {
+            $body += @{'filter[first_name]' = $filter_first_name}
+        }
+        if ($filter_last_name) {
+            $body += @{'filter[last_name]' = $filter_last_name}
+        }
+        if ($filter_title) {
+            $body += @{'filter[title]' = $filter_title}
+        }
+        if ($filter_contact_type_id) {
+            $body += @{'filter[contact_type_id]' = $filter_contact_type_id}
+        }
+        if ($filter_important) {
+            $body += @{'filter[important]' = $filter_important}
+        }
+        if ($filter_primary_email) {
+            $body += @{'filter[primary_email]' = $filter_primary_email}
+        }
+    }
+
+    $body += @{'data' = $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+
+    $data = @{}
+    $data = $rest_output 
+    return $data
+}
+
+function Remove-ITGlueContacts {
+    [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+    Param (
+        [Parameter(ParameterSetName = 'bulk_destroy')]
+        [Nullable[Int64]]$filter_id = $null,
+
+        [Parameter(ParameterSetName = 'bulk_destroy')]
+        [String]$filter_first_name = '',
+
+        [Parameter(ParameterSetName = 'bulk_destroy')]
+        [String]$filter_last_name = '',
+        
+        [Parameter(ParameterSetName = 'bulk_destroy')]
+        [String]$filter_title = '',
+        
+        [Parameter(ParameterSetName = 'bulk_destroy')]
+        [Nullable[Int64]]$filter_contact_type_id = $null,
+
+        [Parameter(ParameterSetName = 'bulk_destroy')]
+        [ValidateSet('1', '0')]
+        [String]$filter_important = '',
+
+        [Parameter(ParameterSetName = 'bulk_destroy')]
+        [String]$filter_primary_email = '',
+
+        [Parameter(ParameterSetName = 'bulk_destroy')]
+        [Parameter(Mandatory = $true)]
+        $data
+    )
+
+    $resource_uri = ('/configurations/{0}' -f $id)
+
+    if ($flexible_asset_type_id) {
+        $resource_uri = ('/organizations/{0}/relationships/configurations/{1}' -f $organization_id, $id)
+    }
+
+    $body = @{}
+
+    if ($PSCmdlet.ParameterSetName -eq 'bulk_destroy') {
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
+        }
+        if ($filter_first_name) {
+            $body += @{'filter[first_name]' = $filter_first_name}
+        }
+        if ($filter_last_name) {
+            $body += @{'filter[last_name]' = $filter_last_name}
+        }
+        if ($filter_title) {
+            $body += @{'filter[title]' = $filter_title}
+        }
+        if ($filter_contact_type_id) {
+            $body += @{'filter[contact_type_id]' = $filter_contact_type_id}
+        }
+        if ($filter_important) {
+            $body += @{'filter[important]' = $filter_important}
+        }
+        if ($filter_primary_email) {
+            $body += @{'filter[primary_email]' = $filter_primary_email}
+        }
+    }
+
+    $body += @{'data' = $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
+
+    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method 'DELETE' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
         -body $body -ErrorAction Stop -ErrorVariable $web_error
     $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 

@@ -2,10 +2,10 @@ function Get-ITGlueCountries {
     [CmdletBinding(DefaultParameterSetName = "index")]
     Param (
         [Parameter(ParameterSetName = "index")]
-        [String]$filter_name = "",
+        [String]$filter_name = '',
 
         [Parameter(ParameterSetName = "index")]
-        [String]$filter_iso = "",
+        [String]$filter_iso = '',
 
         [Parameter(ParameterSetName = "index")]
         [ValidateSet( 'name', 'id', 'created_at', 'updated_at', `
@@ -25,10 +25,14 @@ function Get-ITGlueCountries {
     $resource_uri = ('/countries/{0}' -f $id)
     
     if ($PSCmdlet.ParameterSetName -eq "index") {
-        $body = @{
-            "filter[name]" = $filter_name
-            "filter[iso]"  = $filter_iso
-            "sort"         = $sort
+        if ($filter_name) {
+            $body += @{'filter[name]' = $filter_name}
+        }
+        if ($filter_iso) {
+            $body += @{'filter[iso]' = $filter_iso}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{"page[number]" = $page_number}

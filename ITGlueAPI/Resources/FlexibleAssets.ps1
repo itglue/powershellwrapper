@@ -52,11 +52,17 @@ function Get-ITGlueFlexibleAssets {
     $resource_uri = ('/flexible_assets/{0}' -f $id)
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'filter[name]'                   = $filter_name
-            'filter[organization_id]'        = $filter_organization_id
-            'filter[flexible_asset_type_id]' = $filter_flexible_asset_type_id
-            'sort'                           = $sort
+        if ($filter_name) {
+            $body += @{'filter[name]' = $filter_name}
+        }
+        if ($filter_organization_id) {
+            $body += @{'filter[organization_id]' = $filter_organization_id}
+        }
+        if ($filter_flexible_asset_type_id) {
+            $body += @{'filter[flexible_asset_type_id]' = $filter_flexible_asset_type_id}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}
@@ -81,9 +87,13 @@ function Get-ITGlueFlexibleAssets {
 }
 
 function Set-ITGlueFlexibleAssets {
+    [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
+        [Parameter(ParameterSetName = 'update')]
         [Int64]$id,
 
+        [Parameter(ParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'bulk_update')]
         [Parameter(Mandatory = $true)]
         $data
     )

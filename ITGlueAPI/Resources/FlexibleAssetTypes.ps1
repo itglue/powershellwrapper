@@ -53,12 +53,20 @@ function Get-ITGlueFlexibleAssetTypes {
     $body = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'filter[name]'    = $filter_name
-            'filter[icon]'    = $filter_icon
-            'filter[enabled]' = $filter_enabled
-            'sort'            = $sort
-            'include'         = $include
+        if ($filter_name) {
+            $body += @{'filter[name]' = $filter_name}
+        }
+        if ($filter_icon) {
+            $body += @{'filter[icon]' = $filter_icon}
+        }
+        if ($filter_enabled) {
+            $body += @{'filter[enabled]' = $filter_enabled}
+        }
+        if ($include) {
+            $body += @{'include' = $include}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}

@@ -1,13 +1,10 @@
-function New-ITGlueFavoriteOrganizations {
+function New-ITGluePasswordCategories{
     Param (
-        [Parameter(Mandatory = $true)]
-        [Int64]$user_id,
-
         [Parameter(Mandatory = $true)]
         $data
     )
 
-    $resource_uri = ('/users/{0}/relationships/favorite_organizations' -f $user_id)
+    $resource_uri = '/password_categories/'
 
     $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
 
@@ -21,16 +18,15 @@ function New-ITGlueFavoriteOrganizations {
     return $data
 }
 
-function Get-ITGlueFavoriteOrganizations {
+function Get-ITGluePasswordCategories {
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
         [Parameter(ParameterSetName = 'index')]
-        [Parameter(Mandatory = $true)]
-        [Int64]$user_id,
+        [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'id', 'organization_id', 'organization_name', `
-                '-id', '-organization_id', '-organization_name')]
+        [ValidateSet( 'name', 'created_at', 'updated_at', `
+                '-name', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -39,17 +35,18 @@ function Get-ITGlueFavoriteOrganizations {
         [Parameter(ParameterSetName = 'index')]
         [Nullable[int]]$page_size = $null,
 
-        [Parameter(ParameterSetName = 'index')]
-        [ValidateSet('organization')]
-        [String]$include
+        [Parameter(ParameterSetName = 'show')]
+        [Nullable[Int64]]$id = $null
     )
 
-    $resource_uri = ('/users/{0}/relationships/favorite_organizations' -f $user_id)
+    $resource_uri = ('/password_categories/{0}' -f $id)
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'sort'    = $sort
-            'include' = $include
+        if ($filter_name) {
+            $body += @{'filter[name]' = $filter_name}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}
@@ -70,29 +67,25 @@ function Get-ITGlueFavoriteOrganizations {
     return $data
 }
 
-function Remove-ITGlueFavoriteOrganizations {
-    [CmdletBinding(SupportsShouldProcess, ConfirmImpact = 'High')]
+function Set-ITGluePasswordCategories {
     Param (
         [Parameter(Mandatory = $true)]
-        [Int64]$user_id,
+        [Int64]$id,
 
         [Parameter(Mandatory = $true)]
         $data
     )
 
-    $resource_uri = ('/users/{0}/relationships/favorite_organizations' -f $user_id)
+    $resource_uri = ('/password_categories/{0}' -f $id)
 
     $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
 
-    if ($pscmdlet.ShouldProcess($user_id)) {
+    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+    $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        -body $body -ErrorAction Stop -ErrorVariable $web_error
+    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
 
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'DELETE' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
-
-        $data = @{}
-        $data = $rest_output 
-        return $data
-    }
+    $data = @{}
+    $data = $rest_output 
+    return $data
 }
