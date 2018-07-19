@@ -82,7 +82,13 @@ function Get-ITGlueConfigurations {
         [Nullable[int]]$page_size = $null
     )
 
-    $resource_uri = ('/configurations/{0}' -f $id)
+    if($organization_id) {
+        #Switch to nested relationships route
+        $resource_uri = ('/organizations/{0}/relationships/configurations/{1}' -f $organization_id, $id)
+    }
+    else {
+        $resource_uri = ('/configurations/{0}' -f $id)
+    }
 
     $body = @{'include' = $include} # Both Index and Show support the `include` param
 
