@@ -19,7 +19,6 @@ function Add-ITGlueAPIKey {
     }
 }
 
-
 function Remove-ITGlueAPIKey {
     Remove-Variable -Name "ITGlue_API_Key"  -Force  
 }

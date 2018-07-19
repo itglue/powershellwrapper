@@ -42,7 +42,7 @@ Import-Module ITGlueAPI
 
 The first time you run this module, you will need to configure the base URI and API key that are used to talk with IT Glue. Doing so is as follows:
 
-1. Run `Add-ITGlueBaseURI`. By default, IT Glue's `api.itglue.com` uri is entered. If you have your own API gateway or proxy, you may put in your own custom uri by specifiying the `-uri` parameter, as follows: `Get-ITGlueBaseURI -uri http://myapi.gateway.example.com`.
+1. Run `Add-ITGlueBaseURI`. By default, IT Glue's `api.itglue.com` uri is entered. If you have your own API gateway or proxy, you may put in your own custom uri by specifiying the `-base_uri` parameter, as follows: `Add-ITGlueBaseURI -base_uri http://myapi.gateway.example.com`.
 
 2. Run `Add-ITGlueAPIKey`. It will prompt you to enter your API key (please refer to IT Glue's documentation [here](https://api.itglue.com/developer/) for generating an API key).
 
