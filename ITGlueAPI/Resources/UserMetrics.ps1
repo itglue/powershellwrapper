@@ -14,8 +14,8 @@ function Get-ITGlueUserMetrics {
         [String]$filter_date = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'created', 'viewed', 'edited', 'deleted', 'date', `
-                '-created', '-viewed', '-edited', '-deleted', '-date')]
+        [ValidateSet( 'id', 'created', 'viewed', 'edited', 'deleted', 'date', `
+                '-id', '-created', '-viewed', '-edited', '-deleted', '-date')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -28,16 +28,20 @@ function Get-ITGlueUserMetrics {
     $resource_uri = '/user_metrics'
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'filter[resource_type]' = $filter_resource_type
-            'filter[date]'          = $filter_date
-            'sort'                  = $sort
+        if ($filter_resource_type) {
+            $body += @{'filter[resource_type]' = $filter_resource_type}
+        }
+        if ($filter_date) {
+            $body += @{'filter[date]' = $filter_date}
         }
         if ($filter_user_id) {
             $body += @{'filter[user_id]' = $filter_user_id}
         }
         if ($filter_organization_id) {
             $body += @{'filter[organization_id]' = $filter_organization_id}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}

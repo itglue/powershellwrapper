@@ -32,8 +32,11 @@ function Get-ITGlueModels {
         [Nullable[Int64]]$manufacturer_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'id', 'name', 'manufacturer_id', `
-                '-id', '-name', '-manufacturer_id')]
+        [Nullable[Int64]]$filter_id = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [ValidateSet( 'id', 'name', 'manufacturer_id', 'created_at', 'updated_at', `
+                '-id', '-name', '-manufacturer_id', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -52,15 +55,11 @@ function Get-ITGlueModels {
     }
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'filter[name]' = $filter_name
-            'sort'         = $sort
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
         }
-        if ($filter_region_id) {
-            $body += @{'filter[region_id]' = $filter_region_id}
-        }
-        if ($filter_country_id) {
-            $body += @{'filter[country_id]' = $filter_country_id}
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}
@@ -82,11 +81,19 @@ function Get-ITGlueModels {
 }
 
 function Set-ITGlueModels {
+    [CmdletBinding(DefaultParameterSetName = 'update')]
     Param (
+        [Parameter(ParameterSetName = 'update')]
         [Nullable[Int64]]$id = $null,
 
+        [Parameter(ParameterSetName = 'update')]
         [Nullable[Int64]]$manufacturer_id = $null,
 
+        [Parameter(ParameterSetName = 'bulk_update')]
+        [Nullable[Int64]]$filter_id = $null,
+
+        [Parameter(ParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'bulk_update')]
         [Parameter(Mandatory = $true)]
         $data
     )
@@ -97,7 +104,17 @@ function Set-ITGlueModels {
         $resource_uri = ('/manufacturers/{0}/relationships/models/{1}' -f $manufacturer_id, $id)
     }
 
-    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
+
+    if ($PSCmdlet.ParameterSetName -eq 'bulk_update') {
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
+        }
+    }
+
+    $body += @{'data' = $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `

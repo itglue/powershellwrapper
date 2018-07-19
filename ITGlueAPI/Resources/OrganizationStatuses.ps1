@@ -25,8 +25,8 @@ function Get-ITGlueOrganizationStatuses {
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'name', 'id', `
-                '-name', '-id')]
+        [ValidateSet( 'name', 'id', 'created_at', 'updated_at', `
+                '-name', '-id', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -42,9 +42,11 @@ function Get-ITGlueOrganizationStatuses {
     $resource_uri = ('/organization_statuses/{0}' -f $id)
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'filter[name]' = $filter_name
-            'sort'         = $sort
+        if ($filter_name) {
+            $body += @{'filter[name]' = $filter_name}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}
@@ -67,6 +69,7 @@ function Get-ITGlueOrganizationStatuses {
 
 function Set-ITGlueOrganizationStatuses {
     Param (
+        [Parameter(Mandator = $true)]
         [Int64]$id,
 
         [Parameter(Mandatory = $true)]

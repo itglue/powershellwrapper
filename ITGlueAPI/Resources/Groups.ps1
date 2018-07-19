@@ -1,12 +1,12 @@
-function Get-ITGluePlatforms {
+function Get-ITGlueGroups {
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
         [Parameter(ParameterSetName = 'index')]
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'name', 'id', 'created_at', 'updated_at', `
-                '-name', '-id', '-created_at', '-updated_at')]
+        [ValidateSet( 'name', 'created_at', 'updated_at', `
+                '-name', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -19,7 +19,7 @@ function Get-ITGluePlatforms {
         [Nullable[Int64]]$id = $null
     )
 
-    $resource_uri = ('/platforms/{0}' -f $id)
+    $resource_uri = ('/groups/{0}' -f $id)
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_name) {

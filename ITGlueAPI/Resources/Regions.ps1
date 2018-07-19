@@ -3,7 +3,7 @@ function Get-ITGlueRegions {
     Param (
         [Parameter(ParameterSetName = 'index')]
         [Parameter(ParameterSetName = 'show')]
-        [Nullable[Int]]$country_id = $null,
+        [Nullable[Int64]]$country_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
         [String]$filter_name = '',
@@ -15,8 +15,8 @@ function Get-ITGlueRegions {
         [Nullable[Int]]$filter_country_id = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'name', 'id', `
-                '-name', '-id')]
+        [ValidateSet( 'name', 'id', 'created_at', 'updated_at', `
+                '-name', '-id', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -35,10 +35,14 @@ function Get-ITGlueRegions {
     }
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'filter[name]' = $filter_name
-            'filter[iso]'  = $filter_iso
-            'sort'         = $sort
+        if ($filter_name) {
+            $body += @{'filter[name]' = $filter_name}
+        }
+        if ($filter_iso) {
+            $body += @{'filter[iso]' = $filter_iso}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($filter_country_id) {
             $body += @{'filter[country_id]' = $filter_country_id}

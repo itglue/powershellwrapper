@@ -5,8 +5,8 @@ function Get-ITGlueOperatingSystems {
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'name', 'id', `
-                '-name', '-id')]
+        [ValidateSet( 'name', 'id', 'created_at', 'updated_at', `
+                '-name', '-id', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -22,9 +22,11 @@ function Get-ITGlueOperatingSystems {
     $resource_uri = ('/operating_systems/{0}' -f $id)
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'filter[name]' = $filter_name
-            'sort'         = $sort
+        if ($filter_name) {
+            $body += @{'filter[name]' = $filter_name}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}

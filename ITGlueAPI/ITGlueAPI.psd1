@@ -12,7 +12,7 @@
 RootModule = '.\ITGlueAPI.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.0'
+ModuleVersion = '1.8.0'
 
 # ID used to uniquely identify this module
 #GUID = ''
@@ -74,6 +74,7 @@ NestedModules = 'Internal/BaseURI.ps1',
                 'Resources/FlexibleAssetFields.ps1',
                 'Resources/FlexibleAssets.ps1',
                 'Resources/FlexibleAssetTypes.ps1',
+                'Resources/Groups.ps1',
                 'Resources/Locations.ps1',
                 'Resources/Manufacturers.ps1',
                 'Resources/Models.ps1',
@@ -81,6 +82,8 @@ NestedModules = 'Internal/BaseURI.ps1',
                 'Resources/Organizations.ps1',
                 'Resources/OrganizationStatuses.ps1',
                 'Resources/OrganizationTypes.ps1',
+                'Resources/PasswordCategories.ps1',
+                'Resources/Passwords.ps1',
                 'Resources/Platforms.ps1',
                 'Resources/Regions.ps1',
                 'Resources/UserMetrics.ps1',
@@ -141,6 +144,8 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'Get-ITGlueFlexibleAssets',
                     'Set-ITGlueFlexibleAssets',
 
+                    'Get-ITGlueGroups',
+
                     'New-ITGlueLocations',
                     'Get-ITGlueLocations',
                     'Set-ITGlueLocations',
@@ -166,6 +171,14 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'New-ITGlueOrganizations',
                     'Get-ITGlueOrganizations',
                     'Set-ITGlueOrganizations',
+
+                    'New-ITGluePasswordCategories',
+                    'Get-ITGluePasswordCategories',
+                    'Set-ITGluePasswordCategories',
+
+                    'New-ITGluePasswords',
+                    'Get-ITGluePasswords',
+                    'Set-ITGluePasswords',
 
                     'Get-ITGluePlatforms',
 
