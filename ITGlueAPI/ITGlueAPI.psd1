@@ -26,6 +26,9 @@ CompanyName = 'IT Glue'
 # Description of the functionality provided by this module
 Description = 'This module provides a PowerShell wrapper for the IT Glue API.'
 
+# Copyright information of this module
+Copyright = 'https://github.com/itglue/powershellwrapper/blob/master/LICENSE'
+
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
 
@@ -211,7 +214,7 @@ AliasesToExport = '*'
 # PrivateData = ''
 
 # HelpInfo URI of this module
-# HelpInfoURI = ''
+HelpInfoURI = 'https://github.com/itglue/powershellwrapper/wiki'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''
