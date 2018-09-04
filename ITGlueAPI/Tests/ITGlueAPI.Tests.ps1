@@ -116,13 +116,12 @@ Describe "$ThisModuleName Module Tests" {
                 $null = [System.Management.Automation.PSParser]::Tokenize($psfile, [ref]$errors)
                 $errors.Count | Should Be 0
             }
-        }
-        #Context "$InternalFile has tests" {
+            # Test for test files
             $InternalFileTest = $InternalFile -replace '\.ps1$'
             It "$InternalFileTest.Tests.ps1 should exist" {
-                $InternalFileTest.Tests.ps1 | Should Exist
+                "$InternalFileTest.Tests.ps1" | Should Exist
             }
-        #}
+        }
     }
 
     # Check that Resource files exist
