@@ -41,11 +41,11 @@ function Get-ITGlueRegions {
         if ($filter_iso) {
             $body += @{'filter[iso]' = $filter_iso}
         }
-        if ($sort) {
-            $body += @{'sort' = $sort}
-        }
         if ($filter_country_id) {
             $body += @{'filter[country_id]' = $filter_country_id}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}

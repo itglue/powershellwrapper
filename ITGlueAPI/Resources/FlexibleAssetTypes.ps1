@@ -6,7 +6,11 @@ function New-ITGlueFlexibleAssetTypes {
 
     $resource_uri = '/flexible_asset_types/'
 
-    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
+
+    $body += @{'data'= $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
@@ -27,8 +31,7 @@ function Get-ITGlueFlexibleAssetTypes {
         [String]$filter_icon = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet('1', '0')]
-        [Nullable[Int]]$filter_enabled = $null,
+        [Nullable[Boolean]]$filter_enabled = $null,
 
         [Parameter(ParameterSetName = 'index')]
         [ValidateSet( 'name', 'id', 'created_at', 'updated_at', `
@@ -59,11 +62,12 @@ function Get-ITGlueFlexibleAssetTypes {
         if ($filter_icon) {
             $body += @{'filter[icon]' = $filter_icon}
         }
-        if ($filter_enabled) {
-            $body += @{'filter[enabled]' = $filter_enabled}
+        if ($filter_enabled -eq $true) {
+            # PS $true returns "True" in string form (uppercase) and ITG's API is case-sensitive, so being explicit
+            $body += @{'filter[enabled]' = "1"}
         }
-        if ($include) {
-            $body += @{'include' = $include}
+        elseif ($filter_enabled -eq $false) {
+            $body += @{'filter[enabled]' = "0"}
         }
         if ($sort) {
             $body += @{'sort' = $sort}
@@ -74,6 +78,10 @@ function Get-ITGlueFlexibleAssetTypes {
         if ($page_size) {
             $body += @{'page[size]' = $page_size}
         }
+    }
+
+    if($include) {
+        $body += @{'include' = $include}
     }
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
@@ -97,7 +105,11 @@ function Set-ITGlueFlexibleAssetTypes {
 
     $resource_uri = ('/flexible_asset_types/{0}' -f $id)
 
-    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
+
+    $body += @{'data' = $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
