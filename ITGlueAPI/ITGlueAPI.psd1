@@ -12,7 +12,12 @@
 RootModule = '.\ITGlueAPI.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.8.0'
+# Follows https://semver.org Semantic Versioning 2.0.0
+# Given a version number MAJOR.MINOR.PATCH, increment the:
+# -- MAJOR version when you make incompatible API changes,
+# -- MINOR version when you add functionality in a backwards-compatible manner, and
+# -- PATCH version when you make backwards-compatible bug fixes.
+ModuleVersion = '2.0.0'
 
 # ID used to uniquely identify this module
 #GUID = ''
