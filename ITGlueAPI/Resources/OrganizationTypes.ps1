@@ -6,7 +6,11 @@ function New-ITGlueOrganizationTypes {
 
     $resource_uri = '/organization_types/'
 
-    $body = ConvertTo-Json -InputObject $data
+    $body = @{}
+
+    $body = @{'data' = $data}
+
+    $body = ConvertTo-Json -InputObject $body
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
@@ -40,6 +44,8 @@ function Get-ITGlueOrganizationTypes {
     )
 
     $resource_uri = ('/organization_types/{0}' -f $id)
+
+    $body = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_name) {
@@ -77,7 +83,11 @@ function Set-ITGlueOrganizationTypes {
 
     $resource_uri = ('/organization_types/{0}' -f $id)
 
-    $body = ConvertTo-Json -InputObject $data
+    $body = @{}
+
+    $body += @{'data' = $data}
+
+    $body = ConvertTo-Json -InputObject $body
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
