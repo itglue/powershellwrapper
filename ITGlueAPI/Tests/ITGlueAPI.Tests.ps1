@@ -33,7 +33,6 @@ $ResourceDirectoryFiles = (
     'Contacts.ps1',
     'ContactTypes.ps1',
     'Countries.ps1',
-    'FavoriteOrganizations.ps1',
     'FlexibleAssetFields.ps1',
     'FlexibleAssets.ps1',
     'FlexibleAssetTypes.ps1',
