@@ -64,10 +64,6 @@ $ManifestFileElements = (
     'HelpInfoURI'
 )
 
-
-Test-ModuleManifest -Path .\ITGlueAPI.psd1
-write-host $ModuleInformation.ModuleVersion -ForegroundColor Cyan
-
 Describe "$ThisModuleName Module Tests" {
     
     Context 'Test Module' {
