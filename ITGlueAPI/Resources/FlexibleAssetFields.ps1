@@ -12,7 +12,11 @@ function New-ITGlueFlexibleAssetFields {
         $resource_uri = ('/flexible_asset_types/{0}/relationships/flexible_asset_fields' -f $flexible_asset_type_id)
     }
 
-    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
+
+    $body += @{'data' = $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
@@ -55,12 +59,14 @@ function Get-ITGlueFlexibleAssetFields {
         $resource_uri = ('/flexible_asset_types/{0}/relationships/flexible_asset_fields/{1}' -f $flexible_asset_type_id, $id)
     }
 
+    $body = @{}
+
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'sort'            = $sort
-        }
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{'page[number]' = $page_number}
@@ -111,7 +117,7 @@ function Set-ITGlueFlexibleAssetFields {
 
     $body = @{}
 
-    if ($PSCmdlet.ParameterSetName -eq 'index') {
+    if ($PSCmdlet.ParameterSetName -eq 'bulk_update') {
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
         }

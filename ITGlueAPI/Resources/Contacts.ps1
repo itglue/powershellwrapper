@@ -12,7 +12,11 @@ function New-ITGlueContacts {
         $resource_uri = ('/organizations/{0}/relationships/contacts' -f $organization_id)
     }
 
-    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
+
+    $body += @{'data'= $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
@@ -29,7 +33,10 @@ function Get-ITGlueContacts {
     Param (
         [Parameter(ParameterSetName = 'index')]
         [Parameter(ParameterSetName = 'show')]
-        [Nullable[Int]]$country_id = $null,
+        [Nullable[Int64]]$organization_id = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
         [String]$filter_first_name = '',
@@ -44,8 +51,10 @@ function Get-ITGlueContacts {
         [Nullable[Int64]]$filter_contact_type_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( '1', '0')]
-        [Nullable[Int64]]$filter_important = $null,
+        [Nullable[Boolean]]$filter_important = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [String]$filter_primary_email = '',
 
         [Parameter(ParameterSetName = 'index')]
         [ValidateSet( 'first_name', 'last_name', 'id', 'created_at', 'updated_at', `
@@ -59,7 +68,11 @@ function Get-ITGlueContacts {
         [Nullable[int]]$page_size = $null,
 
         [Parameter(ParameterSetName = 'show')]
-        [Nullable[Int64]]$id = $null
+        [Nullable[Int64]]$id = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'show')]
+        $include = ''
     )
 
     $resource_uri = ('/contacts/{0}' -f $id)
@@ -67,7 +80,12 @@ function Get-ITGlueContacts {
         $resource_uri = ('/organizations/{0}/relationships' -f $organization_id) + $resource_uri
     }
 
+    $body = @{}
+
     if ($PSCmdlet.ParameterSetName -eq 'index') {
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
+        }
         if ($filter_first_name) {
             $body += @{'filter[first_name]' = $filter_first_name}
         }
@@ -77,17 +95,17 @@ function Get-ITGlueContacts {
         if ($filter_title) {
             $body += @{'filter[title]' = $filter_title}
         }
-        if ($filter_iso) {
-            $body += @{'filter[iso]' = $filter_iso}
+        if ($filter_contact_type_id) {
+            $body += @{'filter[contact_type_id]' = $filter_contact_type_id}
         }
-        if ($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+        if ($filter_important -eq $true) {
+            $body += @{'filter[important]' = '1'}
         }
-        if ($filter_country_id) {
-            $body += @{'filter[country_id]' = $filter_country_id}
+        elseif ($filter_important -eq $false) {
+            $body += @{'filter[important]' = '0'}
         }
-        if ($filter_important) {
-            $body += @{'filter[important]' = $filter_important}
+        if ($filter_primary_email) {
+            $body += @{'filter[primary_email]' = $filter_primary_email}
         }
         if ($sort) {
             $body += @{'sort' = $sort}
@@ -98,6 +116,10 @@ function Get-ITGlueContacts {
         if ($page_size) {
             $body += @{'page[size]' = $page_size}
         }
+    }
+
+    if($include) {
+        $body += @{'include' = $include}
     }
 
 
@@ -136,8 +158,10 @@ function Set-ITGlueContacts {
         [Nullable[Int64]]$filter_contact_type_id = $null,
 
         [Parameter(ParameterSetName = 'bulk_update')]
-        [ValidateSet( '1', '0')]
-        [Nullable[Int64]]$filter_important = $null,
+        [Nullable[Boolean]]$filter_important = $null,
+
+        [Parameter(ParameterSetName = 'bulk_update')]
+        [String]$filter_primary_email = '',
 
         [Parameter(ParameterSetName = 'update')]
         [Parameter(ParameterSetName = 'bulk_update')]
@@ -170,8 +194,11 @@ function Set-ITGlueContacts {
         if ($filter_contact_type_id) {
             $body += @{'filter[contact_type_id]' = $filter_contact_type_id}
         }
-        if ($filter_important) {
-            $body += @{'filter[important]' = $filter_important}
+        if ($filter_important -eq $true) {
+            $body += @{'filter[important]' = '1'}
+        }
+        elseif ($filter_import -eq $false) {
+            $body += @{'filter[important]' = '0'}
         }
         if ($filter_primary_email) {
             $body += @{'filter[primary_email]' = $filter_primary_email}
@@ -211,8 +238,7 @@ function Remove-ITGlueContacts {
         [Nullable[Int64]]$filter_contact_type_id = $null,
 
         [Parameter(ParameterSetName = 'bulk_destroy')]
-        [ValidateSet('1', '0')]
-        [String]$filter_important = '',
+        [Nullable[Boolean]]$filter_important = $null,
 
         [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_primary_email = '',
@@ -246,8 +272,11 @@ function Remove-ITGlueContacts {
         if ($filter_contact_type_id) {
             $body += @{'filter[contact_type_id]' = $filter_contact_type_id}
         }
-        if ($filter_important) {
-            $body += @{'filter[important]' = $filter_important}
+        if ($filter_important -eq $true) {
+            $body += @{'filter[important]' = '1'}
+        }
+        elseif ($filter_important -eq $false) {
+            $body += @{'filter[important]' = '0'}
         }
         if ($filter_primary_email) {
             $body += @{'filter[primary_email]' = $filter_primary_email}

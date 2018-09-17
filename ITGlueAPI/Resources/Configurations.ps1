@@ -12,7 +12,11 @@ function New-ITGlueConfigurations {
         $resource_uri = ('/organizations/{0}/relationships/configurations' -f $organization_id)
     }
 
-    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
+
+    $body += @{'data' = $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
@@ -27,7 +31,6 @@ function New-ITGlueConfigurations {
 function Get-ITGlueConfigurations {
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
-        [Parameter(ParameterSetName = 'index')]
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$id,
 
@@ -64,7 +67,7 @@ function Get-ITGlueConfigurations {
                 'continuum', 'jamf-pro', 'kaseya-vsa', 'automate', `
                 'msp-rmm', 'msp-n-central', 'ninja-rmm', 'panorama9', `
                 'pulseway-rmm', 'watchman-monitoring')]
-        [String]$filter_integration_type = '',
+        [String]$filter_rmm_integration_type = '',
 
         [Parameter(ParameterSetName = 'index')]
         [ValidateSet('name', 'id', 'created_at', 'updated-at', `
@@ -72,14 +75,14 @@ function Get-ITGlueConfigurations {
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [Parameter(ParameterSetName = 'show')]
-        [String]$include = '',
-
-        [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$page_number = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [Nullable[int]]$page_size = $null
+        [Nullable[int]]$page_size = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'show')]
+        [String]$include = ''
     )
 
     if($organization_id) {
@@ -90,20 +93,14 @@ function Get-ITGlueConfigurations {
         $resource_uri = ('/configurations/{0}' -f $id)
     }
 
-    $body = @{'include' = $include} # Both Index and Show support the `include` param
+    $body = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
+        }
         if ($filter_name) {
             $body += @{'filter[name]' = $filter_name}
-        }
-        if ($filter_serial_number) {
-            $body += @{'filter[serial_number]' = $filter_serial_number}
-        }
-        if ($filter_rmm_id) {
-            $body += @{'filter[rmm_id]' = $filter_rmm_id}
-        }
-        if ($filter_integration_type) {
-            $body += @{'filter[integration_type]' = $filter_integration_type}
         }
         if ($filter_organization_id) {
             $body += @{'filter[organization_id]' = $filter_organization_id}
@@ -116,6 +113,15 @@ function Get-ITGlueConfigurations {
         }
         if ($filter_contact_id) {
             $body += @{'filter[contact_id]' = $filter_contact_id}
+        }
+        if ($filter_serial_number) {
+            $body += @{'filter[serial_number]' = $filter_serial_number}
+        }
+        if ($filter_rmm_id) {
+            $body += @{'filter[rmm_id]' = $filter_rmm_id}
+        }
+        if ($filter_rmm_integration_type) {
+            $body += @{'filter[rmm_integration_type]' = $filter_rmm_integration_type}
         }
         if ($sort) {
             $body += @{'sort' = $sort}
@@ -132,6 +138,9 @@ function Get-ITGlueConfigurations {
         $resource_uri = ('/organizations/{0}/relationships/configurations/{1}' -f $organization_id, $id)
     }
 
+    if($include) {
+        $body += @{'include' = $include}
+    }
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers -body $body
@@ -181,7 +190,7 @@ function Set-ITGlueConfigurations {
                 'continuum', 'jamf-pro', 'kaseya-vsa', 'automate', `
                 'msp-rmm', 'msp-n-central', 'ninja-rmm', 'panorama9', `
                 'pulseway-rmm', 'watchman-monitoring')]
-        [String]$filter_integration_type = '',
+        [String]$filter_rmm_integration_type = '',
 
         [Parameter(ParameterSetName = 'update')]
         [Parameter(ParameterSetName = 'bulk_update')]
@@ -222,8 +231,8 @@ function Set-ITGlueConfigurations {
         if ($filter_rmm_id) {
             $body += @{'filter[rmm_id]' = $filter_rmm_id}
         }
-        if ($filter_integration_type) {
-            $body += @{'filter[integration_type]' = $filter_integration_type}
+        if ($filter_rmm_integration_type) {
+            $body += @{'filter[rmm_integration_type]' = $filter_rmm_integration_type}
         }
     }
 
@@ -245,10 +254,7 @@ function Remove-ITGlueConfigurations {
     [CmdletBinding(DefaultParameterSetName = 'bulk_delete')]
     Param (
         [Parameter(ParameterSetName = 'bulk_delete')]
-        [Nullable[Int64]]$id = $null,
-
-        [Parameter(ParameterSetName = 'bulk_delete')]
-        [Nullable[Int64]]$organization_id = $null,
+        [Nullable[Int64]]$filter_id = $null,
 
         [Parameter(ParameterSetName = 'bulk_delete')]
         [String]$filter_name = '',
@@ -276,7 +282,7 @@ function Remove-ITGlueConfigurations {
                 'continuum', 'jamf-pro', 'kaseya-vsa', 'automate', `
                 'msp-rmm', 'msp-n-central', 'ninja-rmm', 'panorama9', `
                 'pulseway-rmm', 'watchman-monitoring')]
-        [String]$filter_integration_type = '',
+        [String]$filter_rmm_integration_type = '',
 
         [Parameter(ParameterSetName = 'bulk_delete')]
         [Parameter(Mandatory = $true)]
@@ -292,14 +298,11 @@ function Remove-ITGlueConfigurations {
     $body = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_delete') {
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
+        }
         if ($filter_name) {
             $body += @{'filter[name]' = $filter_name}
-        }
-        if ($filter_rmm_id) {
-            $body += @{'filter[rmm_id]' = $filter_rmm_id}
-        }
-        if ($filter_integration_type) {
-            $body += @{'filter[integration_type]' = $filter_integration_type}
         }
         if ($filter_organization_id) {
             $body += @{'filter[organization_id]' = $filter_organization_id}
@@ -312,6 +315,15 @@ function Remove-ITGlueConfigurations {
         }
         if ($filter_contact_id) {
             $body += @{'filter[contact_id]' = $filter_contact_id}
+        }
+        if ($filter_serial_number) {
+            $body += @{'filter[serial_number]' = $filter_serial_number}
+        }
+        if ($filter_rmm_id) {
+            $body += @{'filter[rmm_id]' = $filter_rmm_id}
+        }
+        if ($filter_rmm_integration_type) {
+            $body += @{'filter[rmm_integration_type]' = $filter_rmm_integration_type}
         }
     }
 

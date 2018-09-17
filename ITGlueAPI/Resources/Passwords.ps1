@@ -2,7 +2,7 @@ function New-ITGluePasswords {
     Param (
         [Nullable[Int64]]$organization_id = $null,
 
-        [Nullable[Boolean]]$show_password = $null, # Passwords API defaults to $false
+        [Boolean]$show_password = $true, # Passwords API defaults to $false
 
         [Parameter(Mandatory = $true)]
         $data
@@ -14,12 +14,15 @@ function New-ITGluePasswords {
         $resource_uri = ('/organizations/{0}/relationships/passwords' -f $organization_id)
     }
 
-    $body = @{}
-
-    if (-not [string]::IsNullOrEmpty($show_password)) {$body += @{'show_password' = $show_password}
+    if (!$show_password) {
+        $resource_uri = $resource_uri + ('?show_password=false') # using $False in PS results in 'False' (uppercase false), so explicitly writing out 'false' is needed
     }
 
-    $body += ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
+
+    $body += @{'data'= $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
@@ -71,7 +74,11 @@ function Get-ITGluePasswords {
         [Nullable[Int64]]$id = $null,
 
         [Parameter(ParameterSetName = 'show')]
-        [Nullable[Boolean]]$show_password = $null # Passwords API defaults to $true
+        [Boolean]$show_password = $true, # Passwords API defaults to $true
+
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'show')]
+        $include = ''
     )
     
     $resource_uri = ('/passwords/{0}' -f $id)
@@ -80,25 +87,27 @@ function Get-ITGluePasswords {
         $resource_uri = ('/organizations/{0}/relationships/passwords/{1}' -f $organization_id, $id)
     }
 
+    $body = @{}
+
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        $body = @{
-            'filter[id]'    = $filter_id
-            'filter[name]'  = $filter_name
-            'filter[url]'   = $filter_url
-            'filter[cached_resource_name]'  = $filter_cached_resource_name
-            'sort'          = $sort
+        if ($filter_id) {$body += @{'filter[id]' = $filter_id}
         }
-        if ($filter_id) {$body += @{'page[id]' = $filter_id}
+        if ($filter_name) {$body += @{'filter[name]' = $filter_name}
         }
-        if ($filter_organization_id) {$body += @{'page[organization_id]' = $filter_organization_id}
+        if ($filter_organization_id) {$body += @{'filter[organization_id]' = $filter_organization_id}
         }
-        if ($filter_password_category_id) {$body += @{'page[password_category_id]' = $filter_password_category_id}
+        if ($filter_password_category_id) {$body += @{'filter[password_category_id]' = $filter_password_category_id}
+        }
+        if ($filter_url) {$body += @{'filter[url]' = $filter_url}
+        }
+        if ($filter_cached_resource_name) {$body += @{'filter[cached_resource_name]' = $filter_cached_resource_name}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {$body += @{'page[number]' = $page_number}
         }
         if ($page_size) {$body += @{'page[size]' = $page_size}
-        }
-        if (-not [string]::IsNullOrEmpty($show_password)) {$body += @{'show_password' = $show_password}
         }
     }
     elseif ($organization_id -eq $null) {
@@ -106,6 +115,13 @@ function Get-ITGluePasswords {
         $resource_uri = ('/passwords/{0}' -f $id)
     }
 
+    if (!$show_password) {
+        $resource_uri = $resource_uri + ('?show_password=false') # using $False in PS results in 'False' (uppercase false), so explicitly writing out 'false' is needed
+    }
+
+    if($include) {
+        $body += @{'include' = $include}
+    }
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
@@ -120,14 +136,14 @@ function Get-ITGluePasswords {
 function Set-ITGluePasswords {
     [CmdletBinding(DefaultParameterSetName = 'update')]
     Param (
-        [CmdletBinding(DefaultParameterSetName = 'index')]
+        [CmdletBinding(DefaultParameterSetName = 'update')]
         [Nullable[Int64]]$organization_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'index')]
+        [CmdletBinding(DefaultParameterSetName = 'update')]
         [Nullable[Int64]]$id = $null,
 
         [CmdletBinding(DefaultParameterSetName = 'update')]
-        [Nullable[Boolean]]$show_password = $null, # Passwords API defaults to $false
+        [Boolean]$show_password = $false, # Passwords API defaults to $false
 
         [CmdletBinding(DefaultParameterSetName = 'update')]
         [CmdletBinding(DefaultParameterSetName = 'bulk_update')]
@@ -141,13 +157,15 @@ function Set-ITGluePasswords {
         $resource_uri = ('/organizations/{0}/relationships/passwords/{1}' -f $organization_id, $id)
     }
 
-    $body = @{}
-
-    if (-not [string]::IsNullOrEmpty($show_password) -and $id -and $organization_id) {
-        $body += @{'show_password' = $show_password}
+    if ($show_password) {
+        $resource_uri = $resource_uri + ('?show_password=true') # using $True in PS results in 'True' (uppercase T), so explicitly writing out 'true' is needed
     }
 
-    $body += ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
+
+    $body += @{'data' = $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
     $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
     $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
@@ -160,31 +178,31 @@ function Set-ITGluePasswords {
 }
 
 function Remove-ITGluePasswords {
-    [CmdletBinding(DefaultParameterSetName = 'delete')]
+    [CmdletBinding(DefaultParameterSetName = 'destroy')]
     Param (
-        [CmdletBinding(DefaultParameterSetName = 'delete')]
+        [CmdletBinding(DefaultParameterSetName = 'destroy')]
         [Nullable[Int64]]$id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_delete')]
+        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_delete')]
+        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
         [String]$filter_name = '',
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_delete')]
+        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_organization_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_delete')]
+        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_password_category_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_delete')]
+        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
         [String]$filter_url = '',
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_delete')]
+        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
         [String]$filter_cached_resource_name = '',
 
         [CmdletBinding(DefaultParameterSetName = 'update')]
-        [CmdletBinding(DefaultParameterSetName = 'bulk_delete')]
+        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
         [Parameter(Mandatory = $true)]
         $data
     )
@@ -193,11 +211,7 @@ function Remove-ITGluePasswords {
 
     $body = @{}
 
-    if (-not [string]::IsNullOrEmpty($show_password) -and $id -and $organization_id) {
-        $body += @{'show_password' = $show_password}
-    }
-
-    if ($PSCmdlet.ParameterSetName -eq 'bulk_delete') {
+    if ($PSCmdlet.ParameterSetName -eq 'bulk_destroy') {
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
         }
