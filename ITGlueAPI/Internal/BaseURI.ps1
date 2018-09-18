@@ -20,13 +20,11 @@ function Add-ITGlueBaseURI {
         Default {}
     }
 
-
-    Set-Variable -Name "ITGlue_Base_URI" -Value $base_uri  -Option ReadOnly -Scope global -Force
+    Set-Variable -Name "ITGlue_Base_URI" -Value $base_uri -Option ReadOnly -Scope global -Force
 }
 
-
 function Remove-ITGlueBaseURI {
-    Remove-Variable -Name "ITGlue_Base_URI"  -Force 
+    Remove-Variable -Name "ITGlue_Base_URI" -Scope global -Force 
 }
 
 function Get-ITGlueBaseURI {
