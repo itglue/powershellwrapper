@@ -6,12 +6,21 @@ function New-ITGlueOrganizations {
 
     $resource_uri = '/organizations/'
 
-    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
 
-    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-        -body $body -ErrorAction Stop -ErrorVariable $web_error
-    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    $body += @{'data' = $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
+
+    try {
+        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
+    } catch {
+        Write-Error $_
+    } finally {
+        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    }
 
     $data = @{}
     $data = $rest_output 
@@ -22,6 +31,9 @@ function Get-ITGlueOrganizations {
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
         [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_id = $null,
+
+        [Parameter(ParameterSetName = 'index')]
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -30,6 +42,18 @@ function Get-ITGlueOrganizations {
         [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$filter_organization_status_id = $null,
 
+        [Parameter(ParameterSetName = 'index')]
+        [String]$filter_created_at = '',
+
+        [Parameter(ParameterSetName = 'index')]
+        [String]$filter_updated_at = '',
+
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_my_glue_account_id = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_exclude_id = $null,
+        
         [Parameter(ParameterSetName = 'index')]
         [String]$filter_exclude_name = '',
 
@@ -40,8 +64,14 @@ function Get-ITGlueOrganizations {
         [Nullable[Int64]]$filter_exclude_organization_status_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'name', 'id', 'updated-at', 'organization_status_name', 'organization_type_name', `
-                '-name', '-id', '-updated-at', '-organization_status_name', '-organization_type_name')]
+        [String]$filter_range = '',
+
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_range_my_glue_account_id = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [ValidateSet( 'name', 'id', 'updated_at', 'organization_status_name', 'organization_type_name', 'created_at', 'short_name', 'my_glue_account_id',`
+                '-name', '-id', '-updated_at', '-organization_status_name', '-organization_type_name', '-created_at', '-short_name', '-my_glue_account_id')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -56,12 +86,14 @@ function Get-ITGlueOrganizations {
 
     $resource_uri = ('/organizations/{0}' -f $id)
 
+    $body = @{}
+
     if ($PSCmdlet.ParameterSetName -eq 'index') {
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
+        }
         if ($filter_name) {
             $body += @{'filter[name]' = $filter_name}
-        }
-        if ($filter_exclude_name) {
-            $body += @{'filter[exclude][name]' = $filter_exclude_name}
         }
         if ($filter_organization_type_id) {
             $body += @{'filter[organization_type_id]' = $filter_organization_type_id}
@@ -69,11 +101,32 @@ function Get-ITGlueOrganizations {
         if ($filter_organization_type_id) {
             $body += @{'filter[organization_status_id]' = $filter_organization_status_id}
         }
+        if ($filter_created_at) {
+            $body += @{'filter[created_at]' = $filter_created_at}
+        }
+        if ($filter_updated_at) {
+            $body += @{'filter[updated_at]' = $filter_updated_at}
+        }
+        if ($filter_my_glue_account_id) {
+            $body += @{'filter[my_glue_account_id]' = $filter_my_glue_account_id}
+        }
+        if ($filter_exclude_id) {
+            $body += @{'filter[exclude][id]' = $filter_exclude_id}
+        }
+        if ($filter_exclude_name) {
+            $body += @{'filter[exclude][name]' = $filter_exclude_name}
+        }
         if ($filter_exclude_organization_type_id) {
             $body += @{'filter[exclude][organization_type_id]' = $filter_exclude_organization_type_id}
         }
         if ($filter_exclude_organization_type_id) {
             $body += @{'filter[exclude][organization_status_id]' = $filter_exclude_organization_status_id}
+        }
+        if ($filter_range) {
+            $body += @{'filter[range]' = $filter_range}
+        }
+        if ($filter_range_my_glue_account_id) {
+            $body += @{'filter[range][my_glue_account_id]' = $filter_range_my_glue_account_id}
         }
         if ($sort) {
             $body += @{'sort' = $sort}
@@ -86,11 +139,15 @@ function Get-ITGlueOrganizations {
         }
     }
 
-
-    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-        -body $body -ErrorAction Stop -ErrorVariable $web_error
-    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    try {
+        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
+    } catch {
+        Write-Error $_
+    } finally {
+        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    }
 
     $data = @{}
     $data = $rest_output 
@@ -148,6 +205,9 @@ function Set-ITGlueOrganizations {
     $body = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_update') {
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
+        }
         if($filter_name) {
             $body += @{'filter[name]' = $filter_name}
         }
@@ -184,10 +244,15 @@ function Set-ITGlueOrganizations {
 
     $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
-    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-        -body $body -ErrorAction Stop -ErrorVariable $web_error
-    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    try {
+        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
+    } catch {
+        Write-Error $_
+    } finally {
+        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    }
 
     $data = @{}
     $data = $rest_output 
@@ -241,6 +306,9 @@ function Remove-ITGlueOrganizations {
     $body = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_destroy') {
+        if ($filter_id) {
+            $body += @{'filter[id]' = $filter_id}
+        }
         if($filter_name) {
             $body += @{'filter[name]' = $filter_name}
         }
@@ -277,10 +345,15 @@ function Remove-ITGlueOrganizations {
 
     $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
-    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method 'DELETE' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-        -body $body -ErrorAction Stop -ErrorVariable $web_error
-    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    try {
+        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $rest_output = Invoke-RestMethod -method 'DELETE' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
+    } catch {
+        Write-Error $_
+    } finally {
+        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    }
 
     $data = @{}
     $data = $rest_output 

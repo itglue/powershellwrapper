@@ -1,7 +1,7 @@
 function Add-ITGlueAPIKey {
     [cmdletbinding()]
     Param (
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
         [AllowEmptyString()]
         [Alias('ApiKey')]
         [string]$Api_Key
@@ -19,13 +19,17 @@ function Add-ITGlueAPIKey {
     }
 }
 
-
 function Remove-ITGlueAPIKey {
     Remove-Variable -Name "ITGlue_API_Key"  -Force  
 }
 
 function Get-ITGlueAPIKey {
-    $ITGlue_API_Key
+    if($ITGlue_API_Key -eq $null) {
+        Write-Error "No API key exists. Please run Add-ITGlueAPIKey to add one."
+    }
+    else {
+        $ITGlue_API_Key
+    }
 }
 
 New-Alias -Name Set-ITGlueAPIKey -Value Add-ITGlueAPIKey

@@ -6,12 +6,21 @@ function New-ITGlueContactTypes {
 
     $resource_uri = '/contact_types/'
 
-    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
 
-    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-        -body $body -ErrorAction Stop -ErrorVariable $web_error
-    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    $body += @{'data'= $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
+
+    try {
+        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
+    } catch {
+        Write-Error $_
+    } finally {
+        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    }
 
     $data = @{}
     $data = $rest_output 
@@ -41,6 +50,8 @@ function Get-ITGlueContactTypes {
 
     $resource_uri = ('/contact_types/{0}' -f $id)
 
+    $body = @{}
+
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_name) {
             $body += @{'filter[name]' = $filter_name}
@@ -56,11 +67,15 @@ function Get-ITGlueContactTypes {
         }
     }
 
-
-    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-        -body $body -ErrorAction Stop -ErrorVariable $web_error
-    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    try {
+        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
+    } catch {
+        Write-Error $_
+    } finally {
+        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    }
 
     $data = @{}
     $data = $rest_output 
@@ -78,12 +93,21 @@ function Set-ITGlueContactTypes {
 
     $resource_uri = ('/contact_types/{0}' -f $id) 
 
-    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
 
-    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-        -body $body -ErrorAction Stop -ErrorVariable $web_error
-    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    $body += @{'data'= $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
+
+    try {
+        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
+    } catch {
+        Write-Error $_
+    } finally {
+        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    }
 
     $data = @{}
     $data = $rest_output 

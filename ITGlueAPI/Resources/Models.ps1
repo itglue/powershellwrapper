@@ -12,12 +12,21 @@ function New-ITGlueModels {
         $resource_uri = ('/manufacturers/{0}/relationships/models' -f $manufacturer_id)
     }
 
-    $body = ConvertTo-Json -InputObject $data -Depth $ITGlue_JSON_Conversion_Depth
+    $body = @{}
 
-    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-        -body $body -ErrorAction Stop -ErrorVariable $web_error
-    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    $body += @{'data'= $data}
+
+    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
+
+    try {
+        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
+    } catch {
+        Write-Error $_
+    } finally {
+        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    }
 
     $data = @{}
     $data = $rest_output 
@@ -54,6 +63,8 @@ function Get-ITGlueModels {
         $resource_uri = ('/manufacturers/{0}/relationships' -f $manufacturer_id) + $resource_uri
     }
 
+    $body = @{}
+
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
@@ -69,11 +80,15 @@ function Get-ITGlueModels {
         }
     }
 
-
-    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-        -body $body -ErrorAction Stop -ErrorVariable $web_error
-    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    try {
+        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
+    } catch {
+        Write-Error $_
+    } finally {
+        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    }
 
     $data = @{}
     $data = $rest_output 
@@ -116,10 +131,15 @@ function Set-ITGlueModels {
 
     $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
-    $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-        -body $body -ErrorAction Stop -ErrorVariable $web_error
-    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    try {
+        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
+    } catch {
+        Write-Error $_
+    } finally {
+        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    }
 
     $data = @{}
     $data = $rest_output 
