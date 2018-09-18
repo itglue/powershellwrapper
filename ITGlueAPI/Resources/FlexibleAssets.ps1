@@ -114,7 +114,11 @@ function Set-ITGlueFlexibleAssets {
         $data
     )
 
-    $resource_uri = ('/flexible_assets/{0}' -f $id)
+    $resource_uri = ('/flexible_assets')
+
+    if($id) {
+        $resource_uri = ('/flexible_assets/{0}' -f $id)
+    }
 
     $body = @{}
 
