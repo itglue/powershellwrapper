@@ -11,7 +11,7 @@ $ThisModulePath = Split-Path (Split-Path -Parent $PSCommandPath) -Parent
 Get-Module -Name $ThisModuleName | Remove-Module
 
 # Credit - borrowed with care from http://www.lazywinadmin.com/2016/05/using-pester-to-test-your-manifest-file.html and modified as needed
-# Manifest file path 
+# Manifest file path
 $ManifestFile = "$ThisModulePath\$ThisModuleName.psd1"
 
 # Import the module and store the information about the module
@@ -64,9 +64,8 @@ $ManifestFileElements = (
     'HelpInfoURI'
 )
 
-Describe "$ThisModuleName Module Tests" {
-    
-    Context 'Test Module' {
+Describe "Module Tests" {
+    Context "Test $ThisModuleName Module" {
         It "has the root module $ThisModuleName.psm1" {
             "$ThisModulePath\$ThisModuleName.psm1" | Should Exist
         }
