@@ -2,14 +2,14 @@ function Get-ITGlueCountries {
     [CmdletBinding(DefaultParameterSetName = "index")]
     Param (
         [Parameter(ParameterSetName = "index")]
-        [String]$filter_name = "",
+        [String]$filter_name = '',
 
         [Parameter(ParameterSetName = "index")]
-        [String]$filter_iso = "",
+        [String]$filter_iso = '',
 
         [Parameter(ParameterSetName = "index")]
-        [ValidateSet( "name", "id", `
-                "-name", "-id")]
+        [ValidateSet( 'name', 'id', 'created_at', 'updated_at', `
+                '-name', '-id', '-created_at', '-updated_at')]
         [String]$sort = "",
 
         [Parameter(ParameterSetName = "index")]
@@ -23,12 +23,16 @@ function Get-ITGlueCountries {
     )
 
     $resource_uri = ('/countries/{0}' -f $id)
-
+    
     if ($PSCmdlet.ParameterSetName -eq "index") {
-        $body = @{
-            "filter[name]" = $filter_name
-            "filter[iso]"  = $filter_iso
-            "sort"         = $sort
+        if ($filter_name) {
+            $body += @{'filter[name]' = $filter_name}
+        }
+        if ($filter_iso) {
+            $body += @{'filter[iso]' = $filter_iso}
+        }
+        if ($sort) {
+            $body += @{'sort' = $sort}
         }
         if ($page_number) {
             $body += @{"page[number]" = $page_number}
@@ -38,10 +42,15 @@ function Get-ITGlueCountries {
         }
     }
 
-    $ITGlue_Headers.Add("x-api-key", (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-    $rest_output = Invoke-RestMethod -method "GET" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-        -body $body -ErrorAction Stop -ErrorVariable $web_error
-    $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    try {
+        $ITGlue_Headers.Add("x-api-key", (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $rest_output = Invoke-RestMethod -method "GET" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
+    } catch {
+        Write-Error $_
+    } finally {
+        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+    }
 
     $data = @{}
     $data = $rest_output 

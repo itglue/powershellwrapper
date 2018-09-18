@@ -12,7 +12,12 @@
 RootModule = '.\ITGlueAPI.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.1.0'
+# Follows https://semver.org Semantic Versioning 2.0.0
+# Given a version number MAJOR.MINOR.PATCH, increment the:
+# -- MAJOR version when you make incompatible API changes,
+# -- MINOR version when you add functionality in a backwards-compatible manner, and
+# -- PATCH version when you make backwards-compatible bug fixes.
+ModuleVersion = '2.0.0'
 
 # ID used to uniquely identify this module
 #GUID = ''
@@ -25,6 +30,9 @@ CompanyName = 'IT Glue'
 
 # Description of the functionality provided by this module
 Description = 'This module provides a PowerShell wrapper for the IT Glue API.'
+
+# Copyright information of this module
+Copyright = 'https://github.com/itglue/powershellwrapper/blob/master/LICENSE'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '3.0'
@@ -70,10 +78,10 @@ NestedModules = 'Internal/BaseURI.ps1',
                 'Resources/Contacts.ps1',
                 'Resources/ContactTypes.ps1',
                 'Resources/Countries.ps1',
-                'Resources/FavoriteOrganizations.ps1',
                 'Resources/FlexibleAssetFields.ps1',
                 'Resources/FlexibleAssets.ps1',
                 'Resources/FlexibleAssetTypes.ps1',
+                'Resources/Groups.ps1',
                 'Resources/Locations.ps1',
                 'Resources/Manufacturers.ps1',
                 'Resources/Models.ps1',
@@ -81,6 +89,8 @@ NestedModules = 'Internal/BaseURI.ps1',
                 'Resources/Organizations.ps1',
                 'Resources/OrganizationStatuses.ps1',
                 'Resources/OrganizationTypes.ps1',
+                'Resources/PasswordCategories.ps1',
+                'Resources/Passwords.ps1',
                 'Resources/Platforms.ps1',
                 'Resources/Regions.ps1',
                 'Resources/UserMetrics.ps1',
@@ -124,10 +134,6 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
 
                     'Get-ITGlueCountries',
 
-                    'New-ITGlueFavoriteOrganizations',
-                    'Get-ITGlueFavoriteOrganizations',
-                    'Remove-ITGlueFavoriteOrganizations',
-
                     'New-ITGlueFlexibleAssetFields',
                     'Get-ITGlueFlexibleAssetFields',
                     'Set-ITGlueFlexibleAssetFields',
@@ -140,10 +146,14 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'New-ITGlueFlexibleAssets',
                     'Get-ITGlueFlexibleAssets',
                     'Set-ITGlueFlexibleAssets',
+                    'Remove-ITGlueFlexibleAssets',
+
+                    'Get-ITGlueGroups',
 
                     'New-ITGlueLocations',
                     'Get-ITGlueLocations',
                     'Set-ITGlueLocations',
+                    'Remove-ITGlueLocations',
 
                     'New-ITGlueManufacturers',
                     'Get-ITGlueManufacturers',
@@ -166,6 +176,16 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'New-ITGlueOrganizations',
                     'Get-ITGlueOrganizations',
                     'Set-ITGlueOrganizations',
+                    'Remove-ITGlueOrganizations',
+
+                    'New-ITGluePasswordCategories',
+                    'Get-ITGluePasswordCategories',
+                    'Set-ITGluePasswordCategories',
+
+                    'New-ITGluePasswords',
+                    'Get-ITGluePasswords',
+                    'Set-ITGluePasswords',
+                    'Remove-ITGluePasswords',
 
                     'Get-ITGluePlatforms',
 
@@ -198,7 +218,7 @@ AliasesToExport = '*'
 # PrivateData = ''
 
 # HelpInfo URI of this module
-# HelpInfoURI = ''
+HelpInfoURI = 'https://github.com/itglue/powershellwrapper/wiki'
 
 # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
 # DefaultCommandPrefix = ''

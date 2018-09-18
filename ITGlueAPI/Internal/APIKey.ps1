@@ -1,7 +1,7 @@
 function Add-ITGlueAPIKey {
     [cmdletbinding()]
     Param (
-        [Parameter(Mandatory = $false)]
+        [Parameter(Mandatory = $false, ValueFromPipeline = $true)]
         [AllowEmptyString()]
         [Alias('ApiKey')]
         [string]$Api_Key
@@ -11,7 +11,7 @@ function Add-ITGlueAPIKey {
 
         Set-Variable -Name "ITGlue_API_Key"  -Value $x_api_key -Option ReadOnly -Scope global -Force
     }
-    if (!$Api_Key) {
+    else {
         Write-Host "Please enter your API key:"
         $x_api_key = Read-Host -AsSecureString
 
@@ -24,9 +24,12 @@ function Remove-ITGlueAPIKey {
 }
 
 function Get-ITGlueAPIKey {
-    $ITGlue_API_Key
-    
-    Write-Host "Use Get-ITGlueAPIKey -Force to retrieve the unencrypted copy." -ForegroundColor "Red"
+    if($ITGlue_API_Key -eq $null) {
+        Write-Error "No API key exists. Please run Add-ITGlueAPIKey to add one."
+    }
+    else {
+        $ITGlue_API_Key
+    }
 }
 
 New-Alias -Name Set-ITGlueAPIKey -Value Add-ITGlueAPIKey

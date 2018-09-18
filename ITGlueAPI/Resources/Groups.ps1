@@ -1,22 +1,12 @@
-function Get-ITGlueRegions {
+function Get-ITGlueGroups {
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
-        [Parameter(ParameterSetName = 'index')]
-        [Parameter(ParameterSetName = 'show')]
-        [Nullable[Int64]]$country_id = $null,
-
         [Parameter(ParameterSetName = 'index')]
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [String]$filter_iso = '',
-
-        [Parameter(ParameterSetName = 'index')]
-        [Nullable[Int]]$filter_country_id = '',
-
-        [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'name', 'id', 'created_at', 'updated_at', `
-                '-name', '-id', '-created_at', '-updated_at')]
+        [ValidateSet( 'name', 'created_at', 'updated_at', `
+                '-name', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -29,20 +19,11 @@ function Get-ITGlueRegions {
         [Nullable[Int64]]$id = $null
     )
 
-    $resource_uri = ('/regions/{0}' -f $id)
-    if ($country_id) {
-        $resource_uri = ('/countries/{0}/relationships' -f $country_id) + $resource_uri
-    }
+    $resource_uri = ('/groups/{0}' -f $id)
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_name) {
             $body += @{'filter[name]' = $filter_name}
-        }
-        if ($filter_iso) {
-            $body += @{'filter[iso]' = $filter_iso}
-        }
-        if ($filter_country_id) {
-            $body += @{'filter[country_id]' = $filter_country_id}
         }
         if ($sort) {
             $body += @{'sort' = $sort}

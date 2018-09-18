@@ -1,14 +1,14 @@
-function New-ITGlueFlexibleAssetTypes {
+function New-ITGluePasswordCategories{
     Param (
         [Parameter(Mandatory = $true)]
         $data
     )
 
-    $resource_uri = '/flexible_asset_types/'
+    $resource_uri = '/password_categories/'
 
     $body = @{}
 
-    $body += @{'data'= $data}
+    $body += @{'data' = $data}
 
     $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
@@ -26,21 +26,16 @@ function New-ITGlueFlexibleAssetTypes {
     $data = $rest_output 
     return $data
 }
-function Get-ITGlueFlexibleAssetTypes {
+
+function Get-ITGluePasswordCategories {
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
         [Parameter(ParameterSetName = 'index')]
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [String]$filter_icon = '',
-
-        [Parameter(ParameterSetName = 'index')]
-        [Nullable[Boolean]]$filter_enabled = $null,
-
-        [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'name', 'id', 'created_at', 'updated_at', `
-                '-name', '-id', '-created_at', '-updated_at')]
+        [ValidateSet( 'name', 'created_at', 'updated_at', `
+                '-name', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -49,30 +44,17 @@ function Get-ITGlueFlexibleAssetTypes {
         [Parameter(ParameterSetName = 'index')]
         [Nullable[int]]$page_size = $null,
 
-        [Parameter(ParameterSetName = 'index')]
-        [String]$include = '',
-
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$id = $null
     )
 
-    $resource_uri = ('/flexible_asset_types/{0}' -f $id)
+    $resource_uri = ('/password_categories/{0}' -f $id)
 
     $body = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_name) {
             $body += @{'filter[name]' = $filter_name}
-        }
-        if ($filter_icon) {
-            $body += @{'filter[icon]' = $filter_icon}
-        }
-        if ($filter_enabled -eq $true) {
-            # PS $true returns "True" in string form (uppercase) and ITG's API is case-sensitive, so being explicit
-            $body += @{'filter[enabled]' = "1"}
-        }
-        elseif ($filter_enabled -eq $false) {
-            $body += @{'filter[enabled]' = "0"}
         }
         if ($sort) {
             $body += @{'sort' = $sort}
@@ -83,10 +65,6 @@ function Get-ITGlueFlexibleAssetTypes {
         if ($page_size) {
             $body += @{'page[size]' = $page_size}
         }
-    }
-
-    if($include) {
-        $body += @{'include' = $include}
     }
 
     try {
@@ -104,7 +82,7 @@ function Get-ITGlueFlexibleAssetTypes {
     return $data
 }
 
-function Set-ITGlueFlexibleAssetTypes {
+function Set-ITGluePasswordCategories {
     Param (
         [Parameter(Mandatory = $true)]
         [Int64]$id,
@@ -113,7 +91,7 @@ function Set-ITGlueFlexibleAssetTypes {
         $data
     )
 
-    $resource_uri = ('/flexible_asset_types/{0}' -f $id)
+    $resource_uri = ('/password_categories/{0}' -f $id)
 
     $body = @{}
 
