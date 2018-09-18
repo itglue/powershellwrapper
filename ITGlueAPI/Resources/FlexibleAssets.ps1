@@ -103,7 +103,7 @@ function Get-ITGlueFlexibleAssets {
 }
 
 function Set-ITGlueFlexibleAssets {
-    [CmdletBinding(DefaultParameterSetName = 'index')]
+    [CmdletBinding(DefaultParameterSetName = 'update')]
     Param (
         [Parameter(ParameterSetName = 'update')]
         [Nullable[Int64]]$id = $null,
