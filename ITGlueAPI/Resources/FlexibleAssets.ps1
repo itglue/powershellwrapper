@@ -106,7 +106,7 @@ function Set-ITGlueFlexibleAssets {
     [CmdletBinding(DefaultParameterSetName = 'update')]
     Param (
         [Parameter(ParameterSetName = 'update')]
-        [Int64]$id,
+        [Nullable[Int64]]$id = $null,
 
         [Parameter(ParameterSetName = 'update')]
         [Parameter(ParameterSetName = 'bulk_update')]
