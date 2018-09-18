@@ -106,7 +106,7 @@ function Set-ITGlueFlexibleAssets {
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
         [Parameter(ParameterSetName = 'update')]
-        [Int64]$id,
+        [Nullable[Int64]]$id = $null,
 
         [Parameter(ParameterSetName = 'update')]
         [Parameter(ParameterSetName = 'bulk_update')]
@@ -114,11 +114,7 @@ function Set-ITGlueFlexibleAssets {
         $data
     )
 
-    $resource_uri = ('/flexible_assets')
-
-    if($id) {
-        $resource_uri = ('/flexible_assets/{0}' -f $id)
-    }
+    $resource_uri = ('/flexible_assets/{0}' -f $id)
 
     $body = @{}
 
