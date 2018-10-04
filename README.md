@@ -31,7 +31,14 @@ Get-ITGlueUsers
 
 ## Installation
 
-One can manually download the Master branch and place the "ITGlueAPI" folder into the (default) `C:\Program Files\WindowsPowerShell\Modules` folder.
+This module can be installed directly from the [PowerShell Gallery](https://www.powershellgallery.com/packages/ITGlueAPI) with the following command:
+```posh
+Install-Module -Name ITGlueAPI
+```
+
+If running an older version of PowerShell, or if PowerShellGet is unavailable, one can manually download the Master branch and place the "ITGlueAPI" folder into the (default) `C:\Program Files\WindowsPowerShell\Modules` folder.
+
+After installation (by either methods), load the module into your workspace:
 
 ```posh
 Import-Module ITGlueAPI
