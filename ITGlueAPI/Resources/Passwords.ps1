@@ -10,7 +10,7 @@ function New-ITGluePasswords {
 
     $resource_uri = '/passwords/'
 
-    if ($flexible_asset_type_id) {
+    if ($organization_id) {
         $resource_uri = ('/organizations/{0}/relationships/passwords' -f $organization_id)
     }
 
