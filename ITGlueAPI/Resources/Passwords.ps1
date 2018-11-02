@@ -216,9 +216,8 @@ function Remove-ITGluePasswords {
         [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_cached_resource_name = '',
 
-        [Parameter(ParameterSetName = 'update')]
-        [Parameter(ParameterSetName = 'bulk_destroy')]
-        [Parameter(Mandatory = $true)]
+        [Parameter(ParameterSetName = 'update', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'bulk_destroy', Mandatory = $true)]
         $data
     )
 
@@ -252,9 +251,15 @@ function Remove-ITGluePasswords {
     $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
     try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
+        if($PSCmdlet.ParameterSetName -eq 'destroy') {
+            $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+            $rest_output = Invoke-RestMethod -method 'DELETE' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+                -ErrorAction Stop -ErrorVariable $web_error
+        } else {
+            $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+            $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+                -body $body -ErrorAction Stop -ErrorVariable $web_error
+        }
     } catch {
         Write-Error $_
     } finally {
@@ -262,6 +267,6 @@ function Remove-ITGluePasswords {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
