@@ -146,17 +146,17 @@ function Get-ITGluePasswords {
 function Set-ITGluePasswords {
     [CmdletBinding(DefaultParameterSetName = 'update')]
     Param (
-        [CmdletBinding(DefaultParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'update')]
         [Nullable[Int64]]$organization_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'update')]
         [Nullable[Int64]]$id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'update')]
         [Boolean]$show_password = $false, # Passwords API defaults to $false
 
-        [CmdletBinding(DefaultParameterSetName = 'update')]
-        [CmdletBinding(DefaultParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'bulk_update')]
         [Parameter(Mandatory = $true)]
         $data
     )
@@ -195,29 +195,29 @@ function Set-ITGluePasswords {
 function Remove-ITGluePasswords {
     [CmdletBinding(DefaultParameterSetName = 'destroy')]
     Param (
-        [CmdletBinding(DefaultParameterSetName = 'destroy')]
+        [Parameter(ParameterSetName = 'destroy')]
         [Nullable[Int64]]$id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_name = '',
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_organization_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_password_category_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_url = '',
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_cached_resource_name = '',
 
-        [CmdletBinding(DefaultParameterSetName = 'update')]
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [Parameter(Mandatory = $true)]
         $data
     )
