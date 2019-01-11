@@ -50,6 +50,9 @@ function Get-ITGlueOrganizations {
 
         [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$filter_my_glue_account_id = $null,
+        
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$filter_group_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$filter_exclude_id = $null,
@@ -109,6 +112,9 @@ function Get-ITGlueOrganizations {
         }
         if ($filter_my_glue_account_id) {
             $body += @{'filter[my_glue_account_id]' = $filter_my_glue_account_id}
+        }
+        if ($filter_group_id) {
+            $body += @{'filter[group_id]' = $filter_group_id}
         }
         if ($filter_exclude_id) {
             $body += @{'filter[exclude][id]' = $filter_exclude_id}
