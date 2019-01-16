@@ -10,7 +10,7 @@ function New-ITGluePasswords {
 
     $resource_uri = '/passwords/'
 
-    if ($flexible_asset_type_id) {
+    if ($organization_id) {
         $resource_uri = ('/organizations/{0}/relationships/passwords' -f $organization_id)
     }
 
@@ -131,7 +131,7 @@ function Get-ITGluePasswords {
     try {
         $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
         $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -ErrorAction Stop -ErrorVariable $web_error
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
     } catch {
         Write-Error $_
     } finally {
@@ -146,17 +146,17 @@ function Get-ITGluePasswords {
 function Set-ITGluePasswords {
     [CmdletBinding(DefaultParameterSetName = 'update')]
     Param (
-        [CmdletBinding(DefaultParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'update')]
         [Nullable[Int64]]$organization_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'update')]
         [Nullable[Int64]]$id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'update')]
         [Boolean]$show_password = $false, # Passwords API defaults to $false
 
-        [CmdletBinding(DefaultParameterSetName = 'update')]
-        [CmdletBinding(DefaultParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'bulk_update')]
         [Parameter(Mandatory = $true)]
         $data
     )
@@ -195,30 +195,28 @@ function Set-ITGluePasswords {
 function Remove-ITGluePasswords {
     [CmdletBinding(DefaultParameterSetName = 'destroy')]
     Param (
-        [CmdletBinding(DefaultParameterSetName = 'destroy')]
+        [Parameter(ParameterSetName = 'destroy')]
         [Nullable[Int64]]$id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_name = '',
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_organization_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_password_category_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_url = '',
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_cached_resource_name = '',
 
-        [CmdletBinding(DefaultParameterSetName = 'update')]
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
-        [Parameter(Mandatory = $true)]
+        [Parameter(ParameterSetName = 'bulk_destroy', Mandatory = $true)]
         $data
     )
 
@@ -245,15 +243,15 @@ function Remove-ITGluePasswords {
         if ($filter_cached_resource_name) {
             $body += @{'filter[cached_resource_name]' = $filter_cached_resource_name}
         }
+
+        $body += @{'data' = $data}
+
+        $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
     }
-
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
     try {
         $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        $rest_output = Invoke-RestMethod -method 'DELETE' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
             -body $body -ErrorAction Stop -ErrorVariable $web_error
     } catch {
         Write-Error $_
@@ -262,6 +260,6 @@ function Remove-ITGluePasswords {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
