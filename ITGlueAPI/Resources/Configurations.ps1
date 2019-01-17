@@ -138,10 +138,6 @@ function Get-ITGlueConfigurations {
             $body += @{'page[size]' = $page_size}
         }
     }
-    else {
-        #Parameter set "Show" is selected; switch to nested relationships route
-        $resource_uri = ('/organizations/{0}/relationships/configurations/{1}' -f $organization_id, $id)
-    }
 
     if($include) {
         $body += @{'include' = $include}
