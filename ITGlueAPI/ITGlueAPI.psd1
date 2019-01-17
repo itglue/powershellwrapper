@@ -17,6 +17,7 @@ RootModule = '.\ITGlueAPI.psm1'
 # -- MAJOR version when you make incompatible API changes,
 # -- MINOR version when you add functionality in a backwards-compatible manner, and
 # -- PATCH version when you make backwards-compatible bug fixes.
+
 ModuleVersion = '2.0.5'
 
 # ID used to uniquely identify this module
@@ -123,6 +124,7 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'New-ITGlueConfigurations',
                     'Get-ITGlueConfigurations',
                     'Set-ITGlueConfigurations',
+                    'Remove-ITGlueConfigurations',
                     
                     'New-ITGlueContactTypes',
                     'Get-ITGlueContactTypes',
@@ -131,6 +133,7 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'New-ITGlueContacts',
                     'Get-ITGlueContacts',
                     'Set-ITGlueContacts',
+                    'Remove-ITGlueContacts',
 
                     'Get-ITGlueCountries',
 
