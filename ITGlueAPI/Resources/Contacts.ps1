@@ -262,10 +262,10 @@ function Remove-ITGlueContacts {
         $data
     )
 
-    $resource_uri = ('/configurations/{0}' -f $id)
+    $resource_uri = ('/contacts/{0}' -f $id)
 
     if ($flexible_asset_type_id) {
-        $resource_uri = ('/organizations/{0}/relationships/configurations/{1}' -f $organization_id, $id)
+        $resource_uri = ('/organizations/{0}/relationships/contacts/{1}' -f $organization_id, $id)
     }
 
     $body = @{}
