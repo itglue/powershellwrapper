@@ -29,7 +29,7 @@ function New-ITGlueFlexibleAssetFields {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -57,7 +57,7 @@ function Get-ITGlueFlexibleAssetFields {
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$id = $null
     )
-    
+
     $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
 
     if ($flexible_asset_type_id) {
@@ -80,7 +80,7 @@ function Get-ITGlueFlexibleAssetFields {
             $body += @{'page[size]' = $page_size}
         }
     }
-    elseif ($flexible_asset_type_id -eq $null) {
+    elseif ($null -eq $flexible_asset_type_id) {
         #Parameter set "Show" is selected and no flexible asset type id is specified; switch from nested relationships route
         $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
     }
@@ -96,7 +96,7 @@ function Get-ITGlueFlexibleAssetFields {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -147,7 +147,7 @@ function Set-ITGlueFlexibleAssetFields {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -179,7 +179,7 @@ function Remove-ITGlueFlexibleAssetFields {
         }
 
         $data = @{}
-        $data = $rest_output 
+        $data = $rest_output
         return $data
     }
 }

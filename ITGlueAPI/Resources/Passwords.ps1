@@ -35,7 +35,7 @@ function New-ITGluePasswords {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -85,7 +85,7 @@ function Get-ITGluePasswords {
         [Parameter(ParameterSetName = 'show')]
         $include = ''
     )
-    
+
     $resource_uri = ('/passwords/{0}' -f $id)
 
     if ($organization_id) {
@@ -115,7 +115,7 @@ function Get-ITGluePasswords {
         if ($page_size) {$body += @{'page[size]' = $page_size}
         }
     }
-    elseif ($organization_id -eq $null) {
+    elseif ($null -eq $organization_id) {
         #Parameter set "Show" is selected and no organization id is specified; switch from nested relationships route
         $resource_uri = ('/passwords/{0}' -f $id)
     }
@@ -139,7 +139,7 @@ function Get-ITGluePasswords {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -188,7 +188,7 @@ function Set-ITGluePasswords {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 

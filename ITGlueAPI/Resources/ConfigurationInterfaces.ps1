@@ -29,7 +29,7 @@ function New-ITGlueConfigurationInterfaces {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -59,7 +59,7 @@ function Get-ITGlueConfigurationInterfaces {
     )
 
     $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces/{1}' -f $conf_id, $id)
-    if (($PsCmdlet.ParameterSetName -eq 'show') -and ($conf_id -eq $null)) {
+    if (($PsCmdlet.ParameterSetName -eq 'show') -and ($null -eq $conf_id)) {
         $resource_uri = ('/configuration_interfaces/{0}' -f $id)
     }
 
@@ -91,7 +91,7 @@ function Get-ITGlueConfigurationInterfaces {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
