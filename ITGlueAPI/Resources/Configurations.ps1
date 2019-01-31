@@ -300,11 +300,7 @@ function Remove-ITGlueConfigurations {
         $data
     )
 
-    $resource_uri = ('/configurations/{0}' -f $id)
-
-    if ($flexible_asset_type_id) {
-        $resource_uri = ('/organizations/{0}/relationships/configurations/{1}' -f $organization_id, $id)
-    }
+    $resource_uri = '/configurations/'
 
     $body = @{}
 
