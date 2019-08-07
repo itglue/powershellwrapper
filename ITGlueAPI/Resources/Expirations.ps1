@@ -24,7 +24,6 @@ function Get-ITGlueExpirations {
         [String]$filter_expiration_date = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidatePattern('^[0-9*]+,\s[0-9*]+$')]
         [String]$filter_range = '',
 
         [Parameter(ParameterSetName = 'index')]
