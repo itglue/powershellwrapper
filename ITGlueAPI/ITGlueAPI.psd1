@@ -79,6 +79,7 @@ NestedModules = 'Internal/BaseURI.ps1',
                 'Resources/Contacts.ps1',
                 'Resources/ContactTypes.ps1',
                 'Resources/Countries.ps1',
+                'Resources/Expirations.ps1',
                 'Resources/FlexibleAssetFields.ps1',
                 'Resources/FlexibleAssets.ps1',
                 'Resources/FlexibleAssetTypes.ps1',
@@ -125,7 +126,7 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'Get-ITGlueConfigurations',
                     'Set-ITGlueConfigurations',
                     'Remove-ITGlueConfigurations',
-                    
+
                     'New-ITGlueContactTypes',
                     'Get-ITGlueContactTypes',
                     'Set-ITGlueContactTypes',
@@ -136,6 +137,8 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'Remove-ITGlueContacts',
 
                     'Get-ITGlueCountries',
+
+                    'Get-ITGlueExpirations',
 
                     'New-ITGlueFlexibleAssetFields',
                     'Get-ITGlueFlexibleAssetFields',
