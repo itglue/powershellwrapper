@@ -29,3 +29,16 @@ Please share additional details about your environment. Version information for:
 * PowerShell
 * ITGlueAPI
 * Operating System
+<!--
+    Please provide as much as possible about the target node, for example edition, version, build and language.
+    On OS with Windows Management Framework (WMF) 5.1 the following command can help get this information.
+
+    Get-ComputerInfo -Property @(
+        'OsName',
+        'OsOperatingSystemSKU',
+        'OSArchitecture',
+        'WindowsVersion',
+        'WindowsBuildLabEx',
+        'OsLanguage',
+        'OsMuiLanguages')
+-->
