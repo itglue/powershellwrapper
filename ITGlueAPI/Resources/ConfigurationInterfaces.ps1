@@ -25,11 +25,11 @@ function New-ITGlueConfigurationInterfaces {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -59,7 +59,7 @@ function Get-ITGlueConfigurationInterfaces {
     )
 
     $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces/{1}' -f $conf_id, $id)
-    if (($PsCmdlet.ParameterSetName -eq 'show') -and ($conf_id -eq $null)) {
+    if (($PsCmdlet.ParameterSetName -eq 'show') -and ($null -eq $conf_id)) {
         $resource_uri = ('/configuration_interfaces/{0}' -f $id)
     }
 
@@ -87,11 +87,11 @@ function Get-ITGlueConfigurationInterfaces {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -138,7 +138,7 @@ function Set-ITGlueConfigurationInterfaces {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
