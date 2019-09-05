@@ -1,4 +1,5 @@
 function New-ITGlueAttachments {
+    [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $true)]    
         [ValidateSet( 'checklists', 'checklist_templates', 'configurations', 'contacts', 'documents', `
@@ -36,7 +37,7 @@ function New-ITGlueAttachments {
 }
 
 function Set-ITGlueAttachments {
-    [CmdletBinding(DefaultParameterSetName = 'update')]
+    [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $true)]    
         [ValidateSet( 'checklists', 'checklist_templates', 'configurations', 'contacts', 'documents', `
@@ -78,7 +79,7 @@ function Set-ITGlueAttachments {
 }
 
 function Remove-ITGlueAttachments {
-    [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+    [CmdletBinding()]
     Param (
         [Parameter(Mandatory = $true)]    
         [ValidateSet( 'checklists', 'checklist_templates', 'configurations', 'contacts', 'documents', `
