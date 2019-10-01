@@ -19,11 +19,11 @@ function New-ITGlueOrganizations {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -56,7 +56,7 @@ function Get-ITGlueOrganizations {
 
         [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$filter_exclude_id = $null,
-        
+
         [Parameter(ParameterSetName = 'index')]
         [String]$filter_exclude_name = '',
 
@@ -152,11 +152,11 @@ function Get-ITGlueOrganizations {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -168,7 +168,7 @@ function Set-ITGlueOrganizations {
 
         [Parameter(ParameterSetName = 'bulk_update')]
         [Nullable[Int64]]$filter_id = $null,
-        
+
         [Parameter(ParameterSetName = 'bulk_update')]
         [String]$filter_name = '',
 
@@ -257,11 +257,11 @@ function Set-ITGlueOrganizations {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -270,7 +270,7 @@ function Remove-ITGlueOrganizations {
     Param (
         [Parameter(ParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_id = $null,
-        
+
         [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_name = '',
 
@@ -358,10 +358,10 @@ function Remove-ITGlueOrganizations {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
