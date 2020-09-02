@@ -72,6 +72,7 @@ PowerShellVersion = '3.0'
 NestedModules = 'Internal/BaseURI.ps1',
                 'Internal/APIKey.ps1',
                 'Internal/ModuleSettings.ps1',
+                'Resources/Attachments.ps1',
                 'Resources/ConfigurationInterfaces.ps1',
                 'Resources/Configurations.ps1',
                 'Resources/ConfigurationStatuses.ps1',
@@ -79,6 +80,8 @@ NestedModules = 'Internal/BaseURI.ps1',
                 'Resources/Contacts.ps1',
                 'Resources/ContactTypes.ps1',
                 'Resources/Countries.ps1',
+                'Resources/Expirations.ps1',
+                'Resources/Domains.ps1',
                 'Resources/FlexibleAssetFields.ps1',
                 'Resources/FlexibleAssets.ps1',
                 'Resources/FlexibleAssetTypes.ps1',
@@ -94,6 +97,7 @@ NestedModules = 'Internal/BaseURI.ps1',
                 'Resources/Passwords.ps1',
                 'Resources/Platforms.ps1',
                 'Resources/Regions.ps1',
+                'Resources/RelatedItems.ps1',
                 'Resources/UserMetrics.ps1',
                 'Resources/Users.ps1'
 
@@ -108,6 +112,10 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
 
                     'Export-ITGlueModuleSettings',
                     'Import-ITGlueModuleSettings',
+
+                    'New-ITGlueAttachments',
+                    'Set-ITGlueAttachments',
+                    'Remove-ITGlueAttachments',
 
                     'New-ITGlueConfigurationInterfaces',
                     'Get-ITGlueConfigurationInterfaces',
@@ -125,7 +133,7 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'Get-ITGlueConfigurations',
                     'Set-ITGlueConfigurations',
                     'Remove-ITGlueConfigurations',
-                    
+
                     'New-ITGlueContactTypes',
                     'Get-ITGlueContactTypes',
                     'Set-ITGlueContactTypes',
@@ -136,6 +144,10 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'Remove-ITGlueContacts',
 
                     'Get-ITGlueCountries',
+
+                    'Get-ITGlueExpirations',
+
+                    'Get-ITGlueDomains',
 
                     'New-ITGlueFlexibleAssetFields',
                     'Get-ITGlueFlexibleAssetFields',
@@ -193,6 +205,10 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'Get-ITGluePlatforms',
 
                     'Get-ITGlueRegions',
+
+                    'New-ITGlueRelatedItems',
+                    'Set-ITGlueRelatedItems',
+                    'Remove-ITGlueRelatedItems',
 
                     'Get-ITGlueUserMetrics',
 
