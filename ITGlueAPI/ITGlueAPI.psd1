@@ -18,7 +18,7 @@ RootModule = '.\ITGlueAPI.psm1'
 # -- MINOR version when you add functionality in a backwards-compatible manner, and
 # -- PATCH version when you make backwards-compatible bug fixes.
 
-ModuleVersion = '2.0.8'
+ModuleVersion = '2.0.10'
 
 # ID used to uniquely identify this module
 #GUID = ''
