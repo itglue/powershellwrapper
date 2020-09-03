@@ -64,6 +64,7 @@ Calling an API resource is as simple as running `Get-ITGlue<resourcename>`. The 
 
 | API Resource             | Create                              | Read                                | Update                              | Delete                               |
 | ------------------------ | ----------------------------------- | ----------------------------------- | ----------------------------------- | ------------------------------------ |
+| Attachments              | `New-ITGlueAttachments`             | -                                   | `Set-ITGlueAttachments`             | `Remove-ITGlueAttachments`           |
 | Configuration Interfaces | `New-ITGlueConfigurationInterfaces` | `Get-ITGlueConfigurationInterfaces` | `Set-ITGlueConfigurationInterfaces` | -                                    |
 | Configuration Statuses   | `New-ITGlueConfigurationStatuses`   | `Get-ITGlueConfigurationStatuses`   | `Set-ITGlueConfigurationStatuses`   | -                                    |
 | Configuration Types      | `New-ITGlueConfigurationTypes`      | `Get-ITGlueConfigurationTypes`      | `Set-ITGlueConfigurationTypes`      | -                                    |
@@ -71,6 +72,8 @@ Calling an API resource is as simple as running `Get-ITGlue<resourcename>`. The 
 | Contact Types            | `New-ITGlueContactTypes`            | `Get-ITGlueContactTypes`            | `Set-ITGlueContactTypes`            | -                                    |
 | Contacts                 | `New-ITGlueContacts`                | `Get-ITGlueContacts`                | `Set-ITGlueContacts`                | `Remove-ITGlueContacts`              |
 | Countries                | -                                   | `Get-ITGlueCountries`               | -                                   | -                                    |
+| Domains                  | -                                   | `Get-ITGlueDomains`                 | -                                   | -                                    |
+| Expirations              | -                                   | `Get-ITGlueExpirations`             | -                                   | -                                    |
 | Flexible Asset Fields    | `New-ITGlueFlexibleAssetFields`     | `Get-ITGlueFlexibleAssetFields`     | `Set-ITGlueFlexibleAssetFields`     | `Remove-ITGlueFlexibleAssetFields`   |
 | Flexible Asset Types     | `New-ITGlueFlexibleAssetTypes`      | `Get-ITGlueFlexibleAssetTypes`      | `Set-ITGlueFlexibleAssetTypes`      | -                                    |
 | Flexible Assets          | `New-ITGlueFlexibleAssets`          | `Get-ITGlueFlexibleAssets`          | `Set-ITGlueFlexibleAssets`          | `Remove-ITGlueFlexibleAssets`        |
@@ -86,6 +89,7 @@ Calling an API resource is as simple as running `Get-ITGlue<resourcename>`. The 
 | Passwords                | `New-ITGluePasswords`               | `Get-ITGluePasswords`               | `Set-ITGluePasswords`               | `Remove-ITGluePasswords`             |
 | Platforms                | -                                   | `Get-ITGluePlatforms`               | -                                   | -                                    |
 | Regions                  | -                                   | `Get-ITGlueRegions`                 | -                                   | -                                    |
+| Related Items            | `New-ITGlueRelatedItems`            | -                                   | `Set-ITGlueRelatedItems`            | `Remove-ITGlueRelatedItems`          |
 | User Metrics             | -                                   | `Get-ITGlueUserMetrics`             | -                                   | -                                    |
 | Users                    | -                                   | `Get-ITGlueUsers`                   | `Set-ITGlueUsers`                   | -                                    |
 
