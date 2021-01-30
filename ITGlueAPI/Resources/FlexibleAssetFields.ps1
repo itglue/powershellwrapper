@@ -25,11 +25,11 @@ function New-ITGlueFlexibleAssetFields {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -57,7 +57,7 @@ function Get-ITGlueFlexibleAssetFields {
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$id = $null
     )
-    
+
     $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
 
     if ($flexible_asset_type_id) {
@@ -80,7 +80,7 @@ function Get-ITGlueFlexibleAssetFields {
             $body += @{'page[size]' = $page_size}
         }
     }
-    elseif ($flexible_asset_type_id -eq $null) {
+    elseif ($null -eq $flexible_asset_type_id) {
         #Parameter set "Show" is selected and no flexible asset type id is specified; switch from nested relationships route
         $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
     }
@@ -92,11 +92,11 @@ function Get-ITGlueFlexibleAssetFields {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -143,11 +143,11 @@ function Set-ITGlueFlexibleAssetFields {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -175,11 +175,11 @@ function Remove-ITGlueFlexibleAssetFields {
         } catch {
             Write-Error $_
         } finally {
-            $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+            [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
         }
 
         $data = @{}
-        $data = $rest_output 
+        $data = $rest_output
         return $data
     }
 }

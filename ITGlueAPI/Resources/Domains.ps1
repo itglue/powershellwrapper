@@ -1,8 +1,8 @@
 function Get-ITGlueDomains {
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
-        [Parameter(Mandatory = $true, ParameterSetName = 'index')]
-        [Int64]$organization_id,
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[Int64]]$organization_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$filter_id = '',
@@ -11,7 +11,7 @@ function Get-ITGlueDomains {
         [Nullable[Int64]]$filter_organization_id = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet('created_at', 'updated-at')]
+        [ValidateSet('created_at', 'updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -25,7 +25,8 @@ function Get-ITGlueDomains {
         [String]$include = ''
     )
 
-    if($organization_id) {
+    $resource_uri = '/domains'
+    if ($organization_id) {
         $resource_uri = ('/organizations/{0}/relationships/domains' -f $organization_id)
     }
 
@@ -34,9 +35,6 @@ function Get-ITGlueDomains {
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
-        }
-        if ($filter_name) {
-            $body += @{'filter[name]' = $filter_name}
         }
         if ($filter_organization_id) {
             $body += @{'filter[organization_id]' = $filter_organization_id}
@@ -62,7 +60,7 @@ function Get-ITGlueDomains {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] $ITGlue_Headers.Remove('x-api-key') # Quietly clean up scope so the API key doesn't persist
     }
 
 
