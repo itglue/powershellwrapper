@@ -97,6 +97,7 @@ NestedModules = 'Internal/BaseURI.ps1',
                 'Resources/Passwords.ps1',
                 'Resources/Platforms.ps1',
                 'Resources/Regions.ps1',
+                'Resources/RelatedItems.ps1',
                 'Resources/UserMetrics.ps1',
                 'Resources/Users.ps1'
 
@@ -204,6 +205,10 @@ FunctionsToExport = 'Add-ITGlueAPIKey',
                     'Get-ITGluePlatforms',
 
                     'Get-ITGlueRegions',
+
+                    'New-ITGlueRelatedItems',
+                    'Set-ITGlueRelatedItems',
+                    'Remove-ITGlueRelatedItems',
 
                     'Get-ITGlueUserMetrics',
 
