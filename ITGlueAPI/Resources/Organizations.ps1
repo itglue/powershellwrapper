@@ -101,7 +101,7 @@ function Get-ITGlueOrganizations {
         if ($filter_organization_type_id) {
             $body += @{'filter[organization_type_id]' = $filter_organization_type_id}
         }
-        if ($filter_organization_type_id) {
+        if ($filter_organization_status_id) {
             $body += @{'filter[organization_status_id]' = $filter_organization_status_id}
         }
         if ($filter_created_at) {
