@@ -48,14 +48,14 @@ function Set-ITGlueRelatedItems {
         [int64]$resource_id,
 
         [Parameter(Mandatory = $true)]
-        [int64]$related_item_id,
+        [int64]$id,
 
         [Parameter(Mandatory = $true)]
         $data
 
     )
 
-    $resource_uri = ('/{0}/{1}/relationships/related_items/{2}' -f $resource_type, $resource_id, $related_item_id)
+    $resource_uri = ('/{0}/{1}/relationships/related_items/{2}' -f $resource_type, $resource_id, $id)
 
     $body = @{}
 
