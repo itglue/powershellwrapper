@@ -68,10 +68,10 @@ function Get-ITGlueConfigurations {
         [String]$filter_rmm_id = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet('addigy', 'aem', 'atera', 'managed-workplace', `
-                'continuum', 'jamf-pro', 'kaseya-vsa', 'automate', `
-                'msp-rmm', 'msp-n-central', 'ninja-rmm', 'panorama9', `
-                'pulseway-rmm', 'watchman-monitoring')]
+        [ValidateSet('addigy', 'aem', 'atera', 'auvik', 'managed-workplace', `
+                'continuum', 'jamf-pro', 'kaseya-vsa', 'automate', 'log-me-in',`
+                'msp-rmm', 'meraki', 'msp-n-central', 'ninja-rmm', 'panorama9', `
+                'pulseway-rmm', 'syncro', 'watchman-monitoring')]
         [String]$filter_rmm_integration_type = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -192,10 +192,10 @@ function Set-ITGlueConfigurations {
         [String]$filter_rmm_id = '',
 
         [Parameter(ParameterSetName = 'bulk_update')]
-        [ValidateSet('addigy', 'aem', 'atera', 'managed-workplace', `
-                'continuum', 'jamf-pro', 'kaseya-vsa', 'automate', `
-                'msp-rmm', 'msp-n-central', 'ninja-rmm', 'panorama9', `
-                'pulseway-rmm', 'watchman-monitoring')]
+        [ValidateSet('addigy', 'aem', 'atera', 'auvik', 'managed-workplace', `
+                'continuum', 'jamf-pro', 'kaseya-vsa', 'automate', 'log-me-in',`
+                'msp-rmm', 'meraki', 'msp-n-central', 'ninja-rmm', 'panorama9', `
+                'pulseway-rmm', 'syncro', 'watchman-monitoring')]
         [String]$filter_rmm_integration_type = '',
 
         [Parameter(ParameterSetName = 'update')]
@@ -292,10 +292,10 @@ function Remove-ITGlueConfigurations {
         [String]$filter_rmm_id = '',
 
         [Parameter(ParameterSetName = 'bulk_delete')]
-        [ValidateSet('addigy', 'aem', 'atera', 'managed-workplace', `
-                'continuum', 'jamf-pro', 'kaseya-vsa', 'automate', `
-                'msp-rmm', 'msp-n-central', 'ninja-rmm', 'panorama9', `
-                'pulseway-rmm', 'watchman-monitoring')]
+        [ValidateSet('addigy', 'aem', 'atera', 'auvik', 'managed-workplace', `
+                'continuum', 'jamf-pro', 'kaseya-vsa', 'automate', 'log-me-in',`
+                'msp-rmm', 'meraki', 'msp-n-central', 'ninja-rmm', 'panorama9', `
+                'pulseway-rmm', 'syncro', 'watchman-monitoring')]
         [String]$filter_rmm_integration_type = '',
 
         [Parameter(ParameterSetName = 'bulk_delete', Mandatory = $true)]
