@@ -264,6 +264,9 @@ function Set-ITGlueConfigurations {
 function Remove-ITGlueConfigurations {
     [CmdletBinding(DefaultParameterSetName = 'bulk_delete')]
     Param (
+        [Parameter(ParameterSetName = 'delete', Mandatory = $true)]
+        [Nullable[Int64]]$id = $null,
+
         [Parameter(ParameterSetName = 'bulk_delete')]
         [Nullable[Int64]]$filter_id = $null,
 
@@ -295,8 +298,7 @@ function Remove-ITGlueConfigurations {
                 'pulseway-rmm', 'watchman-monitoring')]
         [String]$filter_rmm_integration_type = '',
 
-        [Parameter(ParameterSetName = 'bulk_delete')]
-        [Parameter(Mandatory = $true)]
+        [Parameter(ParameterSetName = 'bulk_delete', Mandatory = $true)]
         $data
     )
 
@@ -332,6 +334,15 @@ function Remove-ITGlueConfigurations {
         if ($filter_rmm_integration_type) {
             $body += @{'filter[rmm_integration_type]' = $filter_rmm_integration_type}
         }
+    } elseif ($PSCmdlet.ParameterSetName -eq 'delete') {
+        $data = @(
+            @{
+                type = 'configurations'
+                attributes = @{
+                    id = $id
+                }
+            }
+        )
     }
 
     $body += @{'data' = $data}
