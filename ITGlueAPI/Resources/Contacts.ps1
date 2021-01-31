@@ -70,11 +70,11 @@ function Get-ITGlueContacts {
         [String]$filter_primary_email = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_psa', Mandatory = $true)]
         [ValidateSet('manage', 'autotask', 'tigerpaw', 'kaseya-bms', 'pulseway-psa', 'vorex')]
         [String]$filter_psa_integration_type = '',
 
-        [Parameter(ParameterSetName = 'psa_id', Mandatory=$true)]
+        [Parameter(ParameterSetName = 'index_psa')]
         [String]$filter_psa_id = '',
 
         [Parameter(ParameterSetName = 'index')]
