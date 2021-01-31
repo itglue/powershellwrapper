@@ -30,9 +30,9 @@ function Get-ITGlueExpirations {
         [String]$filter_range = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet( 'id', 'organization_id', 'expiration_date', 'created_at', 'updated_at' `
+        [ValidateSet( 'id', 'organization_id', 'expiration_date', 'created_at', 'updated_at', `
                 '-id', '-organization_id', '-expiration_date', '-created_at', '-updated_at')]
-        [String]$sort = '',
+        [String]$sort,
 
         [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$page_number = $null,
@@ -41,7 +41,7 @@ function Get-ITGlueExpirations {
         [Nullable[int]]$page_size = $null,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'show')]
-        [Nullable[Int64]]$id,
+        [Nullable[Int64]]$id
     )
 
     $resource_uri = ('/expirations/{0}' -f $id)
