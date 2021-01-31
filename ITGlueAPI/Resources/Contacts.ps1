@@ -74,7 +74,7 @@ function Get-ITGlueContacts {
         [ValidateSet('manage', 'autotask', 'tigerpaw', 'kaseya-bms', 'pulseway-psa', 'vorex')]
         [String]$filter_psa_integration_type = '',
 
-        [Parameter(ParameterSetName = 'psa_id', Mandatory=$true)]
+        [Parameter(ParameterSetName = 'index_psa', Mandatory=$true)]
         [String]$filter_psa_id = '',
 
         [Parameter(ParameterSetName = 'index')]

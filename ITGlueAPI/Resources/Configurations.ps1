@@ -40,34 +40,73 @@ function Get-ITGlueConfigurations {
         [Nullable[Int64]]$id,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$organization_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [Nullable[Int64]]$filter_id = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [Nullable[Int64]]$filter_organization_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [Nullable[Int64]]$filter_configuration_type_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [Nullable[Int64]]$filter_configuration_status_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [Nullable[Int64]]$filter_contact_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [String]$filter_serial_number = '',
 
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
+        [String]$filter_psa_id = '',
+
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'index_rmm_psa', Mandatory = $true)]
+        [ValidateSet('manage', 'autotask', 'tigerpaw', 'kaseya-bms', 'pulseway-psa', 'vorex')]
+        [String]$filter_psa_integration_type = '',
+
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [String]$filter_rmm_id = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa', Mandatory = $true)]
         [ValidateSet('addigy', 'aem', 'atera', 'auvik', 'managed-workplace', `
                 'continuum', 'jamf-pro', 'kaseya-vsa', 'automate', 'log-me-in',`
                 'msp-rmm', 'meraki', 'msp-n-central', 'ninja-rmm', 'panorama9', `
@@ -75,17 +114,29 @@ function Get-ITGlueConfigurations {
         [String]$filter_rmm_integration_type = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [ValidateSet('name', 'id', 'created_at', 'updated-at', `
                 '-name', '-id', '-created_at', '-updated-at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [Nullable[Int64]]$page_number = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [Nullable[int]]$page_size = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [Parameter(ParameterSetName = 'show')]
         [String]$include = ''
     )
@@ -168,30 +219,67 @@ function Set-ITGlueConfigurations {
         [Nullable[Int64]]$organization_id = $null,
 
         [Parameter(ParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm')]
+        [Parameter(ParameterSetName = 'bulk_update_psa')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm_psa')]
         [Nullable[Int64]]$filter_id = $null,
 
         [Parameter(ParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm')]
+        [Parameter(ParameterSetName = 'bulk_update_psa')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm_psa')]
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm')]
+        [Parameter(ParameterSetName = 'bulk_update_psa')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm_psa')]
         [Nullable[Int64]]$filter_organization_id = $null,
 
         [Parameter(ParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm')]
+        [Parameter(ParameterSetName = 'bulk_update_psa')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm_psa')]
         [Nullable[Int64]]$filter_configuration_type_id = $null,
 
         [Parameter(ParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm')]
+        [Parameter(ParameterSetName = 'bulk_update_psa')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm_psa')]
         [Nullable[Int64]]$filter_configuration_status_id = $null,
 
         [Parameter(ParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm')]
+        [Parameter(ParameterSetName = 'bulk_update_psa')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm_psa')]
         [Nullable[Int64]]$filter_contact_id = $null,
 
         [Parameter(ParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm')]
+        [Parameter(ParameterSetName = 'bulk_update_psa')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm_psa')]
         [String]$filter_serial_number = '',
 
+
+        [Parameter(ParameterSetName = 'bulk_update_psa')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm_psa')]
+        [String]$filter_psa_id = '',
+
         [Parameter(ParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm')]
+        [Parameter(ParameterSetName = 'bulk_update_psa', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'bulk_update_rmm_psa', Mandatory = $true)]
+        [ValidateSet('manage', 'autotask', 'tigerpaw', 'kaseya-bms', 'pulseway-psa', 'vorex')]
+        [String]$filter_psa_integration_type = '',
+
+        [Parameter(ParameterSetName = 'bulk_update_rmm')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm_psa')]
         [String]$filter_rmm_id = '',
 
         [Parameter(ParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'bulk_update_psa')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm_psa', Mandatory = $true)]
         [ValidateSet('addigy', 'aem', 'atera', 'auvik', 'managed-workplace', `
                 'continuum', 'jamf-pro', 'kaseya-vsa', 'automate', 'log-me-in',`
                 'msp-rmm', 'meraki', 'msp-n-central', 'ninja-rmm', 'panorama9', `
@@ -200,6 +288,9 @@ function Set-ITGlueConfigurations {
 
         [Parameter(ParameterSetName = 'update')]
         [Parameter(ParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm')]
+        [Parameter(ParameterSetName = 'bulk_update_psa')]
+        [Parameter(ParameterSetName = 'bulk_update_rmm_psa')]
         [Parameter(Mandatory = $true)]
         $data
     )
