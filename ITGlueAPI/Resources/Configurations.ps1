@@ -151,7 +151,10 @@ function Get-ITGlueConfigurations {
 
     $body = @{}
 
-    if ($PSCmdlet.ParameterSetName -eq 'index') {
+    if (($PSCmdlet.ParameterSetName -eq 'index') -or `
+        ($PSCmdlet.ParameterSetName -eq 'index_rmm') -or `
+        ($PSCmdlet.ParameterSetName -eq 'index_psa') -or `
+        ($PSCmdlet.ParameterSetName -eq 'index_rmm_psa')) {
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
         }
@@ -173,11 +176,11 @@ function Get-ITGlueConfigurations {
         if ($filter_serial_number) {
             $body += @{'filter[serial_number]' = $filter_serial_number}
         }
-        if ($filter_rmm_id) {
-            $body += @{'filter[rmm_id]' = $filter_rmm_id}
-        }
         if ($filter_rmm_integration_type) {
             $body += @{'filter[rmm_integration_type]' = $filter_rmm_integration_type}
+        }
+        if ($filter_psa_integration_type) {
+            $body += @{'filter[psa_integration_type]' = $filter_psa_integration_type}
         }
         if ($sort) {
             $body += @{'sort' = $sort}
@@ -188,6 +191,12 @@ function Get-ITGlueConfigurations {
         if ($page_size) {
             $body += @{'page[size]' = $page_size}
         }
+    }
+    if (($PSCmdlet.ParameterSetName -eq 'index_rmm') -or ($PSCmdlet.ParameterSetName -eq 'index_rmm_psa')) {
+        $body += @{'filter[rmm_id]' = $filter_rmm_id}
+    }
+    if (($PSCmdlet.ParameterSetName -eq 'index_psa') -or ($PSCmdlet.ParameterSetName -eq 'index_rmm_psa')) {
+        $body += @{'filter[psa_id]' = $filter_psa_id}
     }
 
     if($include) {
@@ -303,7 +312,10 @@ function Set-ITGlueConfigurations {
 
     $body = @{}
 
-    if ($PSCmdlet.ParameterSetName -eq 'bulk_update') {
+    if (($PSCmdlet.ParameterSetName -eq 'bulk_update') -or `
+        ($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm') -or `
+        ($PSCmdlet.ParameterSetName -eq 'bulk_update_psa') -or `
+        ($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm_psa')) {
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
         }
@@ -331,6 +343,12 @@ function Set-ITGlueConfigurations {
         if ($filter_rmm_integration_type) {
             $body += @{'filter[rmm_integration_type]' = $filter_rmm_integration_type}
         }
+    }
+    if (($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm') -or ($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm_psa')) {
+        $body += @{'filter[rmm_id]' = $filter_rmm_id}
+    }
+    if (($PSCmdlet.ParameterSetName -eq 'bulk_update_psa') -or ($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm_psa')) {
+        $body += @{'filter[psa_id]' = $filter_psa_id}
     }
 
     $body += @{'data' = $data}
