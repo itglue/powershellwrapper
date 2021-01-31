@@ -1,8 +1,8 @@
 function Get-ITGlueExpirations {
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
-        [Parameter(Mandatory = $true, ParameterSetName = 'index')]
-        [Parameter(Mandatory = $true, ParameterSetName = 'show')]
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$organization_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
