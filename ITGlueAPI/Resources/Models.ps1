@@ -25,11 +25,11 @@ function New-ITGlueModels {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -87,11 +87,11 @@ function Get-ITGlueModels {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -138,10 +138,10 @@ function Set-ITGlueModels {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }

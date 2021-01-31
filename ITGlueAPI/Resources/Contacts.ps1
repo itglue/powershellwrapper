@@ -25,11 +25,11 @@ function New-ITGlueContacts {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -38,44 +38,64 @@ function Get-ITGlueContacts {
     Param (
         [Parameter(ParameterSetName = 'index')]
         [Parameter(ParameterSetName = 'show')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Nullable[Int64]]$organization_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Nullable[Int64]]$filter_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [String]$filter_first_name = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [String]$filter_last_name = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [String]$filter_title = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Nullable[Int64]]$filter_contact_type_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Nullable[Boolean]]$filter_important = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [String]$filter_primary_email = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa', Mandatory = $true)]
+        [ValidateSet('manage', 'autotask', 'tigerpaw', 'kaseya-bms', 'pulseway-psa', 'vorex')]
+        [String]$filter_psa_integration_type = '',
+
+        [Parameter(ParameterSetName = 'index_psa')]
+        [String]$filter_psa_id = '',
+
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [ValidateSet( 'first_name', 'last_name', 'id', 'created_at', 'updated_at', `
                 '-first_name', '-last_name', '-id', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Nullable[Int64]]$page_number = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Nullable[int]]$page_size = $null,
 
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Parameter(ParameterSetName = 'show')]
         $include = ''
     )
@@ -87,7 +107,7 @@ function Get-ITGlueContacts {
 
     $body = @{}
 
-    if ($PSCmdlet.ParameterSetName -eq 'index') {
+    if (($PSCmdlet.ParameterSetName -eq 'index') -or ($PSCmdlet.ParameterSetName -eq 'index_psa')) {
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
         }
@@ -112,6 +132,9 @@ function Get-ITGlueContacts {
         if ($filter_primary_email) {
             $body += @{'filter[primary_email]' = $filter_primary_email}
         }
+        if ($filter_psa_integration_type) {
+            $body += @{'filter[psa_integration_type]' = $filter_psa_integration_type}
+        }
         if ($sort) {
             $body += @{'sort' = $sort}
         }
@@ -121,6 +144,9 @@ function Get-ITGlueContacts {
         if ($page_size) {
             $body += @{'page[size]' = $page_size}
         }
+    }
+    if ($PSCmdlet.ParameterSetName -eq 'index_psa') {
+        $body += @{'filter[psa_id]' = $filter_psa_id}
     }
 
     if($include) {
@@ -134,11 +160,11 @@ function Get-ITGlueContacts {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -225,11 +251,11 @@ function Set-ITGlueContacts {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -244,10 +270,10 @@ function Remove-ITGlueContacts {
 
         [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_last_name = '',
-        
+
         [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_title = '',
-        
+
         [Parameter(ParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_contact_type_id = $null,
 
@@ -262,10 +288,10 @@ function Remove-ITGlueContacts {
         $data
     )
 
-    $resource_uri = ('/configurations/{0}' -f $id)
+    $resource_uri = ('/contacts/{0}' -f $id)
 
     if ($flexible_asset_type_id) {
-        $resource_uri = ('/organizations/{0}/relationships/configurations/{1}' -f $organization_id, $id)
+        $resource_uri = ('/organizations/{0}/relationships/contacts/{1}' -f $organization_id, $id)
     }
 
     $body = @{}
@@ -308,10 +334,10 @@ function Remove-ITGlueContacts {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }

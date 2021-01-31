@@ -1,10 +1,19 @@
 function New-ITGlueFlexibleAssets {
+    [CmdletBinding(DefaultParameterSetName = 'create')]
     Param (
-        [Parameter(Mandatory = $true)]
-        $data
+        [Parameter(ParameterSetName = 'create', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'bulk_create', Mandatory = $true)]
+        $data,
+
+        [Parameter(ParameterSetName = 'bulk_create', Mandatory = $true)]
+        [Int64]$organization_id
     )
 
     $resource_uri = '/flexible_assets/'
+
+    if ($PSCmdlet.ParameterSetName -eq 'bulk_create') {
+        $resource_uri = '/organizations/{0}/relationships/flexible_assets' -f $organization_id
+    }
 
     $body = @{}
 
@@ -19,11 +28,11 @@ function New-ITGlueFlexibleAssets {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -98,15 +107,15 @@ function Get-ITGlueFlexibleAssets {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
 function Set-ITGlueFlexibleAssets {
-    [CmdletBinding(DefaultParameterSetName = 'index')]
+    [CmdletBinding(DefaultParameterSetName = 'update')]
     Param (
         [Parameter(ParameterSetName = 'update')]
-        [Int64]$id,
+        [Nullable[Int64]]$id = $null,
 
         [Parameter(ParameterSetName = 'update')]
         [Parameter(ParameterSetName = 'bulk_update')]
@@ -129,11 +138,11 @@ function Set-ITGlueFlexibleAssets {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -155,11 +164,11 @@ function Remove-ITGlueFlexibleAssets {
         } catch {
             Write-Error $_
         } finally {
-            $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+            [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
         }
 
         $data = @{}
-        $data = $rest_output 
+        $data = $rest_output
         return $data
     }
 }

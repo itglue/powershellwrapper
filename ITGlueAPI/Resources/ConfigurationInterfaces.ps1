@@ -25,18 +25,18 @@ function New-ITGlueConfigurationInterfaces {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
 function Get-ITGlueConfigurationInterfaces {
     [CmdletBinding(DefaultParametersetName = 'index')]
     Param (
-        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index', Mandatory = $true)]
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$conf_id = $null,
 
@@ -44,8 +44,11 @@ function Get-ITGlueConfigurationInterfaces {
         [Nullable[Int64]]$filter_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet('created_at', 'updated-at', `
-                '-created_at', '-updated-at')]
+        [Nullable[String]]$filter_ip_address = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [ValidateSet('created_at', 'updated_at', `
+                '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -54,13 +57,18 @@ function Get-ITGlueConfigurationInterfaces {
         [Parameter(ParameterSetName = 'index')]
         [Nullable[int]]$page_size = $null,
 
-        [Parameter(ParameterSetName = 'show')]
-        [Nullable[Int64]]$id = $null
+        [Parameter(ParameterSetName = 'show', Mandatory = $true)]
+        [Nullable[Int64]]$id
     )
 
-    $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces/{1}' -f $conf_id, $id)
-    if (($PsCmdlet.ParameterSetName -eq 'show') -and ($conf_id -eq $null)) {
-        $resource_uri = ('/configuration_interfaces/{0}' -f $id)
+    $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces/' -f $conf_id)
+
+    if ($PsCmdlet.ParameterSetName -eq 'show') {
+        if ($null -eq $conf_id) {
+            $resource_uri = ('/configuration_interfaces/{0}' -f $id)
+        } else {
+            $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces/{1}' -f $conf_id, $id)
+        }
     }
 
     $body = @{}
@@ -68,6 +76,9 @@ function Get-ITGlueConfigurationInterfaces {
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
+        }
+        if ($filter_ip_address) {
+            $body += @{'filter[ip_address]' = $filter_ip_address }
         }
         if ($sort) {
             $body += @{'sort' = $sort}
@@ -87,11 +98,11 @@ function Get-ITGlueConfigurationInterfaces {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -138,7 +149,7 @@ function Set-ITGlueConfigurationInterfaces {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}

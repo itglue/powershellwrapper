@@ -10,7 +10,7 @@ function New-ITGluePasswords {
 
     $resource_uri = '/passwords/'
 
-    if ($flexible_asset_type_id) {
+    if ($organization_id) {
         $resource_uri = ('/organizations/{0}/relationships/passwords' -f $organization_id)
     }
 
@@ -31,11 +31,11 @@ function New-ITGluePasswords {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -85,7 +85,7 @@ function Get-ITGluePasswords {
         [Parameter(ParameterSetName = 'show')]
         $include = ''
     )
-    
+
     $resource_uri = ('/passwords/{0}' -f $id)
 
     if ($organization_id) {
@@ -115,7 +115,7 @@ function Get-ITGluePasswords {
         if ($page_size) {$body += @{'page[size]' = $page_size}
         }
     }
-    elseif ($organization_id -eq $null) {
+    elseif ($null -eq $organization_id) {
         #Parameter set "Show" is selected and no organization id is specified; switch from nested relationships route
         $resource_uri = ('/passwords/{0}' -f $id)
     }
@@ -131,32 +131,32 @@ function Get-ITGluePasswords {
     try {
         $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
         $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -ErrorAction Stop -ErrorVariable $web_error
+            -body $body -ErrorAction Stop -ErrorVariable $web_error
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
 function Set-ITGluePasswords {
     [CmdletBinding(DefaultParameterSetName = 'update')]
     Param (
-        [CmdletBinding(DefaultParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'update')]
         [Nullable[Int64]]$organization_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'update')]
         [Nullable[Int64]]$id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'update')]
         [Boolean]$show_password = $false, # Passwords API defaults to $false
 
-        [CmdletBinding(DefaultParameterSetName = 'update')]
-        [CmdletBinding(DefaultParameterSetName = 'bulk_update')]
+        [Parameter(ParameterSetName = 'update')]
+        [Parameter(ParameterSetName = 'bulk_update')]
         [Parameter(Mandatory = $true)]
         $data
     )
@@ -184,41 +184,39 @@ function Set-ITGluePasswords {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
 function Remove-ITGluePasswords {
     [CmdletBinding(DefaultParameterSetName = 'destroy')]
     Param (
-        [CmdletBinding(DefaultParameterSetName = 'destroy')]
+        [Parameter(ParameterSetName = 'destroy')]
         [Nullable[Int64]]$id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_name = '',
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_organization_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [Nullable[Int64]]$filter_password_category_id = $null,
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_url = '',
 
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
+        [Parameter(ParameterSetName = 'bulk_destroy')]
         [String]$filter_cached_resource_name = '',
 
-        [CmdletBinding(DefaultParameterSetName = 'update')]
-        [CmdletBinding(DefaultParameterSetName = 'bulk_destroy')]
-        [Parameter(Mandatory = $true)]
+        [Parameter(ParameterSetName = 'bulk_destroy', Mandatory = $true)]
         $data
     )
 
@@ -245,23 +243,23 @@ function Remove-ITGluePasswords {
         if ($filter_cached_resource_name) {
             $body += @{'filter[cached_resource_name]' = $filter_cached_resource_name}
         }
+
+        $body += @{'data' = $data}
+
+        $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
     }
-
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
 
     try {
         $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
+        $rest_output = Invoke-RestMethod -method 'DELETE' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
             -body $body -ErrorAction Stop -ErrorVariable $web_error
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }

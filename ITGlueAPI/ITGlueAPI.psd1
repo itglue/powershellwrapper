@@ -8,219 +8,270 @@
 
 @{
 
-# Script module or binary module file associated with this manifest
-RootModule = '.\ITGlueAPI.psm1'
+    # Script module or binary module file associated with this manifest
+    RootModule = '.\ITGlueAPI.psm1'
 
-# Version number of this module.
-# Follows https://semver.org Semantic Versioning 2.0.0
-# Given a version number MAJOR.MINOR.PATCH, increment the:
-# -- MAJOR version when you make incompatible API changes,
-# -- MINOR version when you add functionality in a backwards-compatible manner, and
-# -- PATCH version when you make backwards-compatible bug fixes.
-ModuleVersion = '2.0.0'
+    # Version number of this module.
+    # Follows https://semver.org Semantic Versioning 2.0.0
+    # Given a version number MAJOR.MINOR.PATCH, increment the:
+    # -- MAJOR version when you make incompatible API changes,
+    # -- MINOR version when you add functionality in a backwards-compatible manner, and
+    # -- PATCH version when you make backwards-compatible bug fixes.
 
-# ID used to uniquely identify this module
-#GUID = ''
+    ModuleVersion = '2.1.0'
 
-# Author of this module
-Author = 'Caleb Albers'
+    # ID used to uniquely identify this module
+    GUID = 'f969cff1-3120-4980-8c46-83f2d0bf2521'
 
-# Company or vendor of this module
-CompanyName = 'IT Glue'
+    # Author of this module
+    Author = 'Caleb Albers'
 
-# Description of the functionality provided by this module
-Description = 'This module provides a PowerShell wrapper for the IT Glue API.'
+    # Company or vendor of this module
+    CompanyName = 'IT Glue'
 
-# Copyright information of this module
-Copyright = 'https://github.com/itglue/powershellwrapper/blob/master/LICENSE'
+    # Description of the functionality provided by this module
+    Description = 'This module provides a PowerShell wrapper for the IT Glue API.'
 
-# Minimum version of the Windows PowerShell engine required by this module
-PowerShellVersion = '3.0'
+    # Copyright information of this module
+    Copyright = 'https://github.com/itglue/powershellwrapper/blob/master/LICENSE'
 
-# Name of the Windows PowerShell host required by this module
-# PowerShellHostName = ''
+    # Minimum version of the Windows PowerShell engine required by this module
+    PowerShellVersion = '3.0'
 
-# Minimum version of the Windows PowerShell host required by this module
-# PowerShellHostVersion = ''
+    # Name of the Windows PowerShell host required by this module
+    # PowerShellHostName = ''
 
-# Minimum version of the .NET Framework required by this module
-# DotNetFrameworkVersion = ''
+    # Minimum version of the Windows PowerShell host required by this module
+    # PowerShellHostVersion = ''
 
-# Minimum version of the common language runtime (CLR) required by this module
-# CLRVersion = ''
+    # Minimum version of the .NET Framework required by this module
+    # DotNetFrameworkVersion = ''
 
-# Processor architecture (None, X86, Amd64) required by this module
-# ProcessorArchitecture = ''
+    # Minimum version of the common language runtime (CLR) required by this module
+    # CLRVersion = ''
 
-# Modules that must be imported into the global environment prior to importing this module
-# RequiredModules = @()
+    # Processor architecture (None, X86, Amd64) required by this module
+    # ProcessorArchitecture = ''
 
-# Assemblies that must be loaded prior to importing this module
-# RequiredAssemblies = @()
+    # Modules that must be imported into the global environment prior to importing this module
+    # RequiredModules = @()
 
-# Script files (.ps1) that are run in the caller's environment prior to importing this module
-# ScriptsToProcess = @()
+    # Assemblies that must be loaded prior to importing this module
+    # RequiredAssemblies = @()
 
-# Type files (.ps1xml) to be loaded when importing this module
-# TypesToProcess = @()
+    # Script files (.ps1) that are run in the caller's environment prior to importing this module
+    # ScriptsToProcess = @()
 
-# Format files (.ps1xml) to be loaded when importing this module
-# FormatsToProcess = @()
+    # Type files (.ps1xml) to be loaded when importing this module
+    # TypesToProcess = @()
 
-# Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
-NestedModules = 'Internal/BaseURI.ps1',
-                'Internal/APIKey.ps1',
-                'Internal/ModuleSettings.ps1',
-                'Resources/ConfigurationInterfaces.ps1',
-                'Resources/Configurations.ps1',
-                'Resources/ConfigurationStatuses.ps1',
-                'Resources/ConfigurationTypes.ps1',
-                'Resources/Contacts.ps1',
-                'Resources/ContactTypes.ps1',
-                'Resources/Countries.ps1',
-                'Resources/FlexibleAssetFields.ps1',
-                'Resources/FlexibleAssets.ps1',
-                'Resources/FlexibleAssetTypes.ps1',
-                'Resources/Groups.ps1',
-                'Resources/Locations.ps1',
-                'Resources/Manufacturers.ps1',
-                'Resources/Models.ps1',
-                'Resources/OperatingSystems.ps1',
-                'Resources/Organizations.ps1',
-                'Resources/OrganizationStatuses.ps1',
-                'Resources/OrganizationTypes.ps1',
-                'Resources/PasswordCategories.ps1',
-                'Resources/Passwords.ps1',
-                'Resources/Platforms.ps1',
-                'Resources/Regions.ps1',
-                'Resources/UserMetrics.ps1',
-                'Resources/Users.ps1'
+    # Format files (.ps1xml) to be loaded when importing this module
+    # FormatsToProcess = @()
 
-# Functions to export from this module
-FunctionsToExport = 'Add-ITGlueAPIKey',
-                    'Get-ITGlueAPIKey',
-                    'Remove-ITGlueAPIKey',
+    # Modules to import as nested modules of the module specified in RootModule/ModuleToProcess
+    NestedModules = 'Internal/BaseURI.ps1',
+                    'Internal/APIKey.ps1',
+                    'Internal/ModuleSettings.ps1',
+                    'Resources/Attachments.ps1',
+                    'Resources/ConfigurationInterfaces.ps1',
+                    'Resources/Configurations.ps1',
+                    'Resources/ConfigurationStatuses.ps1',
+                    'Resources/ConfigurationTypes.ps1',
+                    'Resources/Contacts.ps1',
+                    'Resources/ContactTypes.ps1',
+                    'Resources/Countries.ps1',
+                    'Resources/Documents.ps1',
+                    'Resources/Domains.ps1',
+                    'Resources/Expirations.ps1',
+                    'Resources/FlexibleAssetFields.ps1',
+                    'Resources/FlexibleAssets.ps1',
+                    'Resources/FlexibleAssetTypes.ps1',
+                    'Resources/Groups.ps1',
+                    'Resources/Locations.ps1',
+                    'Resources/Manufacturers.ps1',
+                    'Resources/Models.ps1',
+                    'Resources/OperatingSystems.ps1',
+                    'Resources/Organizations.ps1',
+                    'Resources/OrganizationStatuses.ps1',
+                    'Resources/OrganizationTypes.ps1',
+                    'Resources/PasswordCategories.ps1',
+                    'Resources/Passwords.ps1',
+                    'Resources/Platforms.ps1',
+                    'Resources/Regions.ps1',
+                    'Resources/RelatedItems.ps1',
+                    'Resources/UserMetrics.ps1',
+                    'Resources/Users.ps1'
 
-                    'Add-ITGlueBaseURI',
-                    'Get-ITGlueBaseURI',
-                    'Remove-ITGlueBaseURI',
+    # Functions to export from this module
+    FunctionsToExport = 'Add-ITGlueAPIKey',
+                        'Get-ITGlueAPIKey',
+                        'Remove-ITGlueAPIKey',
 
-                    'Export-ITGlueModuleSettings',
-                    'Import-ITGlueModuleSettings',
+                        'Add-ITGlueBaseURI',
+                        'Get-ITGlueBaseURI',
+                        'Remove-ITGlueBaseURI',
 
-                    'New-ITGlueConfigurationInterfaces',
-                    'Get-ITGlueConfigurationInterfaces',
-                    'Set-ITGlueConfigurationInterfaces',
+                        'Export-ITGlueModuleSettings',
+                        'Import-ITGlueModuleSettings',
 
-                    'New-ITGlueConfigurationStatuses',
-                    'Get-ITGlueConfigurationStatuses',
-                    'Set-ITGlueConfigurationStatuses',
+                        'New-ITGlueAttachments',
+                        'Set-ITGlueAttachments',
+                        'Remove-ITGlueAttachments',
 
-                    'New-ITGlueConfigurationTypes',
-                    'Get-ITGlueConfigurationTypes',
-                    'Set-ITGlueConfigurationTypes',
+                        'New-ITGlueConfigurationInterfaces',
+                        'Get-ITGlueConfigurationInterfaces',
+                        'Set-ITGlueConfigurationInterfaces',
 
-                    'New-ITGlueConfigurations',
-                    'Get-ITGlueConfigurations',
-                    'Set-ITGlueConfigurations',
-                    
-                    'New-ITGlueContactTypes',
-                    'Get-ITGlueContactTypes',
-                    'Set-ITGlueContactTypes',
+                        'New-ITGlueConfigurationStatuses',
+                        'Get-ITGlueConfigurationStatuses',
+                        'Set-ITGlueConfigurationStatuses',
 
-                    'New-ITGlueContacts',
-                    'Get-ITGlueContacts',
-                    'Set-ITGlueContacts',
+                        'New-ITGlueConfigurationTypes',
+                        'Get-ITGlueConfigurationTypes',
+                        'Set-ITGlueConfigurationTypes',
 
-                    'Get-ITGlueCountries',
+                        'New-ITGlueConfigurations',
+                        'Get-ITGlueConfigurations',
+                        'Set-ITGlueConfigurations',
+                        'Remove-ITGlueConfigurations',
 
-                    'New-ITGlueFlexibleAssetFields',
-                    'Get-ITGlueFlexibleAssetFields',
-                    'Set-ITGlueFlexibleAssetFields',
-                    'Remove-ITGlueFlexibleAssetFields',
+                        'New-ITGlueContactTypes',
+                        'Get-ITGlueContactTypes',
+                        'Set-ITGlueContactTypes',
 
-                    'New-ITGlueFlexibleAssetTypes',
-                    'Get-ITGlueFlexibleAssetTypes',
-                    'Set-ITGlueFlexibleAssetTypes',
+                        'New-ITGlueContacts',
+                        'Get-ITGlueContacts',
+                        'Set-ITGlueContacts',
+                        'Remove-ITGlueContacts',
 
-                    'New-ITGlueFlexibleAssets',
-                    'Get-ITGlueFlexibleAssets',
-                    'Set-ITGlueFlexibleAssets',
-                    'Remove-ITGlueFlexibleAssets',
+                        'Get-ITGlueCountries',
 
-                    'Get-ITGlueGroups',
+                        'Set-ITGlueDocuments',
 
-                    'New-ITGlueLocations',
-                    'Get-ITGlueLocations',
-                    'Set-ITGlueLocations',
-                    'Remove-ITGlueLocations',
+                        'Get-ITGlueDomains',
+                        
+                        'Get-ITGlueExpirations',
 
-                    'New-ITGlueManufacturers',
-                    'Get-ITGlueManufacturers',
-                    'Set-ITGlueManufacturers',
+                        'New-ITGlueFlexibleAssetFields',
+                        'Get-ITGlueFlexibleAssetFields',
+                        'Set-ITGlueFlexibleAssetFields',
+                        'Remove-ITGlueFlexibleAssetFields',
 
-                    'New-ITGlueModels',
-                    'Get-ITGlueModels',
-                    'Set-ITGlueModels',
+                        'New-ITGlueFlexibleAssetTypes',
+                        'Get-ITGlueFlexibleAssetTypes',
+                        'Set-ITGlueFlexibleAssetTypes',
 
-                    'Get-ITGlueOperatingSystems',
+                        'New-ITGlueFlexibleAssets',
+                        'Get-ITGlueFlexibleAssets',
+                        'Set-ITGlueFlexibleAssets',
+                        'Remove-ITGlueFlexibleAssets',
 
-                    'New-ITGlueOrganizationStatuses',
-                    'Get-ITGlueOrganizationStatuses',
-                    'Set-ITGlueOrganizationStatuses',
+                        'Get-ITGlueGroups',
 
-                    'New-ITGlueOrganizationTypes',
-                    'Get-ITGlueOrganizationTypes',
-                    'Set-ITGlueOrganizationTypes',
+                        'New-ITGlueLocations',
+                        'Get-ITGlueLocations',
+                        'Set-ITGlueLocations',
+                        'Remove-ITGlueLocations',
 
-                    'New-ITGlueOrganizations',
-                    'Get-ITGlueOrganizations',
-                    'Set-ITGlueOrganizations',
-                    'Remove-ITGlueOrganizations',
+                        'New-ITGlueManufacturers',
+                        'Get-ITGlueManufacturers',
+                        'Set-ITGlueManufacturers',
 
-                    'New-ITGluePasswordCategories',
-                    'Get-ITGluePasswordCategories',
-                    'Set-ITGluePasswordCategories',
+                        'New-ITGlueModels',
+                        'Get-ITGlueModels',
+                        'Set-ITGlueModels',
 
-                    'New-ITGluePasswords',
-                    'Get-ITGluePasswords',
-                    'Set-ITGluePasswords',
-                    'Remove-ITGluePasswords',
+                        'Get-ITGlueOperatingSystems',
 
-                    'Get-ITGluePlatforms',
+                        'New-ITGlueOrganizationStatuses',
+                        'Get-ITGlueOrganizationStatuses',
+                        'Set-ITGlueOrganizationStatuses',
 
-                    'Get-ITGlueRegions',
+                        'New-ITGlueOrganizationTypes',
+                        'Get-ITGlueOrganizationTypes',
+                        'Set-ITGlueOrganizationTypes',
 
-                    'Get-ITGlueUserMetrics',
+                        'New-ITGlueOrganizations',
+                        'Get-ITGlueOrganizations',
+                        'Set-ITGlueOrganizations',
+                        'Remove-ITGlueOrganizations',
 
-                    'Get-ITGlueUsers',
-                    'Set-ITGlueUsers'
+                        'New-ITGluePasswordCategories',
+                        'Get-ITGluePasswordCategories',
+                        'Set-ITGluePasswordCategories',
+
+                        'New-ITGluePasswords',
+                        'Get-ITGluePasswords',
+                        'Set-ITGluePasswords',
+                        'Remove-ITGluePasswords',
+
+                        'Get-ITGluePlatforms',
+
+                        'Get-ITGlueRegions',
+
+                        'New-ITGlueRelatedItems',
+                        'Set-ITGlueRelatedItems',
+                        'Remove-ITGlueRelatedItems',
+
+                        'Get-ITGlueUserMetrics',
+
+                        'Get-ITGlueUsers',
+                        'Set-ITGlueUsers'
 
 
-#FunctionsToExport = '*'
+    #FunctionsToExport = '*'
 
-# Cmdlets to export from this module
-CmdletsToExport = @()
+    # Cmdlets to export from this module
+    CmdletsToExport = @()
 
-# Variables to export from this module
-VariablesToExport = '*'
+    # Variables to export from this module
+    VariablesToExport = '*'
 
-# Aliases to export from this module
-AliasesToExport = '*'
+    # Aliases to export from this module
+    AliasesToExport = '*'
 
-# List of all modules packaged with this module
-# ModuleList = @()
+    # List of all modules packaged with this module
+    # ModuleList = @()
 
-# List of all files packaged with this module
-# FileList = @()
+    # List of all files packaged with this module
+    # FileList = @()
 
-# Private data to pass to the module specified in RootModule/ModuleToProcess
-# PrivateData = ''
+    # Private data to pass to the module specified in RootModule/ModuleToProcess.
+    PrivateData = @{
+        PSData = @{
 
-# HelpInfo URI of this module
-HelpInfoURI = 'https://github.com/itglue/powershellwrapper/wiki'
+            # Tags applied to this module. These help with module discovery in online galleries.
+            # Tags = @()
 
-# Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
-# DefaultCommandPrefix = ''
+            # A URL to the license for this module.
+            LicenseUri = 'https://github.com/itglue/powershellwrapper/blob/master/LICENSE'
+
+            # A URL to the main website for this project.
+            ProjectUri = 'https://github.com/itglue/powershellwrapper'
+
+            # A URL to an icon representing this module.
+            # IconUri = ''
+
+            # ReleaseNotes of this module
+            # ReleaseNotes = ''
+
+            # Prerelease string of this module
+            # Prerelease = ''
+
+            # Flag to indicate whether the module requires explicit user acceptance for install/update/save
+            # RequireLicenseAcceptance = $true
+
+            # External dependent modules of this module
+            # ExternalModuleDependencies = @()
+
+        } # End of PSData hashtable
+
+    } # End of PrivateData hashtable
+
+    # HelpInfo URI of this module
+    HelpInfoURI = 'https://github.com/itglue/powershellwrapper/wiki'
+
+    # Default prefix for commands exported from this module. Override the default prefix using Import-Module -Prefix.
+    # DefaultCommandPrefix = ''
 
 }

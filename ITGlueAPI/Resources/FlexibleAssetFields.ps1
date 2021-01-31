@@ -25,11 +25,11 @@ function New-ITGlueFlexibleAssetFields {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -42,6 +42,15 @@ function Get-ITGlueFlexibleAssetFields {
 
         [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$filter_id = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[String]]$filter_name = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[String]]$filter_icon = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[bool]]$filter_enabled = $null,
 
         [Parameter(ParameterSetName = 'index')]
         [ValidateSet( 'created_at', 'updated_at', `
@@ -57,7 +66,7 @@ function Get-ITGlueFlexibleAssetFields {
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$id = $null
     )
-    
+
     $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
 
     if ($flexible_asset_type_id) {
@@ -70,6 +79,15 @@ function Get-ITGlueFlexibleAssetFields {
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
         }
+        if ($filter_name) {
+            $body += @{'filter[name]' = $filter_name}
+        }
+        if ($filter_icon) {
+            $body += @{'filter[icon]' = $filter_icon}
+        }
+        if ($null -ne $filter_enabled) {
+            $body += @{'filter[enabled]' = $filter_enabled}
+        }
         if ($sort) {
             $body += @{'sort' = $sort}
         }
@@ -80,7 +98,7 @@ function Get-ITGlueFlexibleAssetFields {
             $body += @{'page[size]' = $page_size}
         }
     }
-    elseif ($flexible_asset_type_id -eq $null) {
+    elseif ($null -eq $flexible_asset_type_id) {
         #Parameter set "Show" is selected and no flexible asset type id is specified; switch from nested relationships route
         $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
     }
@@ -92,11 +110,11 @@ function Get-ITGlueFlexibleAssetFields {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -143,11 +161,11 @@ function Set-ITGlueFlexibleAssetFields {
     } catch {
         Write-Error $_
     } finally {
-        $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
@@ -175,11 +193,11 @@ function Remove-ITGlueFlexibleAssetFields {
         } catch {
             Write-Error $_
         } finally {
-            $ITGlue_Headers.Remove('x-api-key') >$null # Quietly clean up scope so the API key doesn't persist
+            [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
         }
 
         $data = @{}
-        $data = $rest_output 
+        $data = $rest_output
         return $data
     }
 }

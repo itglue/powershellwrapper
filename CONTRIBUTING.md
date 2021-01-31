@@ -12,6 +12,13 @@
 
 * Ensure the PR description clearly describes the problem and solution. Include the relevant issue number if applicable.
 
+* Please update the ModuleVersion using [Semantic Versioning](https://semver.org) in the ITGlueAPI.psd1 file.  Given a version number MAJOR.MINOR.PATCH:
+
+  * MAJOR version when you make incompatible API changes,
+  * MINOR version when you add functionality in a backwards-compatible manner, and
+  * PATCH version when you make backwards-compatible bug fixes.
+  * Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+
 ## **Do you intend to add a new feature or change an existing one?**
 
 * Suggest your change by creating a GitHub issue tagged with "Enhancement"
