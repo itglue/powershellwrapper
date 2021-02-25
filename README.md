@@ -82,7 +82,7 @@ Calling an API resource is as simple as running `Get-ITGlue<resourcename>`. The 
 | Organization Statuses    | `New-ITGlueOrganizationStatuses`    | `Get-ITGlueOrganizationStatuses`    | `Set-ITGlueOrganizationStatuses`    | -                                    |
 | Organization Types       | `New-ITGlueOrganizationTypes`       | `Get-ITGlueOrganizationTypes`       | `Set-ITGlueOrganizationTypes`       | -                                    |
 | Organizations            | `New-ITGlueOrganizations`           | `Get-ITGlueOrganizations`           | `Set-ITGlueOrganizations`           | `Remove-ITGlueOrganizations`         |
-| Password Caterogires     | `New-ITGluePasswordCategories`      | `Get-ITGluePasswordCategories`      | `Set-ITGluePasswordCategories`      | -                                    |
+| Password Categories     | `New-ITGluePasswordCategories`      | `Get-ITGluePasswordCategories`      | `Set-ITGluePasswordCategories`      | -                                    |
 | Passwords                | `New-ITGluePasswords`               | `Get-ITGluePasswords`               | `Set-ITGluePasswords`               | `Remove-ITGluePasswords`             |
 | Platforms                | -                                   | `Get-ITGluePlatforms`               | -                                   | -                                    |
 | Regions                  | -                                   | `Get-ITGlueRegions`                 | -                                   | -                                    |
