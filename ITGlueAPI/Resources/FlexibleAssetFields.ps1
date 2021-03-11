@@ -44,10 +44,10 @@ function Get-ITGlueFlexibleAssetFields {
         [Nullable[Int64]]$filter_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [Nullable[String]]$filter_name = $null,
+        [String]$filter_name = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [Nullable[String]]$filter_icon = $null,
+        [String]$filter_icon = $null,
 
         [Parameter(ParameterSetName = 'index')]
         [Nullable[bool]]$filter_enabled = $null,
