@@ -1,4 +1,5 @@
 # IT-Glue-API-PowerShell-Wrapper
+This is a version of the IT Glue API with fixes from the main repository and another fix by me.
 
 This PowerShell module acts as a wrapper for the [IT Glue](http://itglue.com) API.
 
