@@ -4,8 +4,8 @@ As it appears IT Glue do not want to even roll out fixes for their own version o
 
 To use this instead of the original you can do
 
-  Install-Module ITGlueAPIv2
-  Import-Module ITGlueAPIv2
+    Install-Module ITGlueAPIv2
+    Import-Module ITGlueAPIv2
 
 This is a direct replacement for the original so you should not need any other changes.
 
