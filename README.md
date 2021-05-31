@@ -1,6 +1,15 @@
-# IT-Glue-API-PowerShell-Wrapper
-This is a version of the IT Glue API with fixes from the main repository and another fix by me.
+# Notes on this fork
+This is a version of the IT Glue API with fixes from the main repository and another fix by me to get Flexible Layout Fields to work.
+As it appears IT Glue do not want to even roll out fixes for their own version of the module I have published this as ITGlueAPIv2. I highly recommend you check out Hudu as an alterantive to IT Glue
 
+To use this instead of the original you can do
+
+  Install-Module ITGlueAPIv2
+  Import-Module ITGlueAPIv2
+
+This is a direct replacement for the original so you should not need any other changes.
+
+# IT-Glue-API-PowerShell-Wrapper
 This PowerShell module acts as a wrapper for the [IT Glue](http://itglue.com) API.
 
 ---
