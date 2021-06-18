@@ -43,7 +43,7 @@ function Get-ITGlueConfigurations {
         [Parameter(ParameterSetName = 'index_rmm')]
         [Parameter(ParameterSetName = 'index_psa')]
         [Parameter(ParameterSetName = 'index_rmm_psa')]
-        [Bool]$filter_archived = '',
+        [Nullable[bool]]$filter_archived = $null,
 
         [Parameter(ParameterSetName = 'index')]
         [Parameter(ParameterSetName = 'index_rmm')]
