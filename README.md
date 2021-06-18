@@ -54,7 +54,7 @@ The first time you run this module, you will need to configure the base URI and 
 
 3. [optional] If you would like the IT Glue module to remember your base uri and API key, you can run `Export-ITGlueModuleSettings`. This will create a config file at `%UserProfile%\ITGlueAPI` that securely holds this information. Next time you run `Import-Module`, this configuration will automatically be loaded.
 
-:warning: Exporting module settings encrypts your API key in a format that can **only be unencrypted with your Windows account**. It makes use of PowerShell's `System.Security.SecureString` type, which uses reversible encrypted tied to your principle. This means that you cannot copy your configuration file to another computer or user account and expect it to work.
+:warning: Exporting module settings encrypts your API key in a format that can **only be unencrypted with your Windows account**. It makes use of PowerShell's `System.Security.SecureString` type, which uses reversible encrypted tied to your user principal. This means that you cannot copy your configuration file to another computer or user account and expect it to work.
 
 :warning: Exporting and importing module settings requires use of the `ConvertTo-SecureString` cmdlet, which is currently unavailable in Linux and Mac PowerShell core ports. Until PS Core 6.0.0 is available, this functionality only works on Windows.
 
