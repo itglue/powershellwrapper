@@ -53,7 +53,7 @@ function Get-ITGluePasswords {
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
-        [bool]$filter_archived = '',
+        [Nullable[bool]]$filter_archived = $null,
 
         [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$filter_organization_id = $null,
