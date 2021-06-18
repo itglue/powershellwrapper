@@ -43,6 +43,12 @@ function Get-ITGlueConfigurations {
         [Parameter(ParameterSetName = 'index_rmm')]
         [Parameter(ParameterSetName = 'index_psa')]
         [Parameter(ParameterSetName = 'index_rmm_psa')]
+        [Bool]$filter_archived = '',
+
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$organization_id = $null,
 
@@ -163,6 +169,9 @@ function Get-ITGlueConfigurations {
         }
         if ($filter_organization_id) {
             $body += @{'filter[organization_id]' = $filter_organization_id}
+        }
+        if ($filter_archived) {
+            $body += @{'filter[archived]' = $filter_archived}
         }
         if ($filter_configuration_type_id) {
             $body += @{'filter[configuration_type_id]' = $filter_configuration_type_id}

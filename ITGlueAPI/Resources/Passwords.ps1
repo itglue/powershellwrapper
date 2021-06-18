@@ -53,6 +53,9 @@ function Get-ITGluePasswords {
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [bool]$filter_archived = '',
+
+        [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$filter_organization_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
@@ -98,6 +101,8 @@ function Get-ITGluePasswords {
         if ($filter_id) {$body += @{'filter[id]' = $filter_id}
         }
         if ($filter_name) {$body += @{'filter[name]' = $filter_name}
+        }
+        if ($filter_archived) {$body += @{'filter[archived]' = $filter_archived}
         }
         if ($filter_organization_id) {$body += @{'filter[organization_id]' = $filter_organization_id}
         }
