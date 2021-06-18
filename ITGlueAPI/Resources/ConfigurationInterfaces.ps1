@@ -44,11 +44,11 @@ function Get-ITGlueConfigurationInterfaces {
         [Nullable[Int64]]$filter_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [String]$filter_ip_address = $null,
+        [Nullable[String]]$filter_ip_address = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [ValidateSet('created_at', 'updated-at', `
-                '-created_at', '-updated-at')]
+        [ValidateSet('created_at', 'updated_at', `
+                '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
@@ -63,10 +63,12 @@ function Get-ITGlueConfigurationInterfaces {
 
     $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces/' -f $conf_id)
 
-    if (($PsCmdlet.ParameterSetName -eq 'show') -and ($null -eq $conf_id)) {
-        $resource_uri = ('/configuration_interfaces/{0}' -f $id)
-    } elseif (($PsCmdlet.ParameterSetName -eq 'show') -and ($null -ne $conf_id)) {
-        $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces/{1}' -f $conf_id, $id)
+    if ($PsCmdlet.ParameterSetName -eq 'show') {
+        if ($null -eq $conf_id) {
+            $resource_uri = ('/configuration_interfaces/{0}' -f $id)
+        } else {
+            $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces/{1}' -f $conf_id, $id)
+        }
     }
 
     $body = @{}
@@ -76,7 +78,7 @@ function Get-ITGlueConfigurationInterfaces {
             $body += @{'filter[id]' = $filter_id}
         }
         if ($filter_ip_address) {
-            $body += @{'filter[id]' = $filter_id }
+            $body += @{'filter[ip_address]' = $filter_ip_address }
         }
         if ($sort) {
             $body += @{'sort' = $sort}
