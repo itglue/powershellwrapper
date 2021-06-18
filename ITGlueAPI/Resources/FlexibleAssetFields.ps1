@@ -44,6 +44,15 @@ function Get-ITGlueFlexibleAssetFields {
         [Nullable[Int64]]$filter_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [String]$filter_name = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [String]$filter_icon = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [Nullable[bool]]$filter_enabled = $null,
+
+        [Parameter(ParameterSetName = 'index')]
         [ValidateSet( 'created_at', 'updated_at', `
                 '-created_at', '-updated_at')]
         [String]$sort = '',
@@ -69,6 +78,15 @@ function Get-ITGlueFlexibleAssetFields {
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
+        }
+        if ($filter_name) {
+            $body += @{'filter[name]' = $filter_name}
+        }
+        if ($filter_icon) {
+            $body += @{'filter[icon]' = $filter_icon}
+        }
+        if ($null -ne $filter_enabled) {
+            $body += @{'filter[enabled]' = $filter_enabled}
         }
         if ($sort) {
             $body += @{'sort' = $sort}

@@ -26,6 +26,7 @@ $InternalDirectoryFiles = (
 
 # Resource Files
 $ResourceDirectoryFiles = (
+    'Attachments.ps1',
     'ConfigurationInterfaces.ps1',
     'Configurations.ps1',
     'ConfigurationStatuses.ps1',
@@ -33,6 +34,9 @@ $ResourceDirectoryFiles = (
     'Contacts.ps1',
     'ContactTypes.ps1',
     'Countries.ps1',
+    'Documents.ps1',
+    'Domains.ps1',
+    'Expirations.ps1',
     'FlexibleAssetFields.ps1',
     'FlexibleAssets.ps1',
     'FlexibleAssetTypes.ps1',

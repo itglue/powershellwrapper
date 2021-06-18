@@ -33,39 +33,57 @@ function Get-ITGlueLocations {
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$org_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Nullable[Int64]]$filter_id = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [String]$filter_name = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [String]$filter_city = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Nullable[Int64]]$filter_region_id = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Nullable[Int64]]$filter_country_id = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa', Mandatory = $true)]
+        [ValidateSet('manage', 'autotask', 'tigerpaw', 'kaseya-bms', 'pulseway-psa', 'vorex')]
+        [String]$filter_psa_integration_type = '',
+
+        [Parameter(ParameterSetName = 'index_psa')]
+        [String]$filter_psa_id = '',
+
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [ValidateSet( 'name', 'id', 'created_at', 'updated_at', `
                 '-name', '-id', '-created_at', '-updated_at')]
         [String]$sort = '',
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Nullable[Int64]]$page_number = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Nullable[int64]]$page_size = $null,
 
         [Parameter(ParameterSetName = 'show')]
         [Nullable[Int64]]$id = $null,
 
         [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
         [Parameter(ParameterSetName = 'show')]
         [String]$include = ''
     )
@@ -77,7 +95,7 @@ function Get-ITGlueLocations {
 
     $body = @{}
 
-    if ($PSCmdlet.ParameterSetName -eq 'index') {
+    if (($PSCmdlet.ParameterSetName -eq 'index') -or ($PSCmdlet.ParameterSetName -eq 'index_psa')) {
         if ($filter_id) {
             $body += @{'filter[id]' = $filter_id}
         }
@@ -93,6 +111,9 @@ function Get-ITGlueLocations {
         if ($filter_country_id) {
             $body += @{'filter[country_id]' = $filter_country_id}
         }
+        if ($filter_psa_integration_type) {
+            $body += @{'filter[psa_integration_type]' = $filter_psa_integration_type}
+        }
         if ($sort) {
             $body += @{'sort' = $sort}
         }
@@ -102,6 +123,9 @@ function Get-ITGlueLocations {
         if ($page_size) {
             $body += @{'page[size]' = $page_size}
         }
+    }
+    if ($PSCmdlet.ParameterSetName -eq 'index_psa') {
+        $body += @{'filter[psa_id]' = $filter_psa_id}
     }
 
     if($include) {
