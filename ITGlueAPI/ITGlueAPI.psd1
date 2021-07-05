@@ -9,7 +9,7 @@
 @{
 
     # Script module or binary module file associated with this manifest
-    RootModule = '.\ITGlueAPI.psm1'
+    RootModule = "$PSScriptRoot\ITGlueAPI.psm1"
 
     # Version number of this module.
     # Follows https://semver.org Semantic Versioning 2.0.0
@@ -18,7 +18,7 @@
     # -- MINOR version when you add functionality in a backwards-compatible manner, and
     # -- PATCH version when you make backwards-compatible bug fixes.
 
-    ModuleVersion = '2.1.0'
+    ModuleVersion = '2.1.1'
 
     # ID used to uniquely identify this module
     GUID = 'f969cff1-3120-4980-8c46-83f2d0bf2521'
