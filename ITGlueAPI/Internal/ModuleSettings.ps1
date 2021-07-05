@@ -30,7 +30,7 @@ function Import-ITGlueModuleSettings {
         # Send to function to strip potentially superflous slash (/)
         Add-ITGlueBaseURI $tmp_config.ITGlue_Base_URI
 
-        $tmp_config.ITGlue_API_key = ConvertTo-SecureString $tmp_config.ITGlue_API_key
+        $tmp_config.ITGlue_API_key = ConvertTo-SecureString $tmp_config.ITGlue_API_key -ErrorAction SilentlyContinue
 
         Set-Variable -Name "ITGlue_API_Key"  -Value $tmp_config.ITGlue_API_key `
                     -Option ReadOnly -Scope global -Force
