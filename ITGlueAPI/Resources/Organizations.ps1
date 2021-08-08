@@ -358,9 +358,8 @@ function Remove-ITGlueOrganizations {
     } catch {
         Write-Error $_
     } finally {
-        if {
-            ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-                [void] ($ITGlue_Headers.Remove('x-api-key'))
+        if ($ITGlue_Headers.Remove('x-api-key')) {
+            [void] ($ITGlue_Headers.Remove('x-api-key'))  # Quietly clean up scope so the API key doesn't persist
         }
     }
 
