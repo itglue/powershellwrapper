@@ -50,7 +50,7 @@ function Get-ITGlueOrganizations {
 
         [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$filter_my_glue_account_id = $null,
-        
+
         [Parameter(ParameterSetName = 'index')]
         [Nullable[Int64]]$filter_group_id = $null,
 

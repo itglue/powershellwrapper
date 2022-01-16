@@ -1,7 +1,7 @@
 function New-ITGlueRelatedItems {
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory = $true)]    
+        [Parameter(Mandatory = $true)]
         [ValidateSet( 'checklists', 'checklist_templates', 'configurations', 'contacts', 'documents', `
                 'domains', 'locations', 'passwords', 'ssl_certificates', 'flexible_assets', 'tickets')]
         [string]$resource_type,
@@ -32,14 +32,14 @@ function New-ITGlueRelatedItems {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
 function Set-ITGlueRelatedItems {
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory = $true)]    
+        [Parameter(Mandatory = $true)]
         [ValidateSet( 'checklists', 'checklist_templates', 'configurations', 'contacts', 'documents', `
                 'domains', 'locations', 'passwords', 'ssl_certificates', 'flexible_assets', 'tickets')]
         [string]$resource_type,
@@ -74,14 +74,14 @@ function Set-ITGlueRelatedItems {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
 
 function Remove-ITGlueRelatedItems {
     [CmdletBinding()]
     Param (
-        [Parameter(Mandatory = $true)]    
+        [Parameter(Mandatory = $true)]
         [ValidateSet( 'checklists', 'checklist_templates', 'configurations', 'contacts', 'documents', `
                 'domains', 'locations', 'passwords', 'ssl_certificates', 'flexible_assets', 'tickets')]
         [string]$resource_type,
@@ -112,6 +112,6 @@ function Remove-ITGlueRelatedItems {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }
