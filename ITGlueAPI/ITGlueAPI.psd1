@@ -18,7 +18,7 @@
     # -- MINOR version when you add functionality in a backwards-compatible manner, and
     # -- PATCH version when you make backwards-compatible bug fixes.
 
-    ModuleVersion = '2.1.2'
+    ModuleVersion = '2.2.0'
 
     # ID used to uniquely identify this module
     GUID = 'f969cff1-3120-4980-8c46-83f2d0bf2521'
@@ -88,6 +88,7 @@
                     'Resources/FlexibleAssetTypes.ps1',
                     'Resources/Groups.ps1',
                     'Resources/Locations.ps1',
+                    'Resources/Logs.ps1',
                     'Resources/Manufacturers.ps1',
                     'Resources/Models.ps1',
                     'Resources/OperatingSystems.ps1',
@@ -149,7 +150,7 @@
                         'Set-ITGlueDocuments',
 
                         'Get-ITGlueDomains',
-                        
+
                         'Get-ITGlueExpirations',
 
                         'New-ITGlueFlexibleAssetFields',
@@ -172,6 +173,8 @@
                         'Get-ITGlueLocations',
                         'Set-ITGlueLocations',
                         'Remove-ITGlueLocations',
+
+                        'Get-ITGlueLogs',
 
                         'New-ITGlueManufacturers',
                         'Get-ITGlueManufacturers',
