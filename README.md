@@ -54,7 +54,7 @@ The first time you run this module, you will need to configure the base URI and 
 
 3. [optional] If you would like the IT Glue module to remember your base uri and API key, you can run `Export-ITGlueModuleSettings`. This will create a config file at `%UserProfile%\ITGlueAPI` that securely holds this information. Next time you run `Import-Module`, this configuration will automatically be loaded.
 
-:warning: Exporting module settings encrypts your API key in a format that can **only be unencrypted with your Windows account**. It makes use of PowerShell's `System.Security.SecureString` type, which uses reversible encrypted tied to your principle. This means that you cannot copy your configuration file to another computer or user account and expect it to work.
+:warning: Exporting module settings encrypts your API key in a format that can **only be unencrypted with your Windows account**. It makes use of PowerShell's `System.Security.SecureString` type, which uses reversible encrypted tied to your user principal. This means that you cannot copy your configuration file to another computer or user account and expect it to work.
 
 :warning: Exporting and importing module settings requires use of the `ConvertTo-SecureString` cmdlet, which is currently unavailable in Linux and Mac PowerShell core ports. Until PS Core 6.0.0 is available, this functionality only works on Windows.
 
@@ -64,6 +64,7 @@ Calling an API resource is as simple as running `Get-ITGlue<resourcename>`. The 
 
 | API Resource             | Create                              | Read                                | Update                              | Delete                               |
 | ------------------------ | ----------------------------------- | ----------------------------------- | ----------------------------------- | ------------------------------------ |
+| Attachments              | `New-ITGlueAttachments`             | -                                   | `Set-ITGlueAttachments`             | `Remove-ITGlueAttachments`           |
 | Configuration Interfaces | `New-ITGlueConfigurationInterfaces` | `Get-ITGlueConfigurationInterfaces` | `Set-ITGlueConfigurationInterfaces` | -                                    |
 | Configuration Statuses   | `New-ITGlueConfigurationStatuses`   | `Get-ITGlueConfigurationStatuses`   | `Set-ITGlueConfigurationStatuses`   | -                                    |
 | Configuration Types      | `New-ITGlueConfigurationTypes`      | `Get-ITGlueConfigurationTypes`      | `Set-ITGlueConfigurationTypes`      | -                                    |
@@ -71,6 +72,9 @@ Calling an API resource is as simple as running `Get-ITGlue<resourcename>`. The 
 | Contact Types            | `New-ITGlueContactTypes`            | `Get-ITGlueContactTypes`            | `Set-ITGlueContactTypes`            | -                                    |
 | Contacts                 | `New-ITGlueContacts`                | `Get-ITGlueContacts`                | `Set-ITGlueContacts`                | `Remove-ITGlueContacts`              |
 | Countries                | -                                   | `Get-ITGlueCountries`               | -                                   | -                                    |
+| Documents                | -                                   | `Set-ITGlueDocuments`               | -                                   | -                                    |
+| Domains                  | -                                   | `Get-ITGlueDomains`                 | -                                   | -                                    |
+| Expirations              | -                                   | `Get-ITGlueExpirations`             | -                                   | -                                    |
 | Flexible Asset Fields    | `New-ITGlueFlexibleAssetFields`     | `Get-ITGlueFlexibleAssetFields`     | `Set-ITGlueFlexibleAssetFields`     | `Remove-ITGlueFlexibleAssetFields`   |
 | Flexible Asset Types     | `New-ITGlueFlexibleAssetTypes`      | `Get-ITGlueFlexibleAssetTypes`      | `Set-ITGlueFlexibleAssetTypes`      | -                                    |
 | Flexible Assets          | `New-ITGlueFlexibleAssets`          | `Get-ITGlueFlexibleAssets`          | `Set-ITGlueFlexibleAssets`          | `Remove-ITGlueFlexibleAssets`        |
@@ -82,10 +86,11 @@ Calling an API resource is as simple as running `Get-ITGlue<resourcename>`. The 
 | Organization Statuses    | `New-ITGlueOrganizationStatuses`    | `Get-ITGlueOrganizationStatuses`    | `Set-ITGlueOrganizationStatuses`    | -                                    |
 | Organization Types       | `New-ITGlueOrganizationTypes`       | `Get-ITGlueOrganizationTypes`       | `Set-ITGlueOrganizationTypes`       | -                                    |
 | Organizations            | `New-ITGlueOrganizations`           | `Get-ITGlueOrganizations`           | `Set-ITGlueOrganizations`           | `Remove-ITGlueOrganizations`         |
-| Password Caterogires     | `New-ITGluePasswordCategories`      | `Get-ITGluePasswordCategories`      | `Set-ITGluePasswordCategories`      | -                                    |
+| Password Categories     | `New-ITGluePasswordCategories`      | `Get-ITGluePasswordCategories`      | `Set-ITGluePasswordCategories`      | -                                    |
 | Passwords                | `New-ITGluePasswords`               | `Get-ITGluePasswords`               | `Set-ITGluePasswords`               | `Remove-ITGluePasswords`             |
 | Platforms                | -                                   | `Get-ITGluePlatforms`               | -                                   | -                                    |
 | Regions                  | -                                   | `Get-ITGlueRegions`                 | -                                   | -                                    |
+| Related Items            | `New-ITGlueRelatedItems`            | -                                   | `Set-ITGlueRelatedItems`            | `Remove-ITGlueRelatedItems`          |
 | User Metrics             | -                                   | `Get-ITGlueUserMetrics`             | -                                   | -                                    |
 | Users                    | -                                   | `Get-ITGlueUsers`                   | `Set-ITGlueUsers`                   | -                                    |
 

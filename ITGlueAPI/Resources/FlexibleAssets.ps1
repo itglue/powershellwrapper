@@ -1,10 +1,19 @@
 function New-ITGlueFlexibleAssets {
+    [CmdletBinding(DefaultParameterSetName = 'create')]
     Param (
-        [Parameter(Mandatory = $true)]
-        $data
+        [Parameter(ParameterSetName = 'create', Mandatory = $true)]
+        [Parameter(ParameterSetName = 'bulk_create', Mandatory = $true)]
+        $data,
+
+        [Parameter(ParameterSetName = 'bulk_create', Mandatory = $true)]
+        [Int64]$organization_id
     )
 
     $resource_uri = '/flexible_assets/'
+
+    if ($PSCmdlet.ParameterSetName -eq 'bulk_create') {
+        $resource_uri = '/organizations/{0}/relationships/flexible_assets' -f $organization_id
+    }
 
     $body = @{}
 
