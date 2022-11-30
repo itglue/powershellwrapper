@@ -44,7 +44,7 @@ function Get-ITGlueConfigurationInterfaces {
         [Nullable[Int64]]$filter_id = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [Nullable[String]]$filter_ip_address = $null,
+        [String]$filter_ip_address = $null,
 
         [Parameter(ParameterSetName = 'index')]
         [ValidateSet('created_at', 'updated_at', `
