@@ -9,7 +9,7 @@
 @{
 
     # Script module or binary module file associated with this manifest
-    RootModule = '.\ITGlueAPI.psm1'
+    RootModule = 'ITGlueAPI.psm1'
 
     # Version number of this module.
     # Follows https://semver.org Semantic Versioning 2.0.0
