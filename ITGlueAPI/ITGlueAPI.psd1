@@ -88,6 +88,7 @@
                     'Resources/FlexibleAssetTypes.ps1',
                     'Resources/Groups.ps1',
                     'Resources/Locations.ps1',
+                    'Resources/Logs.ps1',
                     'Resources/Manufacturers.ps1',
                     'Resources/Models.ps1',
                     'Resources/OperatingSystems.ps1',
@@ -149,7 +150,7 @@
                         'Set-ITGlueDocuments',
 
                         'Get-ITGlueDomains',
-                        
+
                         'Get-ITGlueExpirations',
 
                         'New-ITGlueFlexibleAssetFields',
@@ -172,6 +173,8 @@
                         'Get-ITGlueLocations',
                         'Set-ITGlueLocations',
                         'Remove-ITGlueLocations',
+
+                        'Get-ITGlueLogs',
 
                         'New-ITGlueManufacturers',
                         'Get-ITGlueManufacturers',

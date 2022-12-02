@@ -22,7 +22,7 @@ function Get-ITGlueExpirations {
 
         [Parameter(ParameterSetName = 'index')]
         [String]$filter_expiration_date = '',
-        
+
         [Parameter(ParameterSetName = 'index')]
         [Int64]$filter_organization_id = '',
 

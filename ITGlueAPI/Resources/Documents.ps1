@@ -36,6 +36,6 @@ function Set-ITGlueDocuments {
     }
 
     $data = @{}
-    $data = $rest_output 
+    $data = $rest_output
     return $data
 }

@@ -42,6 +42,7 @@ $ResourceDirectoryFiles = (
     'FlexibleAssetTypes.ps1',
     'Groups.ps1',
     'Locations.ps1',
+    'Logs.ps1',
     'Manufacturers.ps1',
     'Models.ps1',
     'OperatingSystems.ps1',
@@ -137,10 +138,10 @@ Describe "Module Tests" {
         }
         # TODO - add tests to check for tests files
     }
-    
+
     Context "PowerShell $ThisModuleName Import Test" {
         # Credit - borrowed with care from https://github.com/TheMattCollins0/MattTools/blob/master/Tests/ModuleImport.Tests.ps1 and modified as needed
-        It "Should import PowerShell $ThisModuleName succesfully" {
+        It "Should import PowerShell $ThisModuleName successfully" {
             Import-Module -Name $ThisModulePath -ErrorVariable ImportError
             $ImportError | Should Be $null
         }
