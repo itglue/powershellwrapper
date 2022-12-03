@@ -1,4 +1,66 @@
 function Get-ITGlueCountries {
+<#
+    .SYNOPSIS
+        Returns a list of supported countries.
+
+    .DESCRIPTION
+        The Get-ITGlueCountries cmdlet returns a list of supported countries
+        as well or details of one of the supported countries.
+
+        This function can call the following endpoints:
+            Index = /countries
+
+            Show =  /countries/:id
+
+    .PARAMETER filter_name
+        Filter by country name
+
+    .PARAMETER filter_iso
+        Filter by country iso abbreviation
+
+    .PARAMETER sort
+        Sort results by a defined value
+
+        Allowed values:
+        'name', 'id', 'created_at', 'updated_at', `
+        '-name', '-id', '-created_at', '-updated_at'
+
+    .PARAMETER page_number
+        Return results starting from the defined number
+
+    .PARAMETER page_size
+        Number of results to return per page
+
+    .PARAMETER id
+        Get a country by id
+
+    .EXAMPLE
+        Get-ITGlueCountries
+
+        Returns the first 50 results from your ITGlue account
+
+    .EXAMPLE
+        Get-ITGlueCountries -id 12345
+
+        Returns the country details with the defined id
+
+    .EXAMPLE
+        Get-ITGlueCountries -page_number 2 -page_size 10
+
+        Returns the first 10 results from the second page for countries
+        in your ITGlue account
+
+    .NOTES
+        N\A
+
+    .LINK
+        https://api.itglue.com/developer/#countries-index
+
+    .LINK
+        https://github.com/itglue/powershellwrapper
+
+#>
+
     [CmdletBinding(DefaultParameterSetName = "index")]
     Param (
         [Parameter(ParameterSetName = "index")]

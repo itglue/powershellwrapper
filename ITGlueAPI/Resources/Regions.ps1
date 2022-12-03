@@ -1,4 +1,74 @@
 function Get-ITGlueRegions {
+<#
+    .SYNOPSIS
+        List or show all regions
+
+    .DESCRIPTION
+        The Get-ITGlueRegions cmdlet returns a list of supported regions
+        or the details of a single support region.
+
+        This function can call the following endpoints:
+            Index = /regions
+                    /countries/:id/relationships/regions
+
+            Show =  /regions/:id
+                    /countries/:id/relationships/regions/:id
+
+    .PARAMETER country_id
+        Get regions by country id
+
+    .PARAMETER filter_name
+        Filter by region name
+
+    .PARAMETER filter_iso
+        Filter by region iso abbreviation
+
+    .PARAMETER filter_country_id
+        Filter by country id
+
+    .PARAMETER sort
+        Sort results by a defined value
+
+        Allowed values:
+        'name', 'id', 'created_at', 'updated_at', `
+        '-name', '-id', '-created_at', '-updated_at'
+
+    .PARAMETER page_number
+        Return results starting from the defined number
+
+    .PARAMETER page_size
+        Number of results to return per page
+
+    .PARAMETER id
+        Get a region by id
+
+    .EXAMPLE
+        Get-ITGlueRegions
+
+        Returns the first 50 region results from your ITGlue account
+
+    .EXAMPLE
+        Get-ITGlueRegions -id 12345
+
+        Returns the region with the defined id
+
+    .EXAMPLE
+        Get-ITGlueRegions -page_number 2 -page_size 10
+
+        Returns the first 10 results from the second page for regions
+        in your ITGlue account
+
+    .NOTES
+        N\A
+
+    .LINK
+        https://api.itglue.com/developer/#regions-index
+
+    .LINK
+        https://github.com/itglue/powershellwrapper
+
+#>
+
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
         [Parameter(ParameterSetName = 'index')]

@@ -1,4 +1,63 @@
 function New-ITGluePasswords {
+<#
+    .SYNOPSIS
+        Creates oen or more a passwords
+
+    .DESCRIPTION
+        The New-ITGluePasswords cmdlet creates one or more passwords
+        under the organization specified in the ID parameter.
+
+        To show passwords your API key needs to have the "Password Access" permission
+
+        You can create general and embedded passwords with this endpoint
+
+        If the resource-id and resource-type attributes are NOT provided, IT Glue assumes
+        the password is a general password.
+
+        If the resource-id and resource-type attributes are provided, IT Glue assumes
+        the password is an embedded password.
+
+        Examples of JSON objects can be found under ITGlues developer documentation
+            https://api.itglue.com/developer
+
+    .PARAMETER organization_id
+        A valid organization Id in your account
+
+    .PARAMETER show_password
+        Define if the password should be shown or not
+
+        By default ITGlue hides the passwords from the returned data
+        and this function enables the password for display.
+
+    .PARAMETER data
+        JSON object or array depending on bulk changes or not
+
+    .EXAMPLE
+        New-ITGluePasswords -organization_id 8756309 -data $json_object
+
+        Creates a new password in the defined organization with the structured JSON object.
+
+        The password IS returned in the results
+
+    .EXAMPLE
+        New-ITGluePasswords -organization_id 8756309 -show_password $false -data $json_object
+
+        Creates a new password in the defined organization with the structured JSON object.
+
+        The password is NOT returned in the results
+
+    .NOTES
+        N\A
+
+    .LINK
+        https://api.itglue.com/developer/#passwords-create
+
+    .LINK
+        https://github.com/itglue/powershellwrapper
+
+#>
+
+    [cmdletbinding()]
     Param (
         [Nullable[Int64]]$organization_id = $null,
 
@@ -19,7 +78,107 @@ function New-ITGluePasswords {
     return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
 
+
+
 function Get-ITGluePasswords {
+<#
+    .SYNOPSIS
+        List or show all passwords
+
+    .DESCRIPTION
+        The Get-ITGluePasswords cmdlet returns a list of passwords for all organizations,
+        a specified organization, or the details of a single password.
+
+        To show passwords your API key needs to have the "Password Access" permission
+
+        This function can call the following endpoints:
+            Index = /passwords
+                    /organizations/:organization_id/relationships/passwords
+
+            Show =  /passwords/:id
+                    /organizations/:organization_id/relationships/passwords/:id
+
+    .PARAMETER organization_id
+        A valid organization Id in your account
+
+    .PARAMETER filter_id
+        Filter by password id
+
+    .PARAMETER filter_name
+        Filter by password name
+
+    .PARAMETER filter_archived
+        Filter by if the password is archived
+
+    .PARAMETER filter_organization_id
+        Filter for passwords by organization id
+
+    .PARAMETER filter_password_category_id
+        Filter by passwords category id
+
+    .PARAMETER filter_url
+        Filter by password url
+
+    .PARAMETER filter_cached_resource_name
+        Filter by a passwords cached resource name
+
+    .PARAMETER sort
+        Sort results by a defined value
+
+        Allowed values:
+        'name', 'username', 'id', 'created_at', 'updated-at', `
+        '-name', '-username', '-id', '-created_at', '-updated-at'
+
+    .PARAMETER page_number
+        Return results starting from the defined number
+
+    .PARAMETER page_size
+        Number of results to return per page
+
+    .PARAMETER id
+        Get a password by id
+
+    .PARAMETER show_password
+        Returns the password in the results
+
+    .PARAMETER include
+        Include specified assets
+
+        Allowed values(Index):
+        'attachments', 'rotatable_password', 'updater', 'user_resource_accesses',
+        'group_resource_accesses'
+
+        Allowed values(Show):
+        'attachments', 'rotatable_password', 'updater', 'user_resource_accesses',
+        'group_resource_accesses', 'recent_versions', 'related_items', 'authorized_users'
+
+    .EXAMPLE
+        Get-ITGluePasswords
+
+        Returns the first 50 password results from your ITGlue account
+
+    .EXAMPLE
+        Get-ITGluePasswords -id 12345
+
+        Returns the password with the defined id
+
+    .EXAMPLE
+        Get-ITGluePasswords -page_number 2 -page_size 10
+
+        Returns the first 10 results from the second page for passwords
+        in your ITGlue account
+
+    .NOTES
+        N\A
+
+    .LINK
+        https://api.itglue.com/developer/#passwords-index
+
+    .LINK
+        https://github.com/itglue/powershellwrapper
+
+#>
+
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
         [Parameter(ParameterSetName = 'index')]
@@ -122,7 +281,63 @@ function Get-ITGluePasswords {
     return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
+
+
 function Set-ITGluePasswords {
+<#
+    .SYNOPSIS
+        Updates one or more passwords
+
+    .DESCRIPTION
+        The Set-ITGluePasswords cmdlet updates the details of an
+        existing password or the details of multiple passwords.
+
+        To show passwords your API key needs to have the "Password Access" permission
+
+        Any attributes you don't specify will remain unchanged.
+
+        Examples of JSON objects can be found under ITGlues developer documentation
+            https://api.itglue.com/developer
+
+    .PARAMETER organization_id
+        A valid organization Id in your account
+
+    .PARAMETER id
+        Update a password by id
+
+    .PARAMETER show_password
+        Define if the password should be shown or not
+
+        By default ITGlue hides the passwords from the returned data
+
+    .PARAMETER data
+        JSON object or array depending on bulk changes or not
+
+    .EXAMPLE
+        Set-ITGluePasswords -id 8756309 -data $json_object
+
+        Updates the password in the defined organization with the structured JSON object.
+
+        The password is NOT returned in the results
+
+    .EXAMPLE
+        Set-ITGluePasswords -id 8756309 -show_password $true -data $json_object
+
+        Updates the password in the defined organization with the structured JSON object.
+
+        The password IS returned in the results
+
+    .NOTES
+        N\A
+
+    .LINK
+        https://api.itglue.com/developer/#passwords-update
+
+    .LINK
+        https://github.com/itglue/powershellwrapper
+
+#>
+
     [CmdletBinding(DefaultParameterSetName = 'update')]
     Param (
         [Parameter(ParameterSetName = 'update')]
@@ -151,7 +366,60 @@ function Set-ITGluePasswords {
     return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
 
+
+
 function Remove-ITGluePasswords {
+<#
+    .SYNOPSIS
+        Deletes one or more passwords
+
+    .DESCRIPTION
+        The Remove-ITGluePasswords cmdlet destroys one or more
+        passwords specified by ID.
+
+        Examples of JSON objects can be found under ITGlues developer documentation
+            https://api.itglue.com/developer
+
+    .PARAMETER id
+        Delete a password by id
+
+    .PARAMETER filter_id
+        Filter by password id
+
+    .PARAMETER filter_name
+        Filter by password name
+
+    .PARAMETER filter_organization_id
+        Filter for passwords by organization id
+
+    .PARAMETER filter_password_category_id
+        Filter by passwords category id
+
+    .PARAMETER filter_url
+        Filter by password url
+
+    .PARAMETER filter_cached_resource_name
+        Filter by a passwords cached resource name
+
+    .PARAMETER data
+        JSON object or array depending on bulk changes or not
+
+    .EXAMPLE
+        Remove-ITGluePasswords -id 8756309
+
+        Deletes the defined password
+
+    .NOTES
+        N\A
+
+    .LINK
+        https://api.itglue.com/developer/#passwords-destroy
+
+    .LINK
+        https://github.com/itglue/powershellwrapper
+
+#>
+
     [CmdletBinding(DefaultParameterSetName = 'destroy')]
     Param (
         [Parameter(ParameterSetName = 'destroy')]
