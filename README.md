@@ -72,7 +72,7 @@ Calling an API resource is as simple as running `Get-ITGlue<resourcename>`. The 
 | Contact Types            | `New-ITGlueContactTypes`            | `Get-ITGlueContactTypes`            | `Set-ITGlueContactTypes`            | -                                    |
 | Contacts                 | `New-ITGlueContacts`                | `Get-ITGlueContacts`                | `Set-ITGlueContacts`                | `Remove-ITGlueContacts`              |
 | Countries                | -                                   | `Get-ITGlueCountries`               | -                                   | -                                    |
-| Documents                | -                                   | `Set-ITGlueDocuments`               | -                                   | -                                    |
+| Documents                | -                                   | `Get-ITGlueDocuments`               | -                                   | -                                    |
 | Domains                  | -                                   | `Get-ITGlueDomains`                 | -                                   | -                                    |
 | Expirations              | -                                   | `Get-ITGlueExpirations`             | -                                   | -                                    |
 | Flexible Asset Fields    | `New-ITGlueFlexibleAssetFields`     | `Get-ITGlueFlexibleAssetFields`     | `Set-ITGlueFlexibleAssetFields`     | `Remove-ITGlueFlexibleAssetFields`   |
