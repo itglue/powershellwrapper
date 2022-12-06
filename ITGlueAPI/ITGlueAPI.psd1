@@ -18,7 +18,7 @@
     # -- MINOR version when you add functionality in a backwards-compatible manner, and
     # -- PATCH version when you make backwards-compatible bug fixes.
 
-    ModuleVersion = '2.2.0'
+    ModuleVersion = '2.1.0'
 
     # ID used to uniquely identify this module
     GUID = 'f969cff1-3120-4980-8c46-83f2d0bf2521'
@@ -72,6 +72,7 @@
     NestedModules = 'Internal/BaseURI.ps1',
                     'Internal/APIKey.ps1',
                     'Internal/ModuleSettings.ps1',
+                    'Internal/APICalls.ps1',
                     'Resources/Attachments.ps1',
                     'Resources/ConfigurationInterfaces.ps1',
                     'Resources/Configurations.ps1',

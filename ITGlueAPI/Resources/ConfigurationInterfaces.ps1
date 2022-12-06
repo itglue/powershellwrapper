@@ -12,25 +12,7 @@ function New-ITGlueConfigurationInterfaces {
         $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces' -f $conf_id)
     }
 
-    $body = @{}
-
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return New-ITGlue -resource_uri $resource_uri -data $data
 }
 
 function Get-ITGlueConfigurationInterfaces {
@@ -71,39 +53,27 @@ function Get-ITGlueConfigurationInterfaces {
         }
     }
 
-    $body = @{}
+    $filter_list = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $filter_list['filter[id]'] = $filter_id
         }
         if ($filter_ip_address) {
-            $body += @{'filter[ip_address]' = $filter_ip_address }
+            $filter_list['filter[ip_address]'] = $filter_ip_address
         }
         if ($sort) {
-            $body += @{'sort' = $sort}
+            $filter_list['sort'] = $sort
         }
         if ($page_number) {
-            $body += @{'page[number]' = $page_number}
+            $filter_list['page[number]'] = $page_number
         }
         if ($page_size) {
-            $body += @{'page[size]' = $page_size}
+            $filter_list['page[size]'] = $page_size
         }
     }
 
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
 }
 
 function Set-ITGlueConfigurationInterfaces {
@@ -130,29 +100,13 @@ function Set-ITGlueConfigurationInterfaces {
         $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces/{1}' -f $conf_id, $id)
     }
 
-    $body = @{}
+    $filter_list = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_delete') {
         if ($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $filter_list['filter[id]'] = $filter_id
         }
     }
 
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Set-ITGlue -resource_uri $resource_uri -data $data -filter_list $filter_list
 }

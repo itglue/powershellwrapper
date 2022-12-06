@@ -12,25 +12,7 @@ function New-ITGlueFlexibleAssetFields {
         $resource_uri = ('/flexible_asset_types/{0}/relationships/flexible_asset_fields' -f $flexible_asset_type_id)
     }
 
-    $body = @{}
-
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return New-ITGlue -resource_uri $resource_uri -data $data
 }
 
 function Get-ITGlueFlexibleAssetFields {
@@ -73,29 +55,29 @@ function Get-ITGlueFlexibleAssetFields {
         $resource_uri = ('/flexible_asset_types/{0}/relationships/flexible_asset_fields/{1}' -f $flexible_asset_type_id, $id)
     }
 
-    $body = @{}
+    $filter_list = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $filter_list['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $body += @{'filter[name]' = $filter_name}
+            $filter_list['filter[name]'] = $filter_name
         }
         if ($filter_icon) {
-            $body += @{'filter[icon]' = $filter_icon}
+            $filter_list['filter[icon]'] = $filter_icon
         }
         if ($null -ne $filter_enabled) {
-            $body += @{'filter[enabled]' = $filter_enabled}
+            $filter_list['filter[enabled]'] = $filter_enabled
         }
         if ($sort) {
-            $body += @{'sort' = $sort}
+            $filter_list['sort'] = $sort
         }
         if ($page_number) {
-            $body += @{'page[number]' = $page_number}
+            $filter_list['page[number]'] = $page_number
         }
         if ($page_size) {
-            $body += @{'page[size]' = $page_size}
+            $filter_list['page[size]'] = $page_size
         }
     }
     elseif ($null -eq $flexible_asset_type_id) {
@@ -103,19 +85,7 @@ function Get-ITGlueFlexibleAssetFields {
         $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
     }
 
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
 }
 
 function Set-ITGlueFlexibleAssetFields {
@@ -142,31 +112,15 @@ function Set-ITGlueFlexibleAssetFields {
         $resource_uri = ('/flexible_asset_types/{0}/relationships/flexible_asset_fields/{1}' -f $flexible_asset_type_id, $id)
     }
 
-    $body = @{}
+    $filter_list = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_update') {
         if ($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $filter_list['filter[id]'] = $filter_id
         }
     }
 
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Set-ITGlue -resource_uri $resource_uri -data $data -filter_list $filter_list
 }
 
 function Remove-ITGlueFlexibleAssetFields {
@@ -185,19 +139,6 @@ function Remove-ITGlueFlexibleAssetFields {
     }
 
     if ($pscmdlet.ShouldProcess($id)) {
-
-        try {
-            $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-            $rest_output = Invoke-RestMethod -method 'DELETE' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-                -ErrorAction Stop -ErrorVariable $web_error
-        } catch {
-            Write-Error $_
-        } finally {
-            [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-        }
-
-        $data = @{}
-        $data = $rest_output
-        return $data
+        return Remove-ITGlue -resource_uri $resource_uri -data $data
     }
 }
