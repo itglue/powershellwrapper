@@ -15,7 +15,7 @@ function New-ITGlueAttachments {
 
     $resource_uri = ('/{0}/{1}/relationships/attachments' -f $resource_type, $resource_id)
 
-    return New-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -Data $data
 
 }
 
@@ -40,7 +40,7 @@ function Set-ITGlueAttachments {
 
     $resource_uri = ('/{0}/{1}/relationships/attachments/{2}' -f $resource_type, $resource_id, $id)
 
-    return Set-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data
 }
 
 function Remove-ITGlueAttachments {
@@ -60,5 +60,5 @@ function Remove-ITGlueAttachments {
 
     $resource_uri = ('/{0}/{1}/relationships/attachments' -f $resource_type, $resource_id)
 
-    return Remove-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method DELETE -ResourceURI $resource_uri -Data $data
 }

@@ -12,7 +12,7 @@ function New-ITGlueConfigurationInterfaces {
         $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces' -f $conf_id)
     }
 
-    return New-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data
 }
 
 function Get-ITGlueConfigurationInterfaces {
@@ -53,27 +53,27 @@ function Get-ITGlueConfigurationInterfaces {
         }
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_ip_address) {
-            $filter_list['filter[ip_address]'] = $filter_ip_address
+            $query_params['filter[ip_address]'] = $filter_ip_address
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list['page[number]'] = $page_number
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $filter_list['page[size]'] = $page_size
+            $query_params['page[size]'] = $page_size
         }
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGlueConfigurationInterfaces {
@@ -100,13 +100,13 @@ function Set-ITGlueConfigurationInterfaces {
         $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces/{1}' -f $conf_id, $id)
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_delete') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
     }
 
-    return Set-ITGlue -resource_uri $resource_uri -data $data -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -data $Data -QueryParams $query_params
 }

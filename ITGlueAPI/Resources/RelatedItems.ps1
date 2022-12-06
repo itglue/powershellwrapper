@@ -15,7 +15,7 @@ function New-ITGlueRelatedItems {
 
     $resource_uri = ('/{0}/{1}/relationships/related_items' -f $resource_type, $resource_id)
 
-    return New-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data
 }
 
 function Set-ITGlueRelatedItems {
@@ -39,7 +39,7 @@ function Set-ITGlueRelatedItems {
 
     $resource_uri = ('/{0}/{1}/relationships/related_items/{2}' -f $resource_type, $resource_id, $id)
 
-    return Set-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data
 }
 
 function Remove-ITGlueRelatedItems {
@@ -59,5 +59,5 @@ function Remove-ITGlueRelatedItems {
 
     $resource_uri = ('/{0}/{1}/relationships/related_items' -f $resource_type, $resource_id)
 
-    return Remove-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method DELETE -ResourceURI $resource_uri -Data $data
 }

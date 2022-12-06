@@ -27,31 +27,31 @@ function Get-ITGlueUserMetrics {
 
     $resource_uri = '/user_metrics'
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_user_id) {
-            $filter_list['filter[user_id]'] = $filter_user_id
+            $query_params['filter[user_id]'] = $filter_user_id
         }
         if ($filter_organization_id) {
-            $filter_list['filter[organization_id]'] = $filter_organization_id
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_resource_type) {
-            $filter_list['filter[resource_type]'] = $filter_resource_type
+            $query_params['filter[resource_type]'] = $filter_resource_type
         }
         if ($filter_date) {
-            $filter_list['filter[date]'] = $filter_date
+            $query_params['filter[date]'] = $filter_date
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list['page[number]'] = $page_number
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $filter_list['page[size]'] = $page_size
+            $query_params['page[size]'] = $page_size
         }
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }

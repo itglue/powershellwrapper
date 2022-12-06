@@ -12,7 +12,7 @@ function New-ITGlueModels {
         $resource_uri = ('/manufacturers/{0}/relationships/models' -f $manufacturer_id)
     }
 
-    return New-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data
 }
 
 function Get-ITGlueModels {
@@ -45,24 +45,24 @@ function Get-ITGlueModels {
         $resource_uri = ('/manufacturers/{0}/relationships' -f $manufacturer_id) + $resource_uri
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list['page[number]'] = $page_number
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $filter_list['page[size]'] = $page_size
+            $query_params['page[size]'] = $page_size
         }
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGlueModels {
@@ -89,13 +89,13 @@ function Set-ITGlueModels {
         $resource_uri = ('/manufacturers/{0}/relationships/models/{1}' -f $manufacturer_id, $id)
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_update') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
     }
 
-    return Set-ITGlue -resource_uri $resource_uri -data $data -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }

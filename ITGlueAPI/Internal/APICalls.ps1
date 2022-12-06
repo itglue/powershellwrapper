@@ -1,159 +1,55 @@
-function New-ITGlue {
-    Param (
-        [Parameter(Mandatory = $true)]
-        [String]$resource_uri,
-        [Parameter(Mandatory = $true)]
-        [Hashtable]$data
-    )
-
-    $body = @{'data'= $data}
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-
-        $parameters = @{
-            "Method" = 'POST'
-            "Uri" = $ITGlue_Base_URI + $resource_uri
-            "Headers" = $ITGlue_Headers
-            "Body" = $body
-        }
-
-        $rest_output = Invoke-RestMethod @parameters -ErrorAction Stop
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
+function ConvertTo-QueryString([Hashtable]$QueryParams) {
+    if (-not $QueryParams) {
+        return ""
     }
 
-    $data = @{}
-    $data = $rest_output
-    return $data
+    $params = @()
+    foreach ($key in $QueryParams.Keys) {
+        $value = [System.Net.WebUtility]::UrlEncode($QueryParams[$key])
+        $params += "$key=$value"
+    }
+
+    $query_string = '?' + ($params -join '&')
+    return $query_string
 }
 
-function Get-ITGlue {
-    Param (
-        [Parameter(Mandatory = $true)]
-        [String]$resource_uri,
+function Invoke-ITGlueRequest {
+    param (
+        [ValidateSet('GET', 'POST', 'PATCH', 'DELETE')]
+        [string]$Method = 'GET',
 
-        [Hashtable]$filter_list = @{}
+        [Parameter(Mandatory = $true)]
+        [string]$ResourceURI,
+
+        [Hashtable]$QueryParams = $null,
+
+        [Hashtable]$Data = $null
     )
 
-    $filter = ""
-    foreach($key in $filter_list.keys) {
-        $filter += "$key=$($filter[$key])&"
-    }
+    $query_string = ConvertTo-QueryString -QueryParams $QueryParams
 
-    $filter = $filter.trimEnd("&") # Remove trailing &.
-
-    if(-not [System.String]::IsNullOrEmpty($filter)) { # Skip if no filer was added.
-        $resource_uri = "{0}?{1}" -f $resource_uri, $filter
+    if ($null -eq $Data) {
+        $body = $null
+    } else {
+        $body = @{'data'=$Data} | ConvertTo-Json -Depth $ITGlue_JSON_Conversion_Depth
     }
 
     try {
         $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
 
         $parameters = @{
-            "Method" = 'GET'
-            "Uri" = $ITGlue_Base_URI + $resource_uri
-            "Headers" = $ITGlue_Headers
+            'Method' = $Method
+            'Uri' = $ITGlue_Base_URI + $ResourceURI + $query_string
+            'Headers' = $ITGlue_Headers
+            'Body' = $body
         }
 
-        $rest_output = Invoke-RestMethod @parameters -ErrorAction Stop
+        $api_response = Invoke-RestMethod @parameters -ErrorAction Stop
     } catch {
         Write-Error $_
     } finally {
         [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
-    $data = @{}
-    $data = $rest_output
-    return $data
-}
-
-function Set-ITGlue {
-    Param (
-        [Parameter(Mandatory = $true)]
-        [String]$resource_uri,
-
-        [Parameter(Mandatory = $true)]
-        [Hashtable]$data,
-
-        [Hashtable]$filter_list = @{}
-    )
-
-    $body = @{}
-    if($filter_list.Count -gt 0)  { # Only run if filters are provided
-        foreach($key in $filter_list.keys) { # Loop all filters and add them to the body.
-            $body[$key] = $filter_list[$key]
-        }
-    }
-
-    $body['data'] = $data
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-
-        $parameters = @{
-            "Method" = 'PATCH'
-            "Uri" = $ITGlue_Base_URI + $resource_uri
-            "Headers" = $ITGlue_Headers
-            "Body" = $body
-        }
-
-        $rest_output = Invoke-RestMethod @parameters -ErrorAction Stop
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
-}
-
-function Remove-ITGlue {
-    Param (
-        [Parameter(Mandatory = $true)]
-        [String]$resource_uri,
-
-        [Parameter(Mandatory = $true)]
-        [Hashtable]$data,
-
-        [Hashtable]$filter_list = @{}
-    )
-
-    $body = @{}
-
-    if($filter_list.Count -gt 0)  { # Only run if filters are provided
-        foreach($key in $filter_list.keys) { # Loop all filters and add them to the body.
-            $body[$key] = $filter_list[$key]
-        }
-    }
-
-    $body['data'] = $data
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-
-        $parameters = @{
-            "Method" = 'DELETE'
-            "Uri" = $ITGlue_Base_URI + $resource_uri
-            "Headers" = $ITGlue_Headers
-            "Body" = $body
-        }
-
-        $rest_output = Invoke-RestMethod @parameters -ErrorAction Stop
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return $api_response
 }

@@ -6,7 +6,7 @@ function New-ITGlueManufacturers {
 
     $resource_uri = '/manufacturers/'
 
-    return New-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data
 }
 
 function Get-ITGlueManufacturers {
@@ -32,24 +32,24 @@ function Get-ITGlueManufacturers {
 
     $resource_uri = ('/manufacturers/{0}' -f $id)
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_name) {
-            $filter_list['filter[name]'] = $filter_name
+            $query_params['filter[name]'] = $filter_name
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list['page[number]'] = $page_number
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $filter_list['page[size]'] = $page_size
+            $query_params['page[size]'] = $page_size
         }
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGlueManufacturers {
@@ -63,5 +63,5 @@ function Set-ITGlueManufacturers {
 
     $resource_uri = ('/manufacturers/{0}' -f $id)
 
-    return Set-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data
 }

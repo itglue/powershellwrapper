@@ -12,7 +12,7 @@ function New-ITGlueConfigurations {
         $resource_uri = ('/organizations/{0}/relationships/configurations' -f $organization_id)
     }
 
-    return New-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data
 }
 
 function Get-ITGlueConfigurations {
@@ -137,64 +137,64 @@ function Get-ITGlueConfigurations {
         $resource_uri = ('/configurations/{0}' -f $id)
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if (($PSCmdlet.ParameterSetName -eq 'index') -or `
         ($PSCmdlet.ParameterSetName -eq 'index_rmm') -or `
         ($PSCmdlet.ParameterSetName -eq 'index_psa') -or `
         ($PSCmdlet.ParameterSetName -eq 'index_rmm_psa')) {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $filter_list['filter[name]'] = $filter_name
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_organization_id) {
-            $filter_list['filter[organization_id]'] = $filter_organization_id
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_archived) {
-            $filter_list['filter[archived]'] = $filter_archived
+            $query_params['filter[archived]'] = $filter_archived
         }
         if ($filter_configuration_type_id) {
-            $filter_list['filter[configuration_type_id]'] = $filter_configuration_type_id
+            $query_params['filter[configuration_type_id]'] = $filter_configuration_type_id
         }
         if ($filter_configuration_status_id) {
-            $filter_list['filter[configuration_status_id]'] = $filter_configuration_status_id
+            $query_params['filter[configuration_status_id]'] = $filter_configuration_status_id
         }
         if ($filter_contact_id) {
-            $filter_list['filter[contact_id]'] = $filter_contact_id
+            $query_params['filter[contact_id]'] = $filter_contact_id
         }
         if ($filter_serial_number) {
-            $filter_list['filter[serial_number]'] = $filter_serial_number
+            $query_params['filter[serial_number]'] = $filter_serial_number
         }
         if ($filter_rmm_integration_type) {
-            $filter_list['filter[rmm_integration_type]'] = $filter_rmm_integration_type
+            $query_params['filter[rmm_integration_type]'] = $filter_rmm_integration_type
         }
         if ($filter_psa_integration_type) {
-            $filter_list['filter[psa_integration_type]'] = $filter_psa_integration_type
+            $query_params['filter[psa_integration_type]'] = $filter_psa_integration_type
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list['page[number]'] = $page_number
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $filter_list['page[size]'] = $page_size
+            $query_params['page[size]'] = $page_size
         }
     }
     if (($PSCmdlet.ParameterSetName -eq 'index_rmm') -or ($PSCmdlet.ParameterSetName -eq 'index_rmm_psa')) {
-        $filter_list['filter[rmm_id]'] = $filter_rmm_id
+        $query_params['filter[rmm_id]'] = $filter_rmm_id
     }
     if (($PSCmdlet.ParameterSetName -eq 'index_psa') -or ($PSCmdlet.ParameterSetName -eq 'index_rmm_psa')) {
-        $filter_list['filter[psa_id]'] = $filter_psa_id
+        $query_params['filter[psa_id]'] = $filter_psa_id
     }
 
     if($include) {
-        $filter_list['include'] = $include
+        $query_params['include'] = $include
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGlueConfigurations {
@@ -289,48 +289,48 @@ function Set-ITGlueConfigurations {
         $resource_uri = ('/organizations/{0}/relationships/configurations/{1}' -f $organization_id, $id)
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if (($PSCmdlet.ParameterSetName -eq 'bulk_update') -or `
         ($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm') -or `
         ($PSCmdlet.ParameterSetName -eq 'bulk_update_psa') -or `
         ($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm_psa')) {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $filter_list['filter[name]'] = $filter_name
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_organization_id) {
-            $filter_list['filter[organization_id]'] = $filter_organization_id
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_configuration_type_id) {
-            $filter_list['filter[configuration_type_id]'] = $filter_configuration_type_id
+            $query_params['filter[configuration_type_id]'] = $filter_configuration_type_id
         }
         if ($filter_configuration_status_id) {
-            $filter_list['filter[configuration_status_id]'] = $filter_configuration_status_id
+            $query_params['filter[configuration_status_id]'] = $filter_configuration_status_id
         }
         if ($filter_contact_id) {
-            $filter_list['filter[contact_id]'] = $filter_contact_id
+            $query_params['filter[contact_id]'] = $filter_contact_id
         }
         if ($filter_serial_number) {
-            $filter_list['filter[serial_number]'] = $filter_serial_number
+            $query_params['filter[serial_number]'] = $filter_serial_number
         }
         if ($filter_rmm_id) {
-            $filter_list['filter[rmm_id]'] = $filter_rmm_id
+            $query_params['filter[rmm_id]'] = $filter_rmm_id
         }
         if ($filter_rmm_integration_type) {
-            $filter_list['filter[rmm_integration_type]'] = $filter_rmm_integration_type
+            $query_params['filter[rmm_integration_type]'] = $filter_rmm_integration_type
         }
     }
     if (($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm') -or ($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm_psa')) {
-        $filter_list['filter[rmm_id]'] = $filter_rmm_id
+        $query_params['filter[rmm_id]'] = $filter_rmm_id
     }
     if (($PSCmdlet.ParameterSetName -eq 'bulk_update_psa') -or ($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm_psa')) {
-        $filter_list['filter[psa_id]'] = $filter_psa_id
+        $query_params['filter[psa_id]'] = $filter_psa_id
     }
 
-    return Set-ITGlue -resource_uri $resource_uri -data $data -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
 
 function Remove-ITGlueConfigurations {
@@ -376,35 +376,35 @@ function Remove-ITGlueConfigurations {
 
     $resource_uri = '/configurations/'
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_delete') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $filter_list['filter[name]'] = $filter_name
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_organization_id) {
-            $filter_list['filter[organization_id]'] = $filter_organization_id
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_configuration_type_id) {
-            $filter_list['filter[configuration_type_id]'] = $filter_configuration_type_id
+            $query_params['filter[configuration_type_id]'] = $filter_configuration_type_id
         }
         if ($filter_configuration_status_id) {
-            $filter_list['filter[configuration_status_id]'] = $filter_configuration_status_id
+            $query_params['filter[configuration_status_id]'] = $filter_configuration_status_id
         }
         if ($filter_contact_id) {
-            $filter_list['filter[contact_id]'] = $filter_contact_id
+            $query_params['filter[contact_id]'] = $filter_contact_id
         }
         if ($filter_serial_number) {
-            $filter_list['filter[serial_number]'] = $filter_serial_number
+            $query_params['filter[serial_number]'] = $filter_serial_number
         }
         if ($filter_rmm_id) {
-            $filter_list['filter[rmm_id]'] = $filter_rmm_id
+            $query_params['filter[rmm_id]'] = $filter_rmm_id
         }
         if ($filter_rmm_integration_type) {
-            $filter_list['filter[rmm_integration_type]'] = $filter_rmm_integration_type
+            $query_params['filter[rmm_integration_type]'] = $filter_rmm_integration_type
         }
     } elseif ($PSCmdlet.ParameterSetName -eq 'delete') {
         $data = @(
@@ -417,5 +417,5 @@ function Remove-ITGlueConfigurations {
         )
     }
 
-    return Remove-ITGlue -resource_uri $resource_uri -data $data -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method DELETE -RequestURI $resource_uri -Data $data -QueryParams $query_params
 }

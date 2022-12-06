@@ -24,25 +24,25 @@ function Get-ITGlueCountries {
 
     $resource_uri = ('/countries/{0}' -f $id)
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq "index") {
         if ($filter_name) {
-            $filter_list['filter[name]'] = $filter_name
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_iso) {
-            $filter_list['filter[iso]'] = $filter_iso
+            $query_params['filter[iso]'] = $filter_iso
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list["page[number]"] = $page_number
+            $query_params["page[number]"] = $page_number
         }
         if ($page_size) {
-            $filter_list["page[size]"] = $page_size
+            $query_params["page[size]"] = $page_size
         }
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -RequestURI $resource_uri -QueryParams $query_params
 }

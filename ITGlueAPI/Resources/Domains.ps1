@@ -30,29 +30,29 @@ function Get-ITGlueDomains {
         $resource_uri = ('/organizations/{0}/relationships/domains' -f $organization_id)
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_organization_id) {
-            $filter_list['filter[organization_id]'] = $filter_organization_id
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list['page[number]'] = $page_number
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $filter_list['page[size]'] = $page_size
+            $query_params['page[size]'] = $page_size
         }
     }
 
     if($include) {
-        $filter_list['include'] = $include
+        $query_params['include'] = $include
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }

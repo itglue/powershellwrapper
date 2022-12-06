@@ -78,19 +78,19 @@ function Get-ITGlueLogs {
 
         $resource_uri = '/logs'
 
-        $filter_list = @{}
+        $query_params = @{}
 
         if ($PSCmdlet.ParameterSetName -eq 'index') {
             if ($sort) {
-                $filter_list['sort'] = $sort
+                $query_params['sort'] = $sort
             }
             if ($page_number) {
-                $filter_list['page[number]'] = $page_number
+                $query_params['page[number]'] = $page_number
             }
             if ($page_size) {
-                $filter_list['page[size]'] = $page_size
+                $query_params['page[size]'] = $page_size
             }
         }
 
-        return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+        return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
     }

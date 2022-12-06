@@ -12,7 +12,7 @@ function New-ITGlueFlexibleAssetFields {
         $resource_uri = ('/flexible_asset_types/{0}/relationships/flexible_asset_fields' -f $flexible_asset_type_id)
     }
 
-    return New-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method POST -RequestURI $resource_uri -Data $data
 }
 
 function Get-ITGlueFlexibleAssetFields {
@@ -55,29 +55,29 @@ function Get-ITGlueFlexibleAssetFields {
         $resource_uri = ('/flexible_asset_types/{0}/relationships/flexible_asset_fields/{1}' -f $flexible_asset_type_id, $id)
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $filter_list['filter[name]'] = $filter_name
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_icon) {
-            $filter_list['filter[icon]'] = $filter_icon
+            $query_params['filter[icon]'] = $filter_icon
         }
         if ($null -ne $filter_enabled) {
-            $filter_list['filter[enabled]'] = $filter_enabled
+            $query_params['filter[enabled]'] = $filter_enabled
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list['page[number]'] = $page_number
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $filter_list['page[size]'] = $page_size
+            $query_params['page[size]'] = $page_size
         }
     }
     elseif ($null -eq $flexible_asset_type_id) {
@@ -85,7 +85,7 @@ function Get-ITGlueFlexibleAssetFields {
         $resource_uri = ('/flexible_asset_fields/{0}' -f $id)
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGlueFlexibleAssetFields {
@@ -112,15 +112,15 @@ function Set-ITGlueFlexibleAssetFields {
         $resource_uri = ('/flexible_asset_types/{0}/relationships/flexible_asset_fields/{1}' -f $flexible_asset_type_id, $id)
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_update') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
     }
 
-    return Set-ITGlue -resource_uri $resource_uri -data $data -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
 
 function Remove-ITGlueFlexibleAssetFields {
@@ -139,6 +139,6 @@ function Remove-ITGlueFlexibleAssetFields {
     }
 
     if ($pscmdlet.ShouldProcess($id)) {
-        return Remove-ITGlue -resource_uri $resource_uri -data $data
+        return Invoke-ITGlueRequest -Method DELETE -ResourceURI $resource_uri -Data $data
     }
 }

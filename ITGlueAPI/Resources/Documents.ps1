@@ -19,5 +19,5 @@ function Set-ITGlueDocuments {
         $resource_uri = ('/organizations/{0}/relationships/documents/{1}' -f $organization_id, $id)
     }
 
-    return Set-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data
 }

@@ -12,7 +12,7 @@ function New-ITGlueContacts {
         $resource_uri = ('/organizations/{0}/relationships/contacts' -f $organization_id)
     }
 
-    return New-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data
 }
 
 function Get-ITGlueContacts {
@@ -87,55 +87,55 @@ function Get-ITGlueContacts {
         $resource_uri = ('/organizations/{0}/relationships' -f $organization_id) + $resource_uri
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if (($PSCmdlet.ParameterSetName -eq 'index') -or ($PSCmdlet.ParameterSetName -eq 'index_psa')) {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_first_name) {
-            $filter_list['filter[first_name]'] = $filter_first_name
+            $query_params['filter[first_name]'] = $filter_first_name
         }
         if ($filter_last_name) {
-            $filter_list['filter[last_name]'] = $filter_last_name
+            $query_params['filter[last_name]'] = $filter_last_name
         }
         if ($filter_title) {
-            $filter_list['filter[title]'] = $filter_title
+            $query_params['filter[title]'] = $filter_title
         }
         if ($filter_contact_type_id) {
-            $filter_list['filter[contact_type_id]'] = $filter_contact_type_id
+            $query_params['filter[contact_type_id]'] = $filter_contact_type_id
         }
         if ($filter_important -eq $true) {
-            $filter_list['filter[important]'] = '1'
+            $query_params['filter[important]'] = '1'
         }
         elseif ($filter_important -eq $false) {
-            $filter_list['filter[important]'] = '0'
+            $query_params['filter[important]'] = '0'
         }
         if ($filter_primary_email) {
-            $filter_list['filter[primary_email]'] = $filter_primary_email
+            $query_params['filter[primary_email]'] = $filter_primary_email
         }
         if ($filter_psa_integration_type) {
-            $filter_list['filter[psa_integration_type]'] = $filter_psa_integration_type
+            $query_params['filter[psa_integration_type]'] = $filter_psa_integration_type
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list['page[number]'] = $page_number
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $filter_list['page[size]'] = $page_size
+            $query_params['page[size]'] = $page_size
         }
     }
     if ($PSCmdlet.ParameterSetName -eq 'index_psa') {
-        $filter_list['filter[psa_id]'] = $filter_psa_id
+        $query_params['filter[psa_id]'] = $filter_psa_id
     }
 
     if($include) {
-        $filter_list += @{'include' = $include}
+        $query_params += @{'include' = $include}
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGlueContacts {
@@ -181,36 +181,36 @@ function Set-ITGlueContacts {
         $resource_uri = ('/organizations/{0}/relationships/contacts/{1}' -f $organization_id, $id)
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_update') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_first_name) {
-            $filter_list['filter[first_name]'] = $filter_first_name
+            $query_params['filter[first_name]'] = $filter_first_name
         }
         if ($filter_last_name) {
-            $filter_list['filter[last_name]'] = $filter_last_name
+            $query_params['filter[last_name]'] = $filter_last_name
         }
         if ($filter_title) {
-            $filter_list['filter[title]'] = $filter_title
+            $query_params['filter[title]'] = $filter_title
         }
         if ($filter_contact_type_id) {
-            $filter_list['filter[contact_type_id]'] = $filter_contact_type_id
+            $query_params['filter[contact_type_id]'] = $filter_contact_type_id
         }
         if ($filter_important -eq $true) {
-            $filter_list['filter[important]'] = '1'
+            $query_params['filter[important]'] = '1'
         }
         elseif ($filter_import -eq $false) {
-            $filter_list['filter[important]'] = '0'
+            $query_params['filter[important]'] = '0'
         }
         if ($filter_primary_email) {
-            $filter_list['filter[primary_email]'] = $filter_primary_email
+            $query_params['filter[primary_email]'] = $filter_primary_email
         }
     }
 
-    return Set-ITGlue -resource_uri $resource_uri -data $data -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
 
 function Remove-ITGlueContacts {
@@ -248,34 +248,34 @@ function Remove-ITGlueContacts {
         $resource_uri = ('/organizations/{0}/relationships/contacts/{1}' -f $organization_id, $id)
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_destroy') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_first_name) {
-            $filter_list['filter[first_name]'] = $filter_first_name
+            $query_params['filter[first_name]'] = $filter_first_name
         }
         if ($filter_last_name) {
-            $filter_list['filter[last_name]'] = $filter_last_name
+            $query_params['filter[last_name]'] = $filter_last_name
         }
         if ($filter_title) {
-            $filter_list['filter[title]'] = $filter_title
+            $query_params['filter[title]'] = $filter_title
         }
         if ($filter_contact_type_id) {
-            $filter_list['filter[contact_type_id]'] = $filter_contact_type_id
+            $query_params['filter[contact_type_id]'] = $filter_contact_type_id
         }
         if ($filter_important -eq $true) {
-            $filter_list['filter[important]'] = '1'
+            $query_params['filter[important]'] = '1'
         }
         elseif ($filter_important -eq $false) {
-            $filter_list['filter[important]'] = '0'
+            $query_params['filter[important]'] = '0'
         }
         if ($filter_primary_email) {
-            $filter_list['filter[primary_email]'] = $filter_primary_email
+            $query_params['filter[primary_email]'] = $filter_primary_email
         }
     }
 
-    return Remove-ITGlue -resource_uri $resource_uri -data $data -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method DELETE -RequestURI $resource_uri -Data $data -QueryParams $query_params
 }

@@ -6,7 +6,7 @@ function New-ITGlueFlexibleAssetTypes {
 
     $resource_uri = '/flexible_asset_types/'
 
-    return New-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data
 }
 function Get-ITGlueFlexibleAssetTypes {
     [CmdletBinding(DefaultParameterSetName = 'index')]
@@ -40,38 +40,38 @@ function Get-ITGlueFlexibleAssetTypes {
 
     $resource_uri = ('/flexible_asset_types/{0}' -f $id)
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_name) {
-            $filter_list['filter[name]'] = $filter_name
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_icon) {
-            $filter_list['filter[icon]'] = $filter_icon
+            $query_params['filter[icon]'] = $filter_icon
         }
         if ($filter_enabled -eq $true) {
             # PS $true returns "True" in string form (uppercase) and ITG's API is case-sensitive, so being explicit
-            $filter_list['filter[enabled]'] = "1"
+            $query_params['filter[enabled]'] = "1"
         }
         elseif ($filter_enabled -eq $false) {
-            $filter_list['filter[enabled]'] = "0"
+            $query_params['filter[enabled]'] = "0"
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list['page[number]'] = $page_number
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $filter_list['page[size]'] = $page_size
+            $query_params['page[size]'] = $page_size
         }
     }
 
     if($include) {
-        $filter_list['include'] = $include
+        $query_params['include'] = $include
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGlueFlexibleAssetTypes {
@@ -85,5 +85,5 @@ function Set-ITGlueFlexibleAssetTypes {
 
     $resource_uri = ('/flexible_asset_types/{0}' -f $id)
 
-    return Set-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data
 }

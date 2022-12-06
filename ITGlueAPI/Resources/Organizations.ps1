@@ -6,7 +6,7 @@ function New-ITGlueOrganizations {
 
     $resource_uri = '/organizations/'
 
-    return New-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data
 }
 
 function Get-ITGlueOrganizations {
@@ -71,63 +71,63 @@ function Get-ITGlueOrganizations {
 
     $resource_uri = ('/organizations/{0}' -f $id)
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $filter_list['filter[name]'] = $filter_name
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_organization_type_id) {
-            $filter_list['filter[organization_type_id]'] = $filter_organization_type_id
+            $query_params['filter[organization_type_id]'] = $filter_organization_type_id
         }
         if ($filter_organization_status_id) {
-            $filter_list['filter[organization_status_id]'] = $filter_organization_status_id
+            $query_params['filter[organization_status_id]'] = $filter_organization_status_id
         }
         if ($filter_created_at) {
-            $filter_list['filter[created_at]'] = $filter_created_at
+            $query_params['filter[created_at]'] = $filter_created_at
         }
         if ($filter_updated_at) {
-            $filter_list['filter[updated_at]'] = $filter_updated_at
+            $query_params['filter[updated_at]'] = $filter_updated_at
         }
         if ($filter_my_glue_account_id) {
-            $filter_list['filter[my_glue_account_id]'] = $filter_my_glue_account_id
+            $query_params['filter[my_glue_account_id]'] = $filter_my_glue_account_id
         }
         if ($filter_group_id) {
-            $filter_list['filter[group_id]'] = $filter_group_id
+            $query_params['filter[group_id]'] = $filter_group_id
         }
         if ($filter_exclude_id) {
-            $filter_list['filter[exclude][id]'] = $filter_exclude_id
+            $query_params['filter[exclude][id]'] = $filter_exclude_id
         }
         if ($filter_exclude_name) {
-            $filter_list['filter[exclude][name]'] = $filter_exclude_name
+            $query_params['filter[exclude][name]'] = $filter_exclude_name
         }
         if ($filter_exclude_organization_type_id) {
-            $filter_list['filter[exclude][organization_type_id]'] = $filter_exclude_organization_type_id
+            $query_params['filter[exclude][organization_type_id]'] = $filter_exclude_organization_type_id
         }
         if ($filter_exclude_organization_type_id) {
-            $filter_list['filter[exclude][organization_status_id]'] = $filter_exclude_organization_status_id
+            $query_params['filter[exclude][organization_status_id]'] = $filter_exclude_organization_status_id
         }
         if ($filter_range) {
-            $filter_list['filter[range]'] = $filter_range
+            $query_params['filter[range]'] = $filter_range
         }
         if ($filter_range_my_glue_account_id) {
-            $filter_list['filter[range][my_glue_account_id]'] = $filter_range_my_glue_account_id
+            $query_params['filter[range][my_glue_account_id]'] = $filter_range_my_glue_account_id
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list['page[number]'] = $page_number
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $filter_list['page[size]'] = $page_size
+            $query_params['page[size]'] = $page_size
         }
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGlueOrganizations {
@@ -178,45 +178,45 @@ function Set-ITGlueOrganizations {
 
     $resource_uri = ('/organizations/{0}' -f $id)
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_update') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if($filter_name) {
-            $filter_list['filter[name]'] = $filter_name
+            $query_params['filter[name]'] = $filter_name
         }
         if($filter_organization_type_id) {
-            $filter_list['filter[organization_type_id]'] = $filter_organization_type_id
+            $query_params['filter[organization_type_id]'] = $filter_organization_type_id
         }
         if($filter_organization_status_id) {
-            $filter_list['filter[organization_status_id]'] = $filter_organization_status_id
+            $query_params['filter[organization_status_id]'] = $filter_organization_status_id
         }
         if($filter_created_at) {
-            $filter_list['filter[created_at]'] = $filter_created_at
+            $query_params['filter[created_at]'] = $filter_created_at
         }
         if($filter_updated_at) {
-            $filter_list['filter[updated_at]'] = $filter_updated_at
+            $query_params['filter[updated_at]'] = $filter_updated_at
         }
         if($filter_my_glue_account_id) {
-            $filter_list['filter[my_glue_account_id]'] = $filter_my_glue_account_id
+            $query_params['filter[my_glue_account_id]'] = $filter_my_glue_account_id
         }
         if($filter_exclude_id) {
-            $filter_list['filter[exclude][id]'] = $filter_exclude_id
+            $query_params['filter[exclude][id]'] = $filter_exclude_id
         }
         if($filter_exclude_name) {
-            $filter_list['filter[exclude][name]'] = $filter_exclude_name
+            $query_params['filter[exclude][name]'] = $filter_exclude_name
         }
         if($filter_exclude_organization_type_id) {
-            $filter_list['filter[exclude][organization_type_id]'] = $filter_exclude_organization_type_id
+            $query_params['filter[exclude][organization_type_id]'] = $filter_exclude_organization_type_id
         }
         if($filter_exclude_organization_status_id) {
-            $filter_list['filter[exclude][organization_status_id]'] = $filter_exclude_organization_status_id
+            $query_params['filter[exclude][organization_status_id]'] = $filter_exclude_organization_status_id
         }
     }
 
-    return Set-ITGlue -resource_uri $resource_uri -data $data -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
 
 function Remove-ITGlueOrganizations {
@@ -263,43 +263,43 @@ function Remove-ITGlueOrganizations {
 
     $resource_uri = ('/organizations/{0}' -f $id)
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_destroy') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if($filter_name) {
-            $filter_list['filter[name]'] = $filter_name
+            $query_params['filter[name]'] = $filter_name
         }
         if($filter_organization_type_id) {
-            $filter_list['filter[organization_type_id]'] = $filter_organization_type_id
+            $query_params['filter[organization_type_id]'] = $filter_organization_type_id
         }
         if($filter_organization_status_id) {
-            $filter_list['filter[organization_status_id]'] = $filter_organization_status_id
+            $query_params['filter[organization_status_id]'] = $filter_organization_status_id
         }
         if($filter_created_at) {
-            $filter_list['filter[created_at]'] = $filter_created_at
+            $query_params['filter[created_at]'] = $filter_created_at
         }
         if($filter_updated_at) {
-            $filter_list['filter[updated_at]'] = $filter_updated_at
+            $query_params['filter[updated_at]'] = $filter_updated_at
         }
         if($filter_my_glue_account_id) {
-            $filter_list['filter[my_glue_account_id]'] = $filter_my_glue_account_id
+            $query_params['filter[my_glue_account_id]'] = $filter_my_glue_account_id
         }
         if($filter_exclude_id) {
-            $filter_list['filter[exclude][id]'] = $filter_exclude_id
+            $query_params['filter[exclude][id]'] = $filter_exclude_id
         }
         if($filter_exclude_name) {
-            $filter_list['filter[exclude][name]'] = $filter_exclude_name
+            $query_params['filter[exclude][name]'] = $filter_exclude_name
         }
         if($filter_exclude_organization_type_id) {
-            $filter_list['filter[exclude][organization_type_id]'] = $filter_exclude_organization_type_id
+            $query_params['filter[exclude][organization_type_id]'] = $filter_exclude_organization_type_id
         }
         if($filter_exclude_organization_status_id) {
-            $filter_list['filter[exclude][organization_status_id]'] = $filter_exclude_organization_status_id
+            $query_params['filter[exclude][organization_status_id]'] = $filter_exclude_organization_status_id
         }
     }
 
-    return Remove-ITGlue -resource_uri $resource_uri -data $data -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method DELETE -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }

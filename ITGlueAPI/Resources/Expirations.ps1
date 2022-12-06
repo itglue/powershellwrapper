@@ -49,43 +49,43 @@ function Get-ITGlueExpirations {
         $resource_uri = ('/organizations/{0}/relationships' -f $organization_id) + $resource_uri
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_resource_id) {
-            $filter_list['filter[resource_id]'] = $filter_resource_id
+            $query_params['filter[resource_id]'] = $filter_resource_id
         }
         if ($filter_resource_name) {
-            $filter_list['filter[resource_name]'] = $filter_resource_name
+            $query_params['filter[resource_name]'] = $filter_resource_name
         }
         if ($filter_resource_type_name) {
-            $filter_list['filter[resource_type_name]'] = $filter_resource_type_name
+            $query_params['filter[resource_type_name]'] = $filter_resource_type_name
         }
         if ($filter_description) {
-            $filter_list['filter[description]'] = $filter_description
+            $query_params['filter[description]'] = $filter_description
         }
         if ($filter_expiration_date) {
-            $filter_list['filter[expiration_date]'] = $filter_expiration_date
+            $query_params['filter[expiration_date]'] = $filter_expiration_date
         }
         if ($filter_organization_id) {
-            $filter_list['filter[organization_id]'] = $filter_organization_id
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_range) {
-            $filter_list['filter[range]'] = $filter_range
+            $query_params['filter[range]'] = $filter_range
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list['page[number]'] = $page_number
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $filter_list['page[size]'] = $page_size
+            $query_params['page[size]'] = $page_size
         }
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }

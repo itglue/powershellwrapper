@@ -14,11 +14,9 @@ function New-ITGluePasswords {
         $resource_uri = ('/organizations/{0}/relationships/passwords' -f $organization_id)
     }
 
-    if (!$show_password) {
-        $resource_uri = $resource_uri + ('?show_password=false') # using $False in PS results in 'False' (uppercase false), so explicitly writing out 'false' is needed
-    }
+    $query_params = @{'show_password'=$show_password}
 
-    return New-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
 
 function Get-ITGluePasswords {
@@ -77,38 +75,38 @@ function Get-ITGluePasswords {
         $resource_uri = ('/organizations/{0}/relationships/passwords/{1}' -f $organization_id, $id)
     }
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $filter_list['filter[name]'] = $filter_name
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_archived) {
-            $filter_list['filter[archived]'] = $filter_archived
+            $query_params['filter[archived]'] = $filter_archived
         }
         if ($filter_organization_id) {
-            $filter_list['filter[organization_id]'] = $filter_organization_id
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_password_category_id) {
-            $filter_list['filter[password_category_id]'] = $filter_password_category_id
+            $query_params['filter[password_category_id]'] = $filter_password_category_id
         }
         if ($filter_url) {
-            $filter_list['filter[url]'] = $filter_url
+            $query_params['filter[url]'] = $filter_url
         }
         if ($filter_cached_resource_name) {
-            $filter_list['filter[cached_resource_name]'] = $filter_cached_resource_name
+            $query_params['filter[cached_resource_name]'] = $filter_cached_resource_name
         }
         if ($sort) {
-            $filter_list['sort'] = $sort
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $filter_list['page[number]'] = $page_number
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $filter_list['page[size]'] = $page_size
+            $query_params['page[size]'] = $page_size
         }
     }
     elseif ($null -eq $organization_id) {
@@ -116,15 +114,12 @@ function Get-ITGluePasswords {
         $resource_uri = ('/passwords/{0}' -f $id)
     }
 
-    if (!$show_password) {
-        $filter_list['show_password'] = 'false' # using $False in PS results in 'False' (uppercase false), so explicitly writing out 'false' is needed
-    }
-
+    $query_params['show_password'] = $show_password
     if($include) {
-        $filter_list['include'] = $include
+        $query_params['include'] = $include
     }
 
-    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGluePasswords {
@@ -151,11 +146,9 @@ function Set-ITGluePasswords {
         $resource_uri = ('/organizations/{0}/relationships/passwords/{1}' -f $organization_id, $id)
     }
 
-    if ($show_password) {
-        $resource_uri = $resource_uri + ('?show_password=true') # using $True in PS results in 'True' (uppercase T), so explicitly writing out 'true' is needed
-    }
+    $query_params = @{'show_password'=$show_password}
 
-    return Set-ITGlue -resource_uri $resource_uri -data $data
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
 
 function Remove-ITGluePasswords {
@@ -188,28 +181,28 @@ function Remove-ITGluePasswords {
 
     $resource_uri = ('/passwords/{0}' -f $id)
 
-    $filter_list = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_destroy') {
         if ($filter_id) {
-            $filter_list['filter[id]'] = $filter_id
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $filter_list['filter[name]'] = $filter_name
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_organization_id) {
-            $filter_list['filter[organization_id]'] = $filter_organization_id
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_password_category_id) {
-            $filter_list['filter[password_category_id]'] = $filter_password_category_id
+            $query_params['filter[password_category_id]'] = $filter_password_category_id
         }
         if ($filter_url) {
-            $filter_list['filter[url]'] = $filter_url
+            $query_params['filter[url]'] = $filter_url
         }
         if ($filter_cached_resource_name) {
-            $filter_list['filter[cached_resource_name]'] = $filter_cached_resource_name
+            $query_params['filter[cached_resource_name]'] = $filter_cached_resource_name
         }
     }
 
-    return Remove-ITGlue -resource_uri $resource_uri -data $data -filter_list $filter_list
+    return Invoke-ITGlueRequest -Method DELETE -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
