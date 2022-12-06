@@ -24,35 +24,25 @@ function Get-ITGlueCountries {
 
     $resource_uri = ('/countries/{0}' -f $id)
 
+    $filter_list = @{}
+
     if ($PSCmdlet.ParameterSetName -eq "index") {
         if ($filter_name) {
-            $body += @{'filter[name]' = $filter_name}
+            $filter_list['filter[name]'] = $filter_name
         }
         if ($filter_iso) {
-            $body += @{'filter[iso]' = $filter_iso}
+            $filter_list['filter[iso]'] = $filter_iso
         }
         if ($sort) {
-            $body += @{'sort' = $sort}
+            $filter_list['sort'] = $sort
         }
         if ($page_number) {
-            $body += @{"page[number]" = $page_number}
+            $filter_list["page[number]"] = $page_number
         }
         if ($page_size) {
-            $body += @{"page[size]" = $page_size}
+            $filter_list["page[size]"] = $page_size
         }
     }
 
-    try {
-        $ITGlue_Headers.Add("x-api-key", (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method "GET" -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
 }

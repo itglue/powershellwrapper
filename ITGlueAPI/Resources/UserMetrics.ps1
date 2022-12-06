@@ -27,41 +27,31 @@ function Get-ITGlueUserMetrics {
 
     $resource_uri = '/user_metrics'
 
+    $filter_list = @{}
+
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_user_id) {
-            $body += @{'filter[user_id]' = $filter_user_id}
+            $filter_list['filter[user_id]'] = $filter_user_id
         }
         if ($filter_organization_id) {
-            $body += @{'filter[organization_id]' = $filter_organization_id}
+            $filter_list['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_resource_type) {
-            $body += @{'filter[resource_type]' = $filter_resource_type}
+            $filter_list['filter[resource_type]'] = $filter_resource_type
         }
         if ($filter_date) {
-            $body += @{'filter[date]' = $filter_date}
+            $filter_list['filter[date]'] = $filter_date
         }
         if ($sort) {
-            $body += @{'sort' = $sort}
+            $filter_list['sort'] = $sort
         }
         if ($page_number) {
-            $body += @{'page[number]' = $page_number}
+            $filter_list['page[number]'] = $page_number
         }
         if ($page_size) {
-            $body += @{'page[size]' = $page_size}
+            $filter_list['page[size]'] = $page_size
         }
     }
 
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method GET -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Get-ITGlue -resource_uri $resource_uri -filter_list $filter_list
 }
