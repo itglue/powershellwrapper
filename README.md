@@ -72,7 +72,7 @@ Calling an API resource is as simple as running `Get-ITGlue<resourcename>`. The 
 | Contact Types            | `New-ITGlueContactTypes`            | `Get-ITGlueContactTypes`            | `Set-ITGlueContactTypes`            | -                                    |
 | Contacts                 | `New-ITGlueContacts`                | `Get-ITGlueContacts`                | `Set-ITGlueContacts`                | `Remove-ITGlueContacts`              |
 | Countries                | -                                   | `Get-ITGlueCountries`               | -                                   | -                                    |
-| Documents                | -                                   | `Get-ITGlueDocuments`               | -                                   | -                                    |
+| Documents                | -                                   | -                                   | `Set-ITGlueDocuments`               | -                                    |
 | Domains                  | -                                   | `Get-ITGlueDomains`                 | -                                   | -                                    |
 | Expirations              | -                                   | `Get-ITGlueExpirations`             | -                                   | -                                    |
 | Flexible Asset Fields    | `New-ITGlueFlexibleAssetFields`     | `Get-ITGlueFlexibleAssetFields`     | `Set-ITGlueFlexibleAssetFields`     | `Remove-ITGlueFlexibleAssetFields`   |
@@ -86,7 +86,7 @@ Calling an API resource is as simple as running `Get-ITGlue<resourcename>`. The 
 | Organization Statuses    | `New-ITGlueOrganizationStatuses`    | `Get-ITGlueOrganizationStatuses`    | `Set-ITGlueOrganizationStatuses`    | -                                    |
 | Organization Types       | `New-ITGlueOrganizationTypes`       | `Get-ITGlueOrganizationTypes`       | `Set-ITGlueOrganizationTypes`       | -                                    |
 | Organizations            | `New-ITGlueOrganizations`           | `Get-ITGlueOrganizations`           | `Set-ITGlueOrganizations`           | `Remove-ITGlueOrganizations`         |
-| Password Categories     | `New-ITGluePasswordCategories`      | `Get-ITGluePasswordCategories`      | `Set-ITGluePasswordCategories`      | -                                    |
+| Password Categories      | `New-ITGluePasswordCategories`      | `Get-ITGluePasswordCategories`      | `Set-ITGluePasswordCategories`      | -                                    |
 | Passwords                | `New-ITGluePasswords`               | `Get-ITGluePasswords`               | `Set-ITGluePasswords`               | `Remove-ITGluePasswords`             |
 | Platforms                | -                                   | `Get-ITGluePlatforms`               | -                                   | -                                    |
 | Regions                  | -                                   | `Get-ITGlueRegions`                 | -                                   | -                                    |
