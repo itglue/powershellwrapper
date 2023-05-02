@@ -139,6 +139,6 @@ function Remove-ITGlueFlexibleAssetFields {
     }
 
     if ($pscmdlet.ShouldProcess($id)) {
-        return Invoke-ITGlueRequest -Method DELETE -ResourceURI $resource_uri -Data $data
+        return Invoke-ITGlueRequest -Method DELETE -ResourceURI $resource_uri
     }
 }

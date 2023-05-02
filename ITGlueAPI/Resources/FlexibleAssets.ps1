@@ -108,6 +108,6 @@ function Remove-ITGlueFlexibleAssets {
     $resource_uri = ('/flexible_assets/{0}' -f $id)
 
     if ($pscmdlet.ShouldProcess($id)) {
-        return Invoke-ITGlueRequest -Method DELETE -ResourceURI $resource_uri -Data $data
+        return Invoke-ITGlueRequest -Method DELETE -ResourceURI $resource_uri
     }
 }
