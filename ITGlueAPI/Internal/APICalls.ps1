@@ -43,6 +43,9 @@ function Invoke-ITGlueRequest {
             'Headers' = $ITGlue_Headers
             'Body' = $body
         }
+        if ($Method -ne 'GET') {
+            $parameters['ContentType'] = 'application/vnd.api+json; charset=utf-8'
+        }
 
         $api_response = Invoke-RestMethod @parameters -ErrorAction Stop
     } catch {
