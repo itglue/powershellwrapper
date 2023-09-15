@@ -6,25 +6,7 @@ function New-ITGlueFlexibleAssetTypes {
 
     $resource_uri = '/flexible_asset_types/'
 
-    $body = @{}
-
-    $body += @{'data'= $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data
 }
 function Get-ITGlueFlexibleAssetTypes {
     [CmdletBinding(DefaultParameterSetName = 'index')]
@@ -58,50 +40,38 @@ function Get-ITGlueFlexibleAssetTypes {
 
     $resource_uri = ('/flexible_asset_types/{0}' -f $id)
 
-    $body = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_name) {
-            $body += @{'filter[name]' = $filter_name}
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_icon) {
-            $body += @{'filter[icon]' = $filter_icon}
+            $query_params['filter[icon]'] = $filter_icon
         }
         if ($filter_enabled -eq $true) {
             # PS $true returns "True" in string form (uppercase) and ITG's API is case-sensitive, so being explicit
-            $body += @{'filter[enabled]' = "1"}
+            $query_params['filter[enabled]'] = "1"
         }
         elseif ($filter_enabled -eq $false) {
-            $body += @{'filter[enabled]' = "0"}
+            $query_params['filter[enabled]'] = "0"
         }
         if ($sort) {
-            $body += @{'sort' = $sort}
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $body += @{'page[number]' = $page_number}
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $body += @{'page[size]' = $page_size}
+            $query_params['page[size]'] = $page_size
         }
     }
 
     if($include) {
-        $body += @{'include' = $include}
+        $query_params['include'] = $include
     }
 
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGlueFlexibleAssetTypes {
@@ -115,23 +85,5 @@ function Set-ITGlueFlexibleAssetTypes {
 
     $resource_uri = ('/flexible_asset_types/{0}' -f $id)
 
-    $body = @{}
-
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data
 }

@@ -9,25 +9,7 @@ function New-ITGlueLocations {
 
     $resource_uri = ('/organizations/{0}/relationships/locations/' -f $org_id)
 
-    $body = @{}
-
-    $body += @{'data'= $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data
 }
 function Get-ITGlueLocations {
     [CmdletBinding(DefaultParameterSetName = 'index')]
@@ -93,58 +75,47 @@ function Get-ITGlueLocations {
         $resource_uri = ('/organizations/{0}/relationships' -f $org_id) + $resource_uri
     }
 
-    $body = @{}
+    $query_params = @{}
 
     if (($PSCmdlet.ParameterSetName -eq 'index') -or ($PSCmdlet.ParameterSetName -eq 'index_psa')) {
         if ($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $body += @{'filter[name]' = $filter_name}
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_city) {
-            $body += @{'filter[city]' = $filter_city}
+            $query_params['filter[city]'] = $filter_city
         }
         if ($filter_region_id) {
-            $body += @{'filter[region_id]' = $filter_region_id}
+            $query_params['filter[region_id]'] = $filter_region_id
         }
         if ($filter_country_id) {
-            $body += @{'filter[country_id]' = $filter_country_id}
+            $query_params['filter[country_id]'] = $filter_country_id
         }
         if ($filter_psa_integration_type) {
-            $body += @{'filter[psa_integration_type]' = $filter_psa_integration_type}
+            $query_params['filter[psa_integration_type]'] = $filter_psa_integration_type
         }
         if ($sort) {
-            $body += @{'sort' = $sort}
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $body += @{'page[number]' = $page_number}
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $body += @{'page[size]' = $page_size}
+            $query_params['page[size]'] = $page_size
         }
     }
     if ($PSCmdlet.ParameterSetName -eq 'index_psa') {
-        $body += @{'filter[psa_id]' = $filter_psa_id}
+        $query_params['filter[psa_id]'] = $filter_psa_id
     }
 
     if($include) {
-        $body += @{'include' = $include}
+        $query_params['include'] = $include
     }
 
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
 
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGlueLocations {
@@ -183,43 +154,27 @@ function Set-ITGlueLocations {
         $resource_uri = ('organizations/{0}/relationships/locations/{1}' -f $org_id, $id)
     }
 
-    $body = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_update') {
         if($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $query_params['filter[id]'] = $filter_id
         }
         if($filter_name) {
-            $body += @{'filter[name]' = $filter_name}
+            $query_params['filter[name]'] = $filter_name
         }
         if($filter_city) {
-            $body += @{'filter[city]' = $filter_city}
+            $query_params['filter[city]'] = $filter_city
         }
         if($filter_region_id) {
-            $body += @{'filter[region_id]' = $filter_region_id}
+            $query_params['filter[region_id]'] = $filter_region_id
         }
         if($filter_country_id) {
-            $body += @{'filter[country_id]' = $filter_country_id}
+            $query_params['filter[country_id]'] = $filter_country_id
         }
     }
 
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
 
 function Remove-ITGlueLocations {
@@ -248,41 +203,25 @@ function Remove-ITGlueLocations {
 
     $resource_uri = ('/locations/')
 
-    $body = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_destroy') {
         if($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $query_params['filter[id]'] = $filter_id
         }
         if($filter_name) {
-            $body += @{'filter[name]' = $filter_name}
+            $query_params['filter[name]'] = $filter_name
         }
         if($filter_city) {
-            $body += @{'filter[city]' = $filter_city}
+            $query_params['filter[city]'] = $filter_city
         }
         if($filter_region_id) {
-            $body += @{'filter[region_id]' = $filter_region_id}
+            $query_params['filter[region_id]'] = $filter_region_id
         }
         if($filter_country_id) {
-            $body += @{'filter[country_id]' = $filter_country_id}
+            $query_params['filter[country_id]'] = $filter_country_id
         }
     }
 
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'DELETE' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method DELETE -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }

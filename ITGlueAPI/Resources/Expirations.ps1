@@ -49,55 +49,43 @@ function Get-ITGlueExpirations {
         $resource_uri = ('/organizations/{0}/relationships' -f $organization_id) + $resource_uri
     }
 
-    $body = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_resource_id) {
-            $body += @{'filter[resource_id]' = $filter_resource_id}
+            $query_params['filter[resource_id]'] = $filter_resource_id
         }
         if ($filter_resource_name) {
-            $body += @{'filter[resource_name]' = $filter_resource_name}
+            $query_params['filter[resource_name]'] = $filter_resource_name
         }
         if ($filter_resource_type_name) {
-            $body += @{'filter[resource_type_name]' = $filter_resource_type_name}
+            $query_params['filter[resource_type_name]'] = $filter_resource_type_name
         }
         if ($filter_description) {
-            $body += @{'filter[description]' = $filter_description}
+            $query_params['filter[description]'] = $filter_description
         }
         if ($filter_expiration_date) {
-            $body += @{'filter[expiration_date]' = $filter_expiration_date}
+            $query_params['filter[expiration_date]'] = $filter_expiration_date
         }
         if ($filter_organization_id) {
-            $body += @{'filter[organization_id]' = $filter_organization_id}
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_range) {
-            $body += @{'filter[range]' = $filter_range}
+            $query_params['filter[range]'] = $filter_range
         }
         if ($sort) {
-            $body += @{'sort' = $sort}
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $body += @{'page[number]' = $page_number}
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $body += @{'page[size]' = $page_size}
+            $query_params['page[size]'] = $page_size
         }
     }
 
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] $ITGlue_Headers.Remove('x-api-key') # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }

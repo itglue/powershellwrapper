@@ -30,41 +30,29 @@ function Get-ITGlueDomains {
         $resource_uri = ('/organizations/{0}/relationships/domains' -f $organization_id)
     }
 
-    $body = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
         if ($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_organization_id) {
-            $body += @{'filter[organization_id]' = $filter_organization_id}
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($sort) {
-            $body += @{'sort' = $sort}
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $body += @{'page[number]' = $page_number}
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $body += @{'page[size]' = $page_size}
+            $query_params['page[size]'] = $page_size
         }
     }
 
     if($include) {
-        $body += @{'include' = $include}
+        $query_params['include'] = $include
     }
 
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers -body $body
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] $ITGlue_Headers.Remove('x-api-key') # Quietly clean up scope so the API key doesn't persist
-    }
-
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }

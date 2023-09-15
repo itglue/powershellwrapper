@@ -12,25 +12,7 @@ function New-ITGlueConfigurations {
         $resource_uri = ('/organizations/{0}/relationships/configurations' -f $organization_id)
     }
 
-    $body = @{}
-
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data
 }
 
 function Get-ITGlueConfigurations {
@@ -155,76 +137,64 @@ function Get-ITGlueConfigurations {
         $resource_uri = ('/configurations/{0}' -f $id)
     }
 
-    $body = @{}
+    $query_params = @{}
 
     if (($PSCmdlet.ParameterSetName -eq 'index') -or `
         ($PSCmdlet.ParameterSetName -eq 'index_rmm') -or `
         ($PSCmdlet.ParameterSetName -eq 'index_psa') -or `
         ($PSCmdlet.ParameterSetName -eq 'index_rmm_psa')) {
         if ($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $body += @{'filter[name]' = $filter_name}
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_organization_id) {
-            $body += @{'filter[organization_id]' = $filter_organization_id}
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_archived) {
-            $body += @{'filter[archived]' = $filter_archived}
+            $query_params['filter[archived]'] = $filter_archived
         }
         if ($filter_configuration_type_id) {
-            $body += @{'filter[configuration_type_id]' = $filter_configuration_type_id}
+            $query_params['filter[configuration_type_id]'] = $filter_configuration_type_id
         }
         if ($filter_configuration_status_id) {
-            $body += @{'filter[configuration_status_id]' = $filter_configuration_status_id}
+            $query_params['filter[configuration_status_id]'] = $filter_configuration_status_id
         }
         if ($filter_contact_id) {
-            $body += @{'filter[contact_id]' = $filter_contact_id}
+            $query_params['filter[contact_id]'] = $filter_contact_id
         }
         if ($filter_serial_number) {
-            $body += @{'filter[serial_number]' = $filter_serial_number}
+            $query_params['filter[serial_number]'] = $filter_serial_number
         }
         if ($filter_rmm_integration_type) {
-            $body += @{'filter[rmm_integration_type]' = $filter_rmm_integration_type}
+            $query_params['filter[rmm_integration_type]'] = $filter_rmm_integration_type
         }
         if ($filter_psa_integration_type) {
-            $body += @{'filter[psa_integration_type]' = $filter_psa_integration_type}
+            $query_params['filter[psa_integration_type]'] = $filter_psa_integration_type
         }
         if ($sort) {
-            $body += @{'sort' = $sort}
+            $query_params['sort'] = $sort
         }
         if ($page_number) {
-            $body += @{'page[number]' = $page_number}
+            $query_params['page[number]'] = $page_number
         }
         if ($page_size) {
-            $body += @{'page[size]' = $page_size}
+            $query_params['page[size]'] = $page_size
         }
     }
     if (($PSCmdlet.ParameterSetName -eq 'index_rmm') -or ($PSCmdlet.ParameterSetName -eq 'index_rmm_psa')) {
-        $body += @{'filter[rmm_id]' = $filter_rmm_id}
+        $query_params['filter[rmm_id]'] = $filter_rmm_id
     }
     if (($PSCmdlet.ParameterSetName -eq 'index_psa') -or ($PSCmdlet.ParameterSetName -eq 'index_rmm_psa')) {
-        $body += @{'filter[psa_id]' = $filter_psa_id}
+        $query_params['filter[psa_id]'] = $filter_psa_id
     }
 
     if($include) {
-        $body += @{'include' = $include}
+        $query_params['include'] = $include
     }
 
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers -body $body
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGlueConfigurations {
@@ -319,64 +289,48 @@ function Set-ITGlueConfigurations {
         $resource_uri = ('/organizations/{0}/relationships/configurations/{1}' -f $organization_id, $id)
     }
 
-    $body = @{}
+    $query_params = @{}
 
     if (($PSCmdlet.ParameterSetName -eq 'bulk_update') -or `
         ($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm') -or `
         ($PSCmdlet.ParameterSetName -eq 'bulk_update_psa') -or `
         ($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm_psa')) {
         if ($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $body += @{'filter[name]' = $filter_name}
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_organization_id) {
-            $body += @{'filter[organization_id]' = $filter_organization_id}
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_configuration_type_id) {
-            $body += @{'filter[configuration_type_id]' = $filter_configuration_type_id}
+            $query_params['filter[configuration_type_id]'] = $filter_configuration_type_id
         }
         if ($filter_configuration_status_id) {
-            $body += @{'filter[configuration_status_id]' = $filter_configuration_status_id}
+            $query_params['filter[configuration_status_id]'] = $filter_configuration_status_id
         }
         if ($filter_contact_id) {
-            $body += @{'filter[contact_id]' = $filter_contact_id}
+            $query_params['filter[contact_id]'] = $filter_contact_id
         }
         if ($filter_serial_number) {
-            $body += @{'filter[serial_number]' = $filter_serial_number}
+            $query_params['filter[serial_number]'] = $filter_serial_number
         }
         if ($filter_rmm_id) {
-            $body += @{'filter[rmm_id]' = $filter_rmm_id}
+            $query_params['filter[rmm_id]'] = $filter_rmm_id
         }
         if ($filter_rmm_integration_type) {
-            $body += @{'filter[rmm_integration_type]' = $filter_rmm_integration_type}
+            $query_params['filter[rmm_integration_type]'] = $filter_rmm_integration_type
         }
     }
     if (($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm') -or ($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm_psa')) {
-        $body += @{'filter[rmm_id]' = $filter_rmm_id}
+        $query_params['filter[rmm_id]'] = $filter_rmm_id
     }
     if (($PSCmdlet.ParameterSetName -eq 'bulk_update_psa') -or ($PSCmdlet.ParameterSetName -eq 'bulk_update_rmm_psa')) {
-        $body += @{'filter[psa_id]' = $filter_psa_id}
+        $query_params['filter[psa_id]'] = $filter_psa_id
     }
 
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
 
 function Remove-ITGlueConfigurations {
@@ -422,35 +376,35 @@ function Remove-ITGlueConfigurations {
 
     $resource_uri = '/configurations/'
 
-    $body = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_delete') {
         if ($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $body += @{'filter[name]' = $filter_name}
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_organization_id) {
-            $body += @{'filter[organization_id]' = $filter_organization_id}
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_configuration_type_id) {
-            $body += @{'filter[configuration_type_id]' = $filter_configuration_type_id}
+            $query_params['filter[configuration_type_id]'] = $filter_configuration_type_id
         }
         if ($filter_configuration_status_id) {
-            $body += @{'filter[configuration_status_id]' = $filter_configuration_status_id}
+            $query_params['filter[configuration_status_id]'] = $filter_configuration_status_id
         }
         if ($filter_contact_id) {
-            $body += @{'filter[contact_id]' = $filter_contact_id}
+            $query_params['filter[contact_id]'] = $filter_contact_id
         }
         if ($filter_serial_number) {
-            $body += @{'filter[serial_number]' = $filter_serial_number}
+            $query_params['filter[serial_number]'] = $filter_serial_number
         }
         if ($filter_rmm_id) {
-            $body += @{'filter[rmm_id]' = $filter_rmm_id}
+            $query_params['filter[rmm_id]'] = $filter_rmm_id
         }
         if ($filter_rmm_integration_type) {
-            $body += @{'filter[rmm_integration_type]' = $filter_rmm_integration_type}
+            $query_params['filter[rmm_integration_type]'] = $filter_rmm_integration_type
         }
     } elseif ($PSCmdlet.ParameterSetName -eq 'delete') {
         $data = @(
@@ -463,21 +417,5 @@ function Remove-ITGlueConfigurations {
         )
     }
 
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'DELETE' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method DELETE -RequestURI $resource_uri -Data $data -QueryParams $query_params
 }

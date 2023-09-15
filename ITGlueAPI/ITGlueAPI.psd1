@@ -72,6 +72,7 @@
     NestedModules = 'Internal/BaseURI.ps1',
                     'Internal/APIKey.ps1',
                     'Internal/ModuleSettings.ps1',
+                    'Internal/APICalls.ps1',
                     'Resources/Attachments.ps1',
                     'Resources/ConfigurationInterfaces.ps1',
                     'Resources/Configurations.ps1',

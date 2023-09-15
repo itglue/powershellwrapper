@@ -14,29 +14,9 @@ function New-ITGluePasswords {
         $resource_uri = ('/organizations/{0}/relationships/passwords' -f $organization_id)
     }
 
-    if (!$show_password) {
-        $resource_uri = $resource_uri + ('?show_password=false') # using $False in PS results in 'False' (uppercase false), so explicitly writing out 'false' is needed
-    }
+    $query_params = @{'show_password'=$show_password}
 
-    $body = @{}
-
-    $body += @{'data'= $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'POST' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method POST -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
 
 function Get-ITGluePasswords {
@@ -95,29 +75,38 @@ function Get-ITGluePasswords {
         $resource_uri = ('/organizations/{0}/relationships/passwords/{1}' -f $organization_id, $id)
     }
 
-    $body = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'index') {
-        if ($filter_id) {$body += @{'filter[id]' = $filter_id}
+        if ($filter_id) {
+            $query_params['filter[id]'] = $filter_id
         }
-        if ($filter_name) {$body += @{'filter[name]' = $filter_name}
+        if ($filter_name) {
+            $query_params['filter[name]'] = $filter_name
         }
-        if ($filter_archived) {$body += @{'filter[archived]' = $filter_archived}
+        if ($filter_archived) {
+            $query_params['filter[archived]'] = $filter_archived
         }
-        if ($filter_organization_id) {$body += @{'filter[organization_id]' = $filter_organization_id}
+        if ($filter_organization_id) {
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
-        if ($filter_password_category_id) {$body += @{'filter[password_category_id]' = $filter_password_category_id}
+        if ($filter_password_category_id) {
+            $query_params['filter[password_category_id]'] = $filter_password_category_id
         }
-        if ($filter_url) {$body += @{'filter[url]' = $filter_url}
+        if ($filter_url) {
+            $query_params['filter[url]'] = $filter_url
         }
-        if ($filter_cached_resource_name) {$body += @{'filter[cached_resource_name]' = $filter_cached_resource_name}
+        if ($filter_cached_resource_name) {
+            $query_params['filter[cached_resource_name]'] = $filter_cached_resource_name
         }
         if ($sort) {
-            $body += @{'sort' = $sort}
+            $query_params['sort'] = $sort
         }
-        if ($page_number) {$body += @{'page[number]' = $page_number}
+        if ($page_number) {
+            $query_params['page[number]'] = $page_number
         }
-        if ($page_size) {$body += @{'page[size]' = $page_size}
+        if ($page_size) {
+            $query_params['page[size]'] = $page_size
         }
     }
     elseif ($null -eq $organization_id) {
@@ -125,27 +114,12 @@ function Get-ITGluePasswords {
         $resource_uri = ('/passwords/{0}' -f $id)
     }
 
-    if (!$show_password) {
-        $resource_uri = $resource_uri + ('?show_password=false') # using $False in PS results in 'False' (uppercase false), so explicitly writing out 'false' is needed
-    }
-
+    $query_params['show_password'] = $show_password
     if($include) {
-        $body += @{'include' = $include}
+        $query_params['include'] = $include
     }
 
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'GET' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
 }
 
 function Set-ITGluePasswords {
@@ -172,29 +146,9 @@ function Set-ITGluePasswords {
         $resource_uri = ('/organizations/{0}/relationships/passwords/{1}' -f $organization_id, $id)
     }
 
-    if ($show_password) {
-        $resource_uri = $resource_uri + ('?show_password=true') # using $True in PS results in 'True' (uppercase T), so explicitly writing out 'true' is needed
-    }
+    $query_params = @{'show_password'=$show_password}
 
-    $body = @{}
-
-    $body += @{'data' = $data}
-
-    $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
-
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'PATCH' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method PATCH -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
 
 function Remove-ITGluePasswords {
@@ -227,44 +181,28 @@ function Remove-ITGluePasswords {
 
     $resource_uri = ('/passwords/{0}' -f $id)
 
-    $body = @{}
+    $query_params = @{}
 
     if ($PSCmdlet.ParameterSetName -eq 'bulk_destroy') {
         if ($filter_id) {
-            $body += @{'filter[id]' = $filter_id}
+            $query_params['filter[id]'] = $filter_id
         }
         if ($filter_name) {
-            $body += @{'filter[name]' = $filter_name}
+            $query_params['filter[name]'] = $filter_name
         }
         if ($filter_organization_id) {
-            $body += @{'filter[organization_id]' = $filter_organization_id}
+            $query_params['filter[organization_id]'] = $filter_organization_id
         }
         if ($filter_password_category_id) {
-            $body += @{'filter[password_category_id]' = $filter_password_category_id}
+            $query_params['filter[password_category_id]'] = $filter_password_category_id
         }
         if ($filter_url) {
-            $body += @{'filter[url]' = $filter_url}
+            $query_params['filter[url]'] = $filter_url
         }
         if ($filter_cached_resource_name) {
-            $body += @{'filter[cached_resource_name]' = $filter_cached_resource_name}
+            $query_params['filter[cached_resource_name]'] = $filter_cached_resource_name
         }
-
-        $body += @{'data' = $data}
-
-        $body = ConvertTo-Json -InputObject $body -Depth $ITGlue_JSON_Conversion_Depth
     }
 
-    try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
-        $rest_output = Invoke-RestMethod -method 'DELETE' -uri ($ITGlue_Base_URI + $resource_uri) -headers $ITGlue_Headers `
-            -body $body -ErrorAction Stop -ErrorVariable $web_error
-    } catch {
-        Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
-    }
-
-    $data = @{}
-    $data = $rest_output
-    return $data
+    return Invoke-ITGlueRequest -Method DELETE -ResourceURI $resource_uri -Data $data -QueryParams $query_params
 }
