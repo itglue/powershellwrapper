@@ -40,7 +40,11 @@ function Get-ITGlueConfigurationInterfaces {
         [Nullable[int]]$page_size = $null,
 
         [Parameter(ParameterSetName = 'show', Mandatory = $true)]
-        [Nullable[Int64]]$id
+        [Nullable[Int64]]$id,
+
+        [Parameter(ParameterSetName = 'show')]
+        [Parameter(ParameterSetName = 'index')]
+        [Switch]$all
     )
 
     $resource_uri = ('/configurations/{0}/relationships/configuration_interfaces/' -f $conf_id)
@@ -73,7 +77,7 @@ function Get-ITGlueConfigurationInterfaces {
         }
     }
 
-    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params -AllResults:$all
 }
 
 function Set-ITGlueConfigurationInterfaces {

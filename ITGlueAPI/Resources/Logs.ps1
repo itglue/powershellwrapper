@@ -73,7 +73,10 @@ function Get-ITGlueLogs {
 
             [Parameter(ParameterSetName = 'index')]
             [ValidateRange ( 1, 1000 )]
-            [Nullable[int]]$page_size = $null
+            [Nullable[int]]$page_size = $null,
+
+            [Parameter(ParameterSetName = 'index')]
+            [Switch]$all
         )
 
         $resource_uri = '/logs'
@@ -92,5 +95,5 @@ function Get-ITGlueLogs {
             }
         }
 
-        return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
+        return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params -AllResults:$all
     }

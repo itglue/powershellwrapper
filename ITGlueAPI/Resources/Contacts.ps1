@@ -79,7 +79,12 @@ function Get-ITGlueContacts {
         [Parameter(ParameterSetName = 'index')]
         [Parameter(ParameterSetName = 'index_psa')]
         [Parameter(ParameterSetName = 'show')]
-        $include = ''
+        $include = '',
+
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'show')]
+        [Switch]$all
     )
 
     $resource_uri = ('/contacts/{0}' -f $id)
@@ -135,7 +140,7 @@ function Get-ITGlueContacts {
         $query_params += @{'include' = $include}
     }
 
-    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params -AllResults:$all
 }
 
 function Set-ITGlueContacts {

@@ -67,7 +67,12 @@ function Get-ITGlueLocations {
         [Parameter(ParameterSetName = 'index')]
         [Parameter(ParameterSetName = 'index_psa')]
         [Parameter(ParameterSetName = 'show')]
-        [String]$include = ''
+        [String]$include = '',
+
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'show')]
+        [Switch]$all
     )
 
     $resource_uri = ('/locations/{0}' -f $id)
@@ -115,7 +120,7 @@ function Get-ITGlueLocations {
     }
 
 
-    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params -AllResults:$all
 }
 
 function Set-ITGlueLocations {

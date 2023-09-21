@@ -22,7 +22,10 @@ function Get-ITGlueUserMetrics {
         [Nullable[Int64]]$page_number = $null,
 
         [Parameter(ParameterSetName = 'index')]
-        [Nullable[int]]$page_size = $null
+        [Nullable[int]]$page_size = $null,
+
+        [Parameter(ParameterSetName = 'index')]
+        [Switch]$all
     )
 
     $resource_uri = '/user_metrics'
@@ -53,5 +56,5 @@ function Get-ITGlueUserMetrics {
         }
     }
 
-    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params -AllResults:$all
 }
