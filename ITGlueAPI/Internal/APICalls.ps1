@@ -35,20 +35,23 @@ function Invoke-ITGlueRequest {
     }
 
     try {
-        $ITGlue_Headers.Add('x-api-key', (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password)
+        $headers = @{
+            'x-api-key' = (New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList 'N/A', $ITGlue_API_Key).GetNetworkCredential().Password
+        }
 
         $parameters = @{
             'Method' = $Method
             'Uri' = $ITGlue_Base_URI + $ResourceURI + $query_string
-            'Headers' = $ITGlue_Headers
+            'Headers' = $headers
             'Body' = $body
+        }
+        if ($Method -ne 'GET') {
+            $parameters['ContentType'] = 'application/vnd.api+json; charset=utf-8'
         }
 
         $api_response = Invoke-RestMethod @parameters -ErrorAction Stop
     } catch {
         Write-Error $_
-    } finally {
-        [void] ($ITGlue_Headers.Remove('x-api-key')) # Quietly clean up scope so the API key doesn't persist
     }
 
     return $api_response
