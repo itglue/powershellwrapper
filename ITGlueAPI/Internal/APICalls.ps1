@@ -75,7 +75,7 @@ function Invoke-ITGlueRequest {
                 $result = $api_response
             }
 
-        } while($AllResults -and $api_response.meta.'total-pages' -and $page -le ($api_response.meta.'total-pages'))
+        } while($AllResults -and $api_response.meta.'total-pages' -and $page -lt ($api_response.meta.'total-pages'))
 
         if($AllResults -and $api_response.meta) {
             $result.meta = $api_response.meta
