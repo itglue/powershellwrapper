@@ -1,4 +1,98 @@
 function Get-ITGlueExpirations {
+<#
+    .SYNOPSIS
+        List or show all expirations
+
+    .DESCRIPTION
+        The Get-ITGlueExpirations cmdlet returns a list of expirations
+        for all organizations or for a specified organization.
+
+        This function can call the following endpoints:
+            Index = /expirations
+                    /organizations/:organization_id/relationships/expirations
+
+            Show =  /expirations/:id
+                    /organizations/:organization_id/relationships/expirations/:id
+
+    .PARAMETER organization_id
+        A valid organization Id in your account
+
+    .PARAMETER filter_id
+        Filter by expiration id
+
+    .PARAMETER filter_resource_id
+        Filter by a resource id
+
+    .PARAMETER filter_resource_name
+        Filter by a resource name
+
+    .PARAMETER filter_resource_type_name
+        Filter by a resource type name
+
+    .PARAMETER filter_description
+        Filter expiration description
+
+    .PARAMETER filter_expiration_date
+        Filter expiration date
+
+    .PARAMETER filter_organization_id
+        Filter by organization name
+
+    .PARAMETER filter_range
+        Filter by expiration range
+
+        To filter on a specific range, supply two comma-separated values
+        Example:
+            “2, 10” is filtering for all that are greater than or equal to 2
+            and less than or equal to 10
+
+        Or, an asterisk ( * ) can filter on values either greater than or equal to
+            Example:
+                “2, *”, or less than or equal to (“*, 10”)
+
+    .PARAMETER sort
+        Sort results by a defined value
+
+        Allowed values:
+        'id', 'organization_id', 'expiration_date', 'created_at', 'updated_at', `
+        '-id', '-organization_id', '-expiration_date', '-created_at', '-updated_at'
+
+    .PARAMETER page_number
+        Return results starting from the defined number
+
+    .PARAMETER page_size
+        Number of results to return per page
+
+    .PARAMETER id
+        A valid organization Id in your account
+
+    .EXAMPLE
+        Get-ITGlueExpirations
+
+        Returns the first 50 results from your ITGlue account
+
+    .EXAMPLE
+        Get-ITGlueExpirations -id 12345
+
+        Returns the expiration with the defined id
+
+    .EXAMPLE
+        Get-ITGlueExpirations -page_number 2 -page_size 10
+
+        Returns the first 10 results from the second page for expirations
+        in your ITGlue account
+
+    .NOTES
+        N\A
+
+    .LINK
+        https://api.itglue.com/developer/#expirations-index
+
+    .LINK
+        https://github.com/itglue/powershellwrapper
+
+#>
+
     [CmdletBinding(DefaultParameterSetName = 'index')]
     Param (
         [Parameter(ParameterSetName = 'index')]

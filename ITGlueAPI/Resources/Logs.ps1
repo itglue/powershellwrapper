@@ -14,18 +14,18 @@ function Get-ITGlueLogs {
         in the last page the start date in the filter for the next request.
 
     .PARAMETER sort
-        Sort the order of the returned data
+        Sort results by a defined value
 
         Allowed values:
         'created_at','-created_at'
 
     .PARAMETER page_number
-        The page number to return data from
+        Return results starting from the defined number
 
         This endpoint is limited to 5 pages of results.
 
     .PARAMETER page_size
-        The number of results to return with each page
+        Number of results to return per page
 
         By default ITGlues API returned the first 50 items.
 

@@ -108,6 +108,7 @@
     FunctionsToExport = 'Add-ITGlueAPIKey',
                         'Get-ITGlueAPIKey',
                         'Remove-ITGlueAPIKey',
+                        'Test-ITGlueAPIKey',
 
                         'Add-ITGlueBaseURI',
                         'Get-ITGlueBaseURI',
@@ -115,6 +116,7 @@
 
                         'Export-ITGlueModuleSettings',
                         'Import-ITGlueModuleSettings',
+                        'Remove-ITGlueModuleSettings',
 
                         'New-ITGlueAttachments',
                         'Set-ITGlueAttachments',
