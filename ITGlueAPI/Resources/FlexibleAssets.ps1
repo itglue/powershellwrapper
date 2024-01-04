@@ -160,7 +160,11 @@ function Get-ITGlueFlexibleAssets {
         [String]$include = $null,
 
         [Parameter(ParameterSetName = 'show')]
-        [Nullable[Int64]]$id = $null
+        [Nullable[Int64]]$id = $null,
+
+        [Parameter(ParameterSetName = 'show')]
+        [Parameter(ParameterSetName = 'index')]
+        [Switch]$all
     )
 
     $resource_uri = ('/flexible_assets/{0}' -f $id)
@@ -192,7 +196,7 @@ function Get-ITGlueFlexibleAssets {
         $query_params['include'] = $include
     }
 
-    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params -AllResults:$all
 }
 
 

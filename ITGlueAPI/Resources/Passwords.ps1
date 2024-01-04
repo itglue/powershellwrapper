@@ -225,7 +225,11 @@ function Get-ITGluePasswords {
 
         [Parameter(ParameterSetName = 'index')]
         [Parameter(ParameterSetName = 'show')]
-        $include = ''
+        $include = '',
+
+        [Parameter(ParameterSetName = 'show')]
+        [Parameter(ParameterSetName = 'index')]
+        [Switch]$all
     )
 
     $resource_uri = ('/passwords/{0}' -f $id)
@@ -278,7 +282,7 @@ function Get-ITGluePasswords {
         $query_params['include'] = $include
     }
 
-    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params -AllResults:$all
 }
 
 

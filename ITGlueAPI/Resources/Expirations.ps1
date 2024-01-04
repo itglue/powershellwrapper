@@ -135,7 +135,11 @@ function Get-ITGlueExpirations {
         [Nullable[int]]$page_size = $null,
 
         [Parameter(Mandatory = $true, ParameterSetName = 'show')]
-        [Nullable[Int64]]$id
+        [Nullable[Int64]]$id,
+
+        [Parameter(ParameterSetName = 'show')]
+        [Parameter(ParameterSetName = 'index')]
+        [Switch]$all
     )
 
     $resource_uri = ('/expirations/{0}' -f $id)
@@ -181,5 +185,5 @@ function Get-ITGlueExpirations {
         }
     }
 
-    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params -AllResults:$all
 }

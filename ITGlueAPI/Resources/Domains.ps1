@@ -88,7 +88,10 @@ function Get-ITGlueDomains {
 
         [Parameter(ParameterSetName = 'index')]
         [ValidateSet('passwords', 'attachments', 'user_resource_accesses', 'group_resource_accesses')]
-        [String]$include = ''
+        [String]$include = '',
+
+        [Parameter(ParameterSetName = 'index')]
+        [Switch]$all
     )
 
     $resource_uri = '/domains'
@@ -120,5 +123,5 @@ function Get-ITGlueDomains {
         $query_params['include'] = $include
     }
 
-    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params -AllResults:$all
 }

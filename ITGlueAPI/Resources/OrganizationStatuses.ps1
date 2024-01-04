@@ -119,7 +119,11 @@ function Get-ITGlueOrganizationStatuses {
         [Nullable[int]]$page_size = $null,
 
         [Parameter(ParameterSetName = 'show')]
-        [Nullable[Int64]]$id = $null
+        [Nullable[Int64]]$id = $null,
+
+        [Parameter(ParameterSetName = 'show')]
+        [Parameter(ParameterSetName = 'index')]
+        [Switch]$all
     )
 
     $resource_uri = ('/organization_statuses/{0}' -f $id)
@@ -141,7 +145,7 @@ function Get-ITGlueOrganizationStatuses {
         }
     }
 
-    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params -AllResults:$all
 }
 
 

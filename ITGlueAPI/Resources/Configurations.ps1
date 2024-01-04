@@ -279,7 +279,14 @@ function Get-ITGlueConfigurations {
         [Parameter(ParameterSetName = 'index_psa')]
         [Parameter(ParameterSetName = 'index_rmm_psa')]
         [Parameter(ParameterSetName = 'show')]
-        [String]$include = ''
+        [String]$include = '',
+
+        [Parameter(ParameterSetName = 'index')]
+        [Parameter(ParameterSetName = 'index_rmm')]
+        [Parameter(ParameterSetName = 'index_psa')]
+        [Parameter(ParameterSetName = 'index_rmm_psa')]
+        [Parameter(ParameterSetName = 'show')]
+        [Switch]$all
     )
 
     if($organization_id) {
@@ -347,7 +354,7 @@ function Get-ITGlueConfigurations {
         $query_params['include'] = $include
     }
 
-    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params
+    return Invoke-ITGlueRequest -Method GET -ResourceURI $resource_uri -QueryParams $query_params -AllResults:$all
 }
 
 
